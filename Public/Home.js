@@ -13,9 +13,10 @@ let AvailableAmount ;
 let firstHit = true ;
 let betHistoryData;
 let slotHistoryData;
+let returnData ;
 
 async function getAllData(){
-    const res = await axios.get('http://localhost:5000/Alldata');
+    const res = await axios.get('https://win4cash.in/Alldata');
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
         walletContainer.innerHTML = res.data.wallet;
@@ -26,13 +27,21 @@ async function getAllData(){
 getAllData();
 
 async function getHistory(){
-    const res1  = await axios.get('http://localhost:5000/user/history');
+    const res1  = await axios.get('https://win4cash.in/user/history');
     betHistoryData = res1.data;
-    const res2 = await axios.get('http://localhost:5000/bathistory');
+    const res2 = await axios.get('https://win4cash.in/bathistory');
     slotHistoryData = res2.data;
     populateTable(slotHistoryData,['Uid','Color' ,'Number','Bs']);
+    const res3 = await axios.get('https://win4cash.in/returnx');
+    returnData = res3.data;
+    const returnContainer  = document.querySelectorAll('.bet-return');
+    returnContainer.forEach((val,index)=>{
+        val.innerHTML = `${returnData.number[index]}X`
+    })
+    console.log(res3,'res3');
     console.log(res1, 'userHistory');
     console.log(res2, 'betHistory');
+
 }
 
 getHistory();
@@ -180,7 +189,25 @@ else
 populateTable(betHistoryData,['Uid','Batoption','Ammount','choose','status']);
 }
 
+function findReturn(val){
+  if(val==='0'||val==='1'||val==='2'||val==='3'||val==='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'){
+    let intVal = parseInt(val);
+    return returnData.number[intVal];
+  }
+  else if(val==='big'){
+    return returnData.bg.big;
+  }
+  else if(val==='small'){
+    return returnData.bg.small;
+  }
+  else{
+    return returnData.color.color;
+  }
+}
+
 function handleBet(val,type=false){
+    const numberBetBhav = document.querySelectorAll('.bet-bhav-number');
+    console.log(numberBetBhav,'betbhav');
     if(type&&initial){
         amountContainer[0].style.backgroundColor='red';
         multipleContainer[0].style.backgroundColor='red';
@@ -193,12 +220,33 @@ function handleBet(val,type=false){
     document.cookie = `betType=${val}`;
     console.log(popup,'hello')
     popup.style.display = 'block';
-    colorContainer.style.backgroundColor = val==='green'?'green':val==='blue'?'blue':val==='red'?'red':val==='0'||val==='1'||val=='2'||val=='3'||val=='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'?'skyblue':'yellow';
+    colorContainer.style.background = val==='green'?'linear-gradient(180deg, #0EB200 0%, #064C00 100%)':val==='blue'?'linear-gradient(180deg, #2838CD 0%, #141C67 100%)':val==='red'?'linear-gradient(180deg, #FF0000 0%, #990000 100%)':val==='0'||val==='1'||val=='2'||val=='3'||val=='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'?'radial-gradient(50% 345.95% at 50% 50%, #FFD700 0%, #A18800 100%)':val==='big'?'linear-gradient(180deg, #C342FF 0%, #440088 100%)':'linear-gradient(180deg, #00FFF0 0%, #006889 100%)';
     betContainer.innerHTML=val;
     quantityContainer.innerHTML = Quantity;
     const finalBet = Amount*Quantity;
     finalBetContainer.innerHTML = finalBet;
-    console.log(finalBetContainer,'betcontainer');
+    const returnAmt = finalBet*findReturn(val);
+   console.log(returnAmt,'returnAmt');
+   if(val==='0'||val==='1'||val==='2'||val==='3'||val==='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'){
+    console.log('step1');
+    let intVal = parseInt(val);
+    let totalReturn = 0;
+    for(let key in returnData.number){
+        if(key!=intVal && key>=0 && key<=9){
+            console.log(key,intVal,'dj')
+            totalReturn = totalReturn + returnData.number[key];
+        }
+    }
+    console.log(totalReturn,'step2');
+    numberBetBhav.forEach((item,index)=>{
+        if(index===intVal){
+            item.innerHTML = `+${returnAmt}`;
+        }
+        else{
+            item.innerHTML = `-${((returnAmt*returnData.number[index])/totalReturn).toFixed(2)}`;
+        }
+    })
+   }
 
 }
 
@@ -246,7 +294,7 @@ async function handleSubmit(){
         return;
     }
 
-    const res  = await axios.post('http://localhost:5000/user/bat',{batoption,choose,Ammount});
+    const res  = await axios.post('https://win4cash.in/user/bat',{batoption,choose,Ammount});
     console.log(res,'res')
     handleCancleBet();
     getAllData();
@@ -292,7 +340,7 @@ function formatTime(seconds) {
             mainDiv.classList.add('unclickable');
             // console.log(mainDiv,remainingTime,'hehehe');
             if(firstHit){
-                const res = await axios.get('http://localhost:5000/user/result');
+                const res = await axios.get('https://win4cash.in/user/result');
                 console.log(res,'final data')
                 firstHit = false;
             }

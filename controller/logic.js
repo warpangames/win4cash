@@ -56,23 +56,8 @@ const DataforAdmin = {
 
 }
 
-let IncomingResult = {
-            color: "",
-            number: "",
-            BS: ""
-
-}
-
-const IncomingResultfromAdmin= async(req,res)=>{
-    IncomingResult.color = req.body.color,
-    IncomingResult.number = req.body.number,
-    IncomingResult.BS = req.body.Bs
-
-    res.stauts(200).json("Result Sends sucessfully! ")
-}
 
 const AdminSending = async (req,res)=>{
-    res.json(DataforAdmin);
 
 }
 
@@ -260,8 +245,7 @@ const result = async (req, res) => {
 
     // const Adminauto = await Admin.findOne();
     // const auto = Admin.Auto
-    if (IncomingResult.color == "" && IncomingResult.BS == "") {
-        console.log("code with auto")
+    // if (auto) {
         if (blue === red && red === green) {
             colorresult = nobat[Math.floor(Math.random() * 3)];
             console.log("when all is same", colorresult);
@@ -524,192 +508,8 @@ const result = async (req, res) => {
         })
 
     }
-    else{
-        const id = generateUniqueId();
 
-        await Result.create({
-            Number: req.body.number,
-            Color: req.body.color,
-            Bs: req.body.Bs,
-            Uid: id
-
-        })
-
-        let maindata = [];
-
-        try {
-            if (minData.length > 0) {
-
-                const dataWithIds = minData.map(data => {
-                    let status = 'loss';
-
-                    const trimmedChoose = data.choose.trim().toLowerCase();
-                    const trimmedResult = req.body.color.trim().toLowerCase();
-
-                    if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
-                        status = 'won';
-                        Return.ColorX.findOne().then((Data)=>{
-                            console.log("data from colorx",Data)
-                            const X = Data.color;
-                            try {
-                                console.log(userid)
-                                Usermodel.findById(userid).then((user) =>{
-                                    console.log("user", user)
-
-                                if (!user) {
-                                    throw new Error('User not found');
-                                }
-                                // let result = minData.find(obj => obj.Username === user.Username)
-                                console.log(result)
-                                user.wallet += X * (data.Ammount);
-
-                                user.save().then(() => {
-                                    console.log('Money credited successfully!');
-
-                                })
-                                    .catch((err) => console.log(err));
-                                })
-                                
-
-                            }
-                            catch (error) {
-                                console.error('Error crediting money:', error.message);
-                            }
-
-                        })
-
-                    } else if (data.Batoption === 'number' && (data.choose) == req.body.number) {
-                        status = 'won';
-                        Return.NumberX.findOne().limit(1).sort({_id:-1}).then((Data)=>{
-                            // let result = Data.find(obj => obj.Username === user.Username)
-                                const X = Data[data.choose]
-
-                                try {
-                                    console.log(userid)
-                                    Usermodel.findById(userid).then((user) =>{
-                                        console.log("user", user)
-
-                                    if (!user) {
-                                        throw new Error('User not found');
-                                    }
-                                    // let result = minData.find(obj => obj.Username === user.Username)
-                                    console.log(result)
-                                    user.wallet += X * (data.Ammount);
-
-                                    user.save().then(() => {
-                                        console.log('Money credited successfully!');
-
-                                    })
-                                        .catch((err) => console.log(err));
-                                    })
-                                    
-
-                                }
-                                catch (error) {
-                                    console.error('Error crediting money:', error.message);
-                                }
-
-
-                        })
-
-
-
-
-
-                    } else if (data.Batoption === 'Bs' &&
-                        ((data.choose == 'big' && Bsresult == req.body.Bs) ||
-                            (data.choose == 'small' && Bsresult == req.body.Bs))) {
-                        status = 'won';
-                        if (Bsresult == "Big") {
-                            Return.BgX.findOne().then((DATA) => {
-                                const X = DATA.big
-                                try {
-                                    console.log(userid)
-                                    Usermodel.findById(userid).then((user) =>{
-                                        console.log("user", user)
-
-                                    if (!user) {
-                                        throw new Error('User not found');
-                                    }
-                                    // let result = minData.find(obj => obj.Username === user.Username)
-                                    // nconsole.log(result)
-                                    user.wallet += parseInt(X) * (data.Ammount);
-                                    console.log(user.wallet);
-
-                                    user.save().then(() => {
-                                        console.log('Money credited successfully!');
-
-                                    })
-                                        .catch((err) => console.log(err));
-                                    })
-                                    
-
-                                }
-                                catch (error) {
-                                    console.error('Error crediting money:', error.message);
-                                }
-
-
-                            })
-
-                        }
-                        if (Bsresult == "Small") {
-                            Return.BgX.find().then((DATA) => {
-                                const X = DATA.BatXsmall
-                                try {
-                                    console.log(userid)
-                                    Usermodel.findById(userid).then((user) =>{
-                                        console.log("user", user)
-
-                                    if (!user) {
-                                        throw new Error('User not found');
-                                    }
-                                    // let result = minData.find(obj => obj.Username === user.Username)
-                                    // console.log(result);
-                                    user.wallet += parseInt(X) * (data.Ammount);
-                                    console.log(user.wallet);
-
-                                    user.save().then(() => {
-                                        console.log('Money credited successfully!');
-
-                                    })
-                                        .catch((err) => console.log(err));
-                                    })
-                                    
-
-                                }
-                                catch (error) {
-                                    console.error('Error crediting money:', error.message);
-                                }
-
-
-                            })
-
-                        }
-                    }
-
-                    console.log("Final status:", status);
-
-
-                    // return { ...data, Uid: id, status:status };
-                    return { ...data, Uid: id, status: status };
-
-                });
-                console.log(dataWithIds)
-                maindata = dataWithIds;
-
-                await Batmodel.insertMany(dataWithIds);
-                console.log("Data successfully inserted into the database.");
-            } else {
-                console.log("No data to insert.");
-            }
-        } catch (error) {
-            console.error("Error inserting data into the database:", error);
-        }
-    }
-
-} 
-
+// }
 
 
 

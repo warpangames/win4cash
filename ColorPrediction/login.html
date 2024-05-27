@@ -33,7 +33,7 @@
       e.preventDefault();
       const Username = document.getElementById('username').value;
       const Password = document.getElementById('password').value;
-      const res = await axios.post('http://localhost:5000/user/login',{Username,Password});
+      const res = await axios.post('https://win4cash.in/user/login',{Username,Password});
       
       if(res.status===200){
        window.location.href = '/';
