@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+    <div class="main">
+        <div class="login-text">SignUp</div>
+
+        <section>
+            <form id="form" method="post" >
+
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your Username">
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="password">
+
+                <input type="submit" value="SIGN UP" id="submit">
+
+            </form>
+            <div style="text-align: center;color: #3c3838;margin: 10px;">or</div>
+            <div class="login-button">Login</div>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+     const form = document.getElementById('form');
+     form.addEventListener('submit',async (e)=>{
+      e.preventDefault();
+      const Phoneno = document.getElementById('phone').value;
+      const Username = document.getElementById('username').value;
+      const Password = document.getElementById('password').value;
+      const res = await axios.post('http://localhost:5000/user/signup',{Phoneno,Username,Password});
+      if(res.status===200){
+        window.location.href = 'login'
+      }
+     })
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+ .main{
+        max-width: 800px;
+        margin: auto;
+        background-color: white;
+    }
+
+    .login-text{
+        text-align: center;
+        font-size: 34px;
+        font-weight: bolder;
+        margin-top: 40px;
+    }
+
+    #phone,#username, #password{
+        display: block;
+        border: none;
+        border-bottom: 1px solid #d9c5c5;
+        padding: 10px 0;
+        width: 300px;
+    }
+
+    label{
+        display: block;
+        margin-top: 25px;
+    }
+
+    form{
+        width:300px;
+        margin: auto;
+    }
+
+    #submit{
+        width: 100%;
+        background-color: #4B92BA;
+        padding: 8px;
+        margin-top: 30px;
+        font-size: large;
+    }
+
+    .login-button{
+        text-align: center;
+        width: 150px;
+        margin: auto;
+        background-color: cadetblue;
+        padding: 8px;
+    }

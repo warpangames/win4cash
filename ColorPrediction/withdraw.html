@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw</title>
+    <link rel="stylesheet" href="/withdraw.css">
+</head>
+<body>
+    <div class="main">
+     <header>
+        <div class="header">
+            <div class="back-arrow"><</div>
+            <div class="header-heading">Withdraw</div>
+            <div></div>
+        </div>
+     </header>
+     <div class="bg-red">
+        <div class="available-text">Available Balance</div>
+        <div class="balance">₹<span class="balance-data">0.00</span></div>
+     </div>
+     <div class="bank-box">
+        <div class="card-img">
+            &#x1F4B3;
+        </div>
+        <div class="bankcard-text">
+            Bank Card
+        </div>
+     </div>
+     <div class="addbank-box">
+        <div class="plus-symbol" onclick="handleDisplayForm()">+</div>
+        <div>Add a bank account number</div>
+     </div>
+     <div class="bankdetails-container">
+        <form  class="bankdetails-form">
+            <label for="Bank-Name">Bank Name</label>
+            <input type="text" id="Bank-Name" name="Bank-Name" required>
+
+            <label for="Name">Full Name</label>
+            <input type="text" id="Name" name="Name" required>
+
+            <label for="AccountNumber">Account Number</label>
+            <input type="text" id="AccountNumber" name="AccountNumber" required>
+
+            <label for="Phone">Phone Number</label>
+            <input type="text" id="Phone" name="Phone" required>
+
+            <label for="IFSC">IFSC Code</label>
+            <input type="text" id="IFSC" name="IFSC" required>
+
+            <input type="submit" value="SAVE" id="save">
+        </form>
+     </div>
+     <div>
+        <input type="text" id="widthdraw" name="amount" placeholder="Enter Withdraw Amount">
+        <p class="withdraw-button">WITHDRAW</p>
+     </div>
+     <div class="withdraw-histry" style="padding: 20px 0;">
+        <p style="font-weight: bolder;">Withdraw History</p>
+     </div>
+    </div>
+    <script src="/withdraw.js"></script>
+</body>
+</html>

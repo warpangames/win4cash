@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Prediction </title>
+    <link rel="stylesheet" href="/Home.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="main">
+        <header>
+            <nav class="navbar">
+                <div class="logo">
+                    LOGO
+                </div>
+                <div class="profile-logo">
+                    <img src="./Public/Images/profileLogo.jpg" alt="">
+                </div>
+            </nav>
+        </header>
+        <section>
+            <div class="balance-withdraw-container">
+                <div class="withdrawtext">Wallet Balance</div>
+                <div class="balancetext">₹<span id="balance-data">0.00</span></div>
+                <div class="withdraw-diposit-button">
+                    <div class="withdraw-button" onclick="window.location.href = '/user/withdraw'">Withdraw</div>
+                    <div class="deposit-button">Deposit</div>
+                </div>
+            </div>
+        </section>
+        <section class="timer section">
+            <div class="timer-box">
+                <!-- <div>03</div>
+                <div>:</div>
+                <div>34</div> -->
+            </div>
+        </section>
+        <section class="color-bet section">
+            <div class="colorBet-line">Bet on Color</div>
+            <div class="colorBet-box">
+                <div class="red-box" onclick="handleBet('red',true)">Red</div>
+                <div class="green-box" onclick="handleBet('green',true)">Green</div>
+                <div class="blue-box" onclick="handleBet('blue',true)">Blue</div>
+
+            </div>
+        </section>
+        <section class="number-bet section">
+            <div class='numberBet-line'>Bet on number</div>
+            <div class="numberBet-box">
+                <div class="numberBet-row">
+                    <div class="number-box" onclick="handleBet('0',true)">0</div>
+                    <div class="number-box" onclick="handleBet('1',true)">1</div>
+                    <div class="number-box" onclick="handleBet('2',true)">2</div>
+                    <div class="number-box" onclick="handleBet('3',true)">3</div>
+                    <div class="number-box" onclick="handleBet('4',true)">4</div>
+                </div>
+                <div class='numberBet-row'>
+                    <div class="number-box" onclick="handleBet('5',true)">5</div>
+                    <div class="number-box" onclick="handleBet('6',true)">6</div>
+                    <div class="number-box" onclick="handleBet('7',true)">7</div>
+                    <div class="number-box" onclick="handleBet('8',true)">8</div>
+                    <div class="number-box" onclick="handleBet('9',true)">9</div>
+                </div>
+            </div>
+        </section>
+        <section class="big-small section">
+            <div class="small" onclick="handleBet('small',true)">SMALL</div>
+            <div class="big" onclick="handleBet('big',true)">BIG</div>
+        </section>
+        <section class="history section">
+            <div class="history-filter">
+                <div class="history-button active-history" onclick="handleHistoryClick('bet')">Bet History</div>
+                <div class="history-button" onclick="handleHistoryClick('my')">My History</div> 
+            </div>
+            <table class="history-table">
+                <thead id="tableHead">
+                   
+                </thead>
+                <tbody id="myTable">
+
+                </tbody>
+            </table>
+        </section>
+        <div class="popup">
+            <div class="color-container">
+                <div class="popup-text"> Win Go 5Min</div>
+                <div class="selected-bet-div">select <span class="slected-bet"></span></div>
+            </div>
+            <div class="balance">
+                <div>Balance</div>
+                <div class="set-bet-amount">
+                    <div class="amount-box initial-val" onclick="handleAmount(this,1)">1</div>
+                    <div class="amount-box" onclick="handleAmount(this,10)">10</div>
+                    <div class="amount-box" onclick="handleAmount(this,100)">100</div>
+                    <div class="amount-box" onclick="handleAmount(this,1000)">1000</div>
+                </div>
+            </div>
+            <div class="quantity">
+                <div>Quantity</div>
+                <div class="set-quantity">
+                    <div class="quantity-handle" onclick="handleQunatity(-1)">-</div>
+                    <div class="quantity-val"></div>
+                    <div class="quantity-handle" onclick="handleQunatity(1)">+</div>
+                </div>
+            </div>
+            <div class="multiple"> 
+                <div class="multiple-val" onclick="handlemultiple(this,1)">X1</div>
+                <div class="multiple-val" onclick="handlemultiple(this,5)">X5</div>
+                <div class="multiple-val" onclick="handlemultiple(this,10)">X10</div>
+                <div class="multiple-val" onclick="handlemultiple(this,20)">X20</div>
+                <div class="multiple-val" onclick="handlemultiple(this,50)">X50</div>
+                <div class="multiple-val" onclick="handlemultiple(this,100)">X100</div>
+            </div>
+            <div class="final-step">
+                <div class="cancel-bet" onclick="handleCancleBet()">Cancel</div>
+                <div class="add-bet" onclick="handleSubmit()">Total Amount ₹<span class="final-bet"></span></div>
+            </div>
+            </div>
+    </div>
+
+   
+    <script src="/Home.js"></script>
+</body>
+
+</html>

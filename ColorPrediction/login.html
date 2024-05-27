@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+    <div class="main">
+        <div class="login-text">Login</div>
+
+        <section>
+            <form id="form" method="post">
+
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your Username">
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="password">
+
+                <input type="submit" value="Login" id="submit">
+
+            </form>
+            <div style="text-align: center;color: #3c3838;margin: 10px;">or</div>
+            <div onclick="window.location.href = '/user/signup'" class="login-button">Sign Up</div>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+     const form = document.getElementById('form');
+     form.addEventListener('submit',async (e)=>{
+      e.preventDefault();
+      const Username = document.getElementById('username').value;
+      const Password = document.getElementById('password').value;
+      const res = await axios.post('http://localhost:5000/user/login',{Username,Password});
+      
+      if(res.status===200){
+       window.location.href = '/';
+      }
+     })
+    </script>
+</body>
+</html>

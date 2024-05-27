@@ -1,0 +1,135 @@
+body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: rgb(25, 93, 152);
+}
+
+.main{
+    max-width: 800px;
+    margin: auto;
+    background-color: white;
+    /* height: 150vh; */
+}
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.back-arrow{
+    font-size: 25px;
+    font-weight: bolder;
+}
+
+.header-heading{
+    font-size: 25px;
+}
+
+.bg-red{
+    background-color: red;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    margin: 20px;
+    text-align: center;
+}
+
+.available-text,.balance{
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.bank-box{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 100px;
+    margin: auto;
+    border-radius: 7px;
+    text-align: center;
+}
+
+.card-img{
+    font-size: 24px;
+    margin: 5px;
+}
+
+.bankcard-text{
+    padding: 5px;
+}
+
+.addbank-box{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 270px;
+    margin: auto;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px auto;
+    padding: 5px;
+}
+
+.plus-symbol{
+    font-size: 20px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(56, 54, 54);
+    border-radius: 10px;
+    margin: 10px auto;
+}
+
+input{
+    display: block;
+  width: 80%;
+  margin: auto;
+  border: navajowhite;
+  background-color: #4d434324;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+
+label{
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.bankdetails-form{
+    width: 300px;
+    margin: auto;
+}
+
+#save{
+    background-color: rgba(246, 21, 21, 0.86);
+    color: white;
+    width: 120px;
+    margin: auto;
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 7px;
+    margin-top: 20px;
+}
+
+.bankdetails-container{
+    display: none;
+}
+
+#widthdraw{
+    display: block;
+    padding: 14px;
+    margin: 15px auto;
+}
+
+.withdraw-button{
+    margin: 20px auto;
+    width: 250px;
+    padding: 8px;
+    border-radius: 10px;
+    background-color: rgba(255, 0, 0, 0.523);
+    color: white;
+    text-align: center;
+}
