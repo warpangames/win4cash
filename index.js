@@ -19,7 +19,11 @@ connectdb()
     console.log("Error in DB connection :",err);
 })
 
-app.use(cors());
+
+app.use(cors({
+    origin: 'https://win4cash.in',
+    credentials: true
+  }));
 
 app.listen(process.env.PORT || 2000,()=>
     console.log(`server is running port no ${process.env.PORT}`)
