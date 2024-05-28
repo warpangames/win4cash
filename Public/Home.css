@@ -3,6 +3,9 @@ body{
     margin: 0;
     box-sizing: border-box;
     background-color: rgb(25, 93, 152);
+    font-family: "Poppins", sans-serif;
+
+
 }
 
 .main{
@@ -18,15 +21,11 @@ body{
     justify-content: space-between;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.26);
-    border-radius: 10px;
+    padding: 5px 15px;
     
 }
 
-.logo{
-    font-size: 20px;
-    font-weight: bold;
-    margin-left: 3%;
-}
+
 
 .profile-logo{
     margin-right: 3%;
@@ -42,7 +41,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 60px;
+    font-size: 76px;
     padding: 20px 0;
     color: rgba(255, 255, 255, 1);
     font-weight: 700;
@@ -73,22 +72,24 @@ body{
 }
 
 .colorBet-line,.numberBet-line{
-font-size: 19px;
-margin: 20px 0 3px 0;
+font-size: 14px;
+margin: 20px 5px 3px 0;
 }
 
 .red-box{
     background: linear-gradient(180deg, #FF0000 0%, #990000 100%);
-
+    z-index: 2;
 }
 
 .green-box{
     background: linear-gradient(180deg, #0EB200 0%, #064C00 100%);
+    z-index: 2;
 
 }
 
 .blue-box{
     background: linear-gradient(180deg, #2838CD 0%, #141C67 100%);
+    z-index: 2;
 
 }
 
@@ -113,6 +114,7 @@ margin: 20px 0 3px 0;
     align-items: center;
     justify-content: space-evenly;
     margin: auto;
+    z-index: 2;
 }
 
 /* .numberBet-row{
@@ -184,7 +186,7 @@ margin: 20px 0 3px 0;
     }
 
     .history{
-        background-color: #FBF7F7;
+        background-color: #fbf7f738;
     }
 
     .history-filter{
@@ -207,7 +209,7 @@ margin: 20px 0 3px 0;
 
     .active-history{
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        background-color: white;
+        background-color: #ffffff47;
     }
 
     .history-table{
@@ -218,7 +220,7 @@ margin: 20px 0 3px 0;
     }
 
     .history-row{
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.24);
         margin: 10px;
     }
     
@@ -352,18 +354,17 @@ margin: 20px 0 3px 0;
         margin: auto;
         text-align: center;
         margin: 20px auto;
-        padding: 10px 0;
+        padding: 20px 0;
     }
 
     .withdrawtext{
-        font-size: 15px;
-        color: rgb(64, 63, 63);
-        margin: 5px auto;
+        font-size: 14px;
+        color: rgb(226, 226, 226);
     }
 
     .balancetext{
-        font-size: 20px;
-        margin: 10px auto;
+        font-size: 36px;
+        color: white;
     }
 
     .withdraw-diposit-button{
@@ -377,17 +378,15 @@ margin: 20px 0 3px 0;
     .withdraw-button{
         width: 120px;
         padding: 5px;
-        background-color: rgb(201, 201, 30);
-        color: white;
-        border-radius: 10px;
+        background-color: rgb(33, 137, 223);
+        border-radius: 5px;
     }
 
     .deposit-button{
         width: 120px;
         padding: 5px;
-        background-color:rgba(255, 0, 0, 0.621);
-        color: white;
-        border-radius: 10px;
+        background-color:rgb(29, 190, 115);
+        border-radius: 5px;
     }
 
     .unclickable {
@@ -395,4 +394,80 @@ margin: 20px 0 3px 0;
         z-index: 0.5;
         filter: blur(1px);
     }
+
+    .redBlur{
+        position: relative;
+        top: -50px;
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        border-radius: 50%;
+
+        filter: blur(60px);
+    }
+   
+    .greenBlur{
+        position: relative;
+        top: 20px;
+        width: 250px;
+        height: 250px;
+        background-color: rgb(15, 221, 15);
+    border-radius: 50%;
+    filter: blur(50px);
+    }
     
+    .blueBlur{
+        position: relative;
+        top: -50px;
+        width: 200px;
+        height: 200px;
+        background-color: blue;
+        border-radius: 50%;
+
+        filter: blur(50px);
+
+    }
+    .yellowBlur{
+        position: absolute;
+        left: -200px;
+        top: -300px;
+        width: 400px;
+        height: 300px;
+        background-color: #FFD700;
+        border-radius: 50%;
+
+        filter: blur(90px);
+    }
+
+    .yellowBlur2{
+        position: absolute;
+        right: 20px;
+        width: 300px;
+        height: 200px;
+        background-color: #ffd000;
+        border-radius: 50%;
+        filter: blur(90px);
+    }
+
+
+    .color-bhav{
+        margin-top: 10px;
+        font-size: 15px;
+        color: #ffffffad;
+    }
+
+    .Bs-bhav{
+        margin-top: 10px;
+        font-size: 15px;
+        color: #ffffffad;
+    }
+
+    .blurContainer{
+        transform: translate(10px, -150px);
+        position: absolute;
+        display: flex;
+        width: 90%;
+        z-index: 0;
+        justify-content: space-between;
+    }
+

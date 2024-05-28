@@ -5,22 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="/login.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
     <div class="main">
         <div class="login-text">Login</div>
 
         <section>
+
             <form id="form" method="post">
 
                 <label for="username">Username</label>
+                <div class="bar">
+                <i class="fa fa-user"></i>
                 <input type="text" id="username" name="username" placeholder="Enter your Username">
-
+            </div>
                 <label for="password">Password</label>
+
+                <div class="bar">
+                <i class="fa fa-lock"></i>
                 <input type="password" id="password" name="password" placeholder="password">
 
+            </div>
                 <input type="submit" value="Login" id="submit">
-
+        
             </form>
             <div style="text-align: center;color: #3c3838;margin: 10px;">or</div>
             <div onclick="window.location.href = '/user/signup'" class="login-button">Sign Up</div>

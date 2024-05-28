@@ -7,17 +7,20 @@
     <title>Color Prediction </title>
     <link rel="stylesheet" href="/Home.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 
 <body>
     <div class="main">
         <header>
             <nav class="navbar">
-                <div class="logo">
-                    LOGO
-                </div>
+                    <img src="./Images/logo.png"></img>
                 <div class="profile-logo">
-                    <img src="./Public/Images/profileLogo.jpg" alt="">
+                    <div style="width: 30px; height: 30px; border-radius: 50%; background-color: white; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-user" style="color: rgb(71, 71, 71); font-size: 24px;"></i>
+                    </div>
                 </div>
             </nav>
         </header>
@@ -39,14 +42,38 @@
             </div>
         </section>
         <section class="color-bet section">
+            
+            
             <div class="colorBet-line">Bet on Color</div>
             <div class="colorBet-box">
-                <div class="red-box" onclick="handleBet('red',true)">Red</div>
-                <div class="green-box" onclick="handleBet('green',true)">Green</div>
-                <div class="blue-box" onclick="handleBet('blue',true)">Blue</div>
+                <div class="red-box" onclick="handleBet('red',true)">
+                <div style="text-align: center;">
+                    <div>Red</div>
+                    <div class="color-bhav"></div>
+                </div>
+                </div>
+                <div class="green-box" onclick="handleBet('green',true)">
+                    <div style="text-align: center;">
+                        <div>Green</div>
+                        <div class="color-bhav"></div>
+                    </div>
+                    </div>
+                    <div class="blue-box" onclick="handleBet('blue',true)">
+                        <div style="text-align: center;">
+                            <div>Blue</div>
+                            <div class="color-bhav"></div>
+                        </div>
+                        </div>
 
             </div>
-        </section>
+
+            <div class="blurContainer">
+                <div class="redBlur"></div>
+                <div class="greenBlur"></div>
+                <div class="blueBlur"></div>         
+                </div>
+
+        </section>
         <section class="number-bet section">
             <div class='numberBet-line'>Bet on number</div>
             <div class="numberBet-box">
@@ -111,11 +138,27 @@
                     <div></div>
                    </div>
         </div>
+
+        <div class="blurContainer">
+            <div class="yellowBlur"></div>
+            <div class="yellowBlur2"></div>
+
+            </div>
         </section>
         <section class="big-small section">
-            <div class="small" onclick="handleBet('small',true)">SMALL</div>
-            <div class="big" onclick="handleBet('big',true)">BIG</div>
-        </section>
+            <div class="small" onclick="handleBet('small',true)">
+            <div style="text-align: center;">
+                <div>SMALL</div>
+                <div class="Bs-bhav"></div>
+            </div>
+            </div>
+            <div class="big" onclick="handleBet('big',true)">
+                <div style="text-align: center;">
+                    <div>BIG</div>
+                    <div class="Bs-bhav"></div>
+                </div>
+            </div>
+  </section>
         <section class="history section">
             <div class="history-filter">
                 <div class="history-button active-history" onclick="handleHistoryClick('bet')">Bet History</div>

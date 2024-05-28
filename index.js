@@ -20,10 +20,7 @@ connectdb()
 })
 
 
-app.use(cors({
-    origin: 'https://win4cash.in',
-    credentials: true
-  }));
+app.use();
 
 app.listen(process.env.PORT || 2000,()=>
     console.log(`server is running port no ${process.env.PORT}`)
