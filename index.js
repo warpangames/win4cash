@@ -1,15 +1,13 @@
 const { connect } = require("mongoose");
-const app = require("./app");
 const dotenv = require("dotenv")
 const jwt = require("jsonwebtoken")
-const cors  = require('cors');
 const connectdb = require("./db/connect.js");
+const app = require("./app");
 
 
 dotenv.config({
     path: './.env'
 })
-
 
 connectdb()
 .then(()=>{
@@ -20,7 +18,10 @@ connectdb()
 })
 
 
-app.use();
+// {
+//     origin:["http://localhost:5000","https://win4cash.in"],
+//     credentials:true
+// }
 
 app.listen(process.env.PORT || 2000,()=>
     console.log(`server is running port no ${process.env.PORT}`)

@@ -31,6 +31,10 @@ const UserRegister = new mongoose.Schema({
         type:Number,
         trim:true,
         default:0,
+    },
+    bankdetail:{
+        type:Boolean,
+        default:false
     }
 },{timestamps:true})
 

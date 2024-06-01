@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="game_statistics.css"> -->
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body style="font-family:'Poppins';">
+    <style>
+        body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color:rgb(238, 244, 249) ;
+    height: 80px;
+}
+
+header p{
+    margin: 0;
+}
+
+.header-left{
+    color: rgb(31, 31, 31);
+    font-size: 35px;
+}
+.header-middle{
+    color: rgb(31, 31, 31);
+    font-size: 20px;
+    font-weight: bold;
+}
+.header-right{
+    color: rgb(31, 31, 31);
+    font-size: 17px;
+}
+
+.section1{
+    margin: 10px;
+}
+
+.flex1{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: auto;
+    margin-top: 30px;
+    max-width: 1000px;
+
+}
+
+.flex1 button{
+    min-width: 70px;
+    font-size: 17px;
+    text-align: center;
+    padding: 8px;
+    border-radius: 20px;
+}
+
+.flex1 :nth-child(1){
+    background: linear-gradient(to right, #F6655F, #faada9);
+    color: white;
+}
+
+.bg-red{
+    background-color: #F6655F;
+    border-radius: 30px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: 10px;
+    margin-top: 20px;
+    max-width: 1000px;
+}
+
+.bg-red-p1{
+ margin:10px 0;
+ font-size: 20px;
+ text-align: center;
+ font-weight: bolder;
+}
+
+.bg-red-p2{
+ margin:10px 0;
+ font-size: 16px;
+ text-align: center;
+}
+
+.img1{
+    max-width: 600px;
+    text-align: center;
+    margin: auto;
+    display: block;
+    margin-top: 70px;
+}
+
+@media (max-width:410px) {
+    .flex1 button{
+        font-size: 15px;
+        padding: 4px;
+    }
+}
+
+    </style>
+    <header>
+        <p class="header-left"><</p>
+        <p class="header-middle">Statistics</p>
+        <p class="header-right"></p>
+      </header>
+      <section class="section1">
+      <div class="flex1">
+      <button>Today</button>
+      <button>Yestarday</button>
+      <button>This Week</button>
+      <button>This Month</button>
+    </div>
+    <div class="bg-red">
+        <div>
+            <p class="bg-red-p1">₹<span>0.00</span></p>
+            <p class="bg-red-p2">Total Bet</p>
+        </div>
+    </div>
+
+    <div class="img1">
+        <img src="Images/noData.png" alt="">
+    </div>
+      </section>
+</body>
+</html>

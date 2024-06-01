@@ -133,3 +133,14 @@ label{
     color: white;
     text-align: center;
 }
+
+table{
+    text-align: center;
+    margin: auto;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td,th{
+padding-bottom: 10px;
+}

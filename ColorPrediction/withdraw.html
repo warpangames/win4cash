@@ -6,13 +6,14 @@
     <title>Withdraw</title>
     <link rel="stylesheet" href="/withdraw.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
 <body>
     <div class="main">
      <header>
         <div class="header">
-            <div class="back-arrow"><</div>
+            <div class="back-arrow" onclick="window.location.href='/'"><</div>
             <div class="header-heading">Withdraw</div>
             <div></div>
         </div>
@@ -34,7 +35,7 @@
         <div>Add a bank account number</div>
      </div>
      <div class="bankdetails-container">
-        <form  class="bankdetails-form">
+        <form  class="bankdetails-form" onsubmit="handleBankDetails(event)" method="post">
             <label for="Bank-Name">Bank Name</label>
             <input type="text" id="Bank-Name" name="Bank-Name" required>
 
@@ -55,11 +56,24 @@
      </div>
      <div>
         <input type="text" id="widthdraw" name="amount" placeholder="Enter Withdraw Amount">
-        <p class="withdraw-button">WITHDRAW</p>
+        <p class="withdraw-button" onclick="handleWithdraw()">WITHDRAW</p>
      </div>
      <div class="withdraw-histry" style="padding: 20px 0;">
         <p style="font-weight: bolder;">Withdraw History</p>
      </div>
+     <table>
+      <thead>
+         <tr>
+            <th>UserName</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+         </tr>
+      </thead>
+      <tbody id="historyTable">
+
+      </tbody>
+     </table>
     </div>
     <script src="/withdraw.js"></script>
 </body>

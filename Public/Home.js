@@ -17,6 +17,7 @@ let returnData ;
 
 async function getAllData(){
     const res = await axios.get('https://win4cash.in/Alldata');
+    console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
         walletContainer.innerHTML = res.data.wallet;

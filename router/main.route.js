@@ -21,9 +21,9 @@ console.log(req.cookies,'hello')
        if(userdata){
         next()
        }
-       else{
-       res.redirect("/user/login")
-       }
+    //    else{
+    //    res.redirect("/user/login")
+    //    }
     }
     else{
         res.redirect("/user/login")

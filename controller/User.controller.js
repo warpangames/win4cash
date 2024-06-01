@@ -6,6 +6,8 @@ require("../db/connect.js");
 const auth = require("../middleware/auth.middleware.js");
 const Usermodel = require("../models/usermodel.model.js");
 const Batmodel = require("../models/Batmodel.model.js");
+const Withdraw = require("../models/bankdetail.model.js")
+const Withdrawammount = require("../models/withdrawammount.model.js")
 
 const UserRegister = async (req, res) => {
     try {
@@ -74,22 +76,62 @@ const withdraw = async (req,res)=>{
 
     console.log(id)
     const user = await Usermodel.findById(id)
-    const Blance = user.wallet;
-    user.wallet -= req.body.Ammount;
+    // const Blance = user.wallet;
+    // user.wallet -= req.body.Ammount;
+    user.bankdetail = true;
 
+       await Withdraw.create({
+        Username:user.Username,
+       
+        Accountno:req.body.Accountno,
+        IFSC:req.body.ifsc,
+        bankname:req.body.bankname,
+        fullname:req.body.fullname,
+        phoneno:req.body.phoneno
+
+
+       })
+        console.log("")
        await user.save().then(()=>{
         console.log("ammount debited sucessfully !")
        })
-
-       res.json({
-        reqammount:req.body.Ammount,
-        Blance:Blance,
-       })
+       res.json("your request sent sucessfully !")
     }
     else{
         res.json("token didn't get !")
     }
 
+}
+
+const WithdrawAmmount = async (req,res) =>{
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+    // console.log(req.header("Authorization")?.replace("Bearer",""))
+
+    if(Incomingaccesstoken){
+    const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
+    const id = Decodedtoken?.id;
+    const Username = Decodedtoken?.Username;
+
+    console.log(id)
+    const user = await Usermodel.findById(id)
+    const Blance = user.wallet;
+   
+    console.log(typeof req.body)
+
+    await Withdrawammount.create({
+        Requestedammount:parseFloat(req.body.reqammount),
+        Username:user.Username,
+        Walletammount:Blance
+
+    })
+    user.wallet -= parseFloat(req.body.reqammount);
+    await user.save()
+    res.json("your request sucessfully sended !")
+    }
+
+    else{
+        res.json("token didn't get !")
+    }
 }
 
 const UserHistory = async (req, res) => {
@@ -116,5 +158,7 @@ const UserHistory = async (req, res) => {
 module.exports = {
     UserRegister,
     Userlogin,
-    UserHistory
+    UserHistory,
+    withdraw,
+    WithdrawAmmount
 };
