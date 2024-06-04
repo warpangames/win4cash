@@ -84,7 +84,7 @@ const withdraw = async (req,res)=>{
         Username:user.Username,
        
         Accountno:req.body.Accountno,
-        IFSC:req.body.ifsc,
+        IFSC:req.body.IFSC,
         bankname:req.body.bankname,
         fullname:req.body.fullname,
         phoneno:req.body.phoneno

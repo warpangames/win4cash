@@ -6,6 +6,9 @@ const colorContainer = document.querySelector('.color-container');
 const betContainer  = document.querySelector('.slected-bet');
 const finalBetContainer = document.querySelector('.final-bet');
 const timer = document.querySelector('.timer-box');
+const numberBetBhav = document.querySelectorAll('.bet-bhav-number');
+const colorBetBhav = document.querySelectorAll('.color-bhav');
+const BsBhav = document.querySelectorAll('.Bs-bhav');
 let Amount = 1;
 let Quantity = 1;
 let initial = true;
@@ -163,10 +166,15 @@ function populateTable(data, keysToShow) {
         data.forEach(obj => {
             const row = document.createElement('tr');
             row.classList.add('history-row');
+        //    row.style.color = obj.Color;
             keysToShow.forEach(key => {
                 const cell = document.createElement('td');
                 cell.classList.add('table-column');
-                if (key === 'Number') {
+                if(key==='Color'){
+                   
+                    cell.innerHTML = `<div style='width:15px;height:15px;border-radius:50%; background-color:${obj[key]};margin:auto'></div>`;
+                }
+               else if (key === 'Number') {
 
                     cell.textContent = obj[key].toString(); // Convert integer to string for 'number' key
                 } else {
@@ -207,7 +215,6 @@ function findReturn(val){
 }
 
 function handleBet(val,type=false){
-    const numberBetBhav = document.querySelectorAll('.bet-bhav-number');
     console.log(numberBetBhav,'betbhav');
     if(type&&initial){
         amountContainer[0].style.backgroundColor='red';
@@ -219,7 +226,6 @@ function handleBet(val,type=false){
     initial = false;
    
     document.cookie = `betType=${val}`;
-    console.log(popup,'hello')
     popup.style.display = 'block';
     colorContainer.style.background = val==='green'?'linear-gradient(180deg, #0EB200 0%, #064C00 100%)':val==='blue'?'linear-gradient(180deg, #2838CD 0%, #141C67 100%)':val==='red'?'linear-gradient(180deg, #FF0000 0%, #990000 100%)':val==='0'||val==='1'||val=='2'||val=='3'||val=='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'?'radial-gradient(50% 345.95% at 50% 50%, #FFD700 0%, #A18800 100%)':val==='big'?'linear-gradient(180deg, #C342FF 0%, #440088 100%)':'linear-gradient(180deg, #00FFF0 0%, #006889 100%)';
     betContainer.innerHTML=val;
@@ -227,7 +233,6 @@ function handleBet(val,type=false){
     const finalBet = Amount*Quantity;
     finalBetContainer.innerHTML = finalBet;
     const returnAmt = finalBet*findReturn(val);
-   console.log(returnAmt,'returnAmt');
    if(val==='0'||val==='1'||val==='2'||val==='3'||val==='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'){
     console.log('step1');
     let intVal = parseInt(val);
@@ -249,10 +254,67 @@ function handleBet(val,type=false){
     })
    }
 
+    if(val==='red'){
+        colorBetBhav.forEach((item,index)=>{
+            if(index===0){
+                item.innerHTML = `+${returnAmt}`;
+            }
+            else{
+                item.innerHTML = `-${returnAmt/2}`;
+            }
+            
+        })
+    }
+    if(val==='green'){
+        colorBetBhav.forEach((item,index)=>{
+            if(index===1){
+                item.innerHTML = `+${returnAmt}`;
+            }
+            else{
+                item.innerHTML = `-${returnAmt/2}`;
+            }
+            
+        })
+    }
+    if(val==='blue'){
+        colorBetBhav.forEach((item,index)=>{
+            if(index===2){
+                item.innerHTML = `+${returnAmt}`;
+            }
+            else{
+                item.innerHTML = `-${returnAmt/2}`;
+            }
+            
+        })
+   }
+
+   if(val==='small'){
+    BsBhav.forEach((item,index)=>{
+        if(index===0){
+            item.innerHTML = `+${returnAmt}`;
+        }
+        else{
+            item.innerHTML = `-${returnAmt}`;
+        }
+        
+    })
 }
 
+if(val==='big'){
+    BsBhav.forEach((item,index)=>{
+        if(index===1){
+            item.innerHTML = `+${returnAmt}`;
+        }
+        else{
+            item.innerHTML = `-${returnAmt}`;
+        }
+        
+    })
+}
+ 
+
+}
 function handleCancleBet(){
-    console.log('hello')
     initial = true;
      Amount = 1;
      Quantity = 1;
@@ -269,12 +331,32 @@ function handleCancleBet(){
     amountContainer[0].style.color='white';
     multipleContainer[0].style.color='white';
 
+    numberBetBhav.forEach((item,index)=>{
+       
+            item.innerHTML ='';
+        
+    })
+
+    BsBhav.forEach((item,index)=>{
+       
+            item.innerHTML = '';
+        
+        
+    })
+
+    colorBetBhav.forEach((item,index)=>{
+       
+            item.innerHTML = '';
+        
+        
+    })
+
     popup.style.display = 'none';
+
 }
 
 
 async function handleSubmit(){
-    console.log('hello1')
     const bet = getCookie('betType');
     let batoption;
     if(bet==='0'||bet==='1'||bet==='2'||bet==='3'||bet==='4'||bet==='5'||bet==='6'||bet==='7'||bet==='8'||bet==='9'){

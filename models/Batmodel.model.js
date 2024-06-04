@@ -26,7 +26,7 @@ const Bat = new mongoose.Schema({
 
     }
 
-},{timestamp:true})
+},{timestamps:true})
 
 const Batmodel = mongoose.model("Batmodel",Bat);
 

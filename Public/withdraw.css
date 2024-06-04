@@ -79,6 +79,7 @@ body{
     border: 1px solid rgb(56, 54, 54);
     border-radius: 10px;
     margin: 10px auto;
+    height: 32px;
 }
 
 input{
@@ -134,13 +135,57 @@ label{
     text-align: center;
 }
 
-table{
-    text-align: center;
+.history-table{
+    max-width: 1000px;
     margin: auto;
-    width: 100%;
-    border-collapse: collapse;
+    margin-top: 30px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
 }
 
-td,th{
-padding-bottom: 10px;
+table{
+    width: 100%;
+    padding: 5px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+td, th{
+    text-align: center;
+}
+
+th{
+    padding: 15px;
+}
+
+td{
+    padding: 10px;
+    border-bottom: 1px solid rgb(77, 76, 76);
+}
+
+.table-header{
+    background-color: #F6433F;
+    border-radius: 4px;
+    color: white;
+}
+
+@media (max-width:650px) {
+    table{
+        font-size: 12px;
+    }
+}
+
+@media (max-width:420px){
+    .section1{
+        margin: 2px;
+        padding: 0;
+    }
+
+    body{
+        margin: 0;
+    }
+
+    .history-table{
+    overflow-x: auto;
+    }
 }

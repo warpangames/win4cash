@@ -53,10 +53,14 @@ const DataforAdmin = {
     "7": 0,
     "8": 0,
     "9": 0,
-    "userdata":[]
+    "userdata": [],
+    "won": 0,
+    "loss": 0,
+    "wonammount": 0,
+    "lossammount": 0
 
 }
-console.log("min data",minData)
+console.log("min data", minData)
 
 let IncomingResult = {
     color: "",
@@ -66,7 +70,7 @@ let IncomingResult = {
 }
 
 const IncomingResultfromAdmin = async (req, res) => {
-    console.log("this data for admin side",req.body)
+    console.log("this data for admin side", req.body)
     IncomingResult.color = req.body.color,
         IncomingResult.number = req.body.number,
         IncomingResult.BS = req.body.Bs
@@ -106,7 +110,64 @@ const UserData = async (req, res) => {
         }
         minData.push(Data);
         DataforAdmin.userdata = minData;
+        const LastBatData = await Batmodel.find({ Username: Username }).limit(5).sort({ _id: -1 })
+        if (LastBatData.length != 0) {
+           await Promise.all(LastBatData.filter(async (data) => {
+                const RetX = await Result.findOne({ Uid: data.Uid })
+                // console.log("Retx",RetX)
+
+                //   console.log("data for admim ", data)
+     
+                if (data.status == "won") {
+                    if (data.Batoption == "color") {
+                        const Multi_ = await Return.ColorX.findOne().sort({ _id: -1 })
+                        const Multi = Multi_.color
+                        console.log(Multi)
+                        DataforAdmin.won += 1;
+                        DataforAdmin[wonammount] += parseFloat(data.Ammount * Multi)
+                        console.log( LastBatData.wonammount)
+                    }
+                    else if (data.Batoption == "number") {
+                        const Multi_ = await Return.NumberX.findOne().sort({ _id: -1 })
+                        const Multi = Multi_[data.choose]
+                        DataforAdmin.won += 1;
+                        DataforAdmin.wonammount += data.Ammount * Multi
+                    }
+                    else if (data.Batoption == "Bs") {
+                        const Multi = await Return.BgX.findOne().sort({ _id: -1 })
+                        DataforAdmin.won += 1;
+                        DataforAdmin.wonammount += data.Ammount * Multi
+                    }
+                }
+                else {
+                    if (data.status == "loss") {
+                        if (data.Batoption == "color") {
+
+                            DataforAdmin.loss += 1;
+                            DataforAdmin.lossammount += data.Ammount
+                            console.log("loss data", DataforAdmin.lossammount)
+
+                        }
+                        else if (data.Batoption == "number") {
+
+                            DataforAdmin.loss += 1;
+                            DataforAdmin.lossammount += data.Ammount
+                        }
+                        else if (data.Batoption == "Bs") {
+
+                            DataforAdmin.loss += 1;
+                            DataforAdmin.lossammount += data.Ammount
+                        }
+                    }
+            console.log("Data for Admin",DataforAdmin)
+
+                }
+            }))
+
+        }
         console.log(minData);
+        console.log("Data for Admin",DataforAdmin)
+
 
         const Batoption = req.body.batoption;
         if (Batoption == "color") {
@@ -131,17 +192,7 @@ const UserData = async (req, res) => {
                 console.log(green);
             }
         }
-        // if (Batoption == "Bs") {
-        //     if (req.body.choose == "big") {
-        //         bignumber += parseInt(req.body.Ammount);
 
-        //     }
-        //     else {
-        //         smallnumber += parseInt(req.body.Ammount);
-        //     }
-
-        // }
-        //  console.log(blue)
         else if (Batoption === "Bs") {
             if (req.body.choose === "Bignumber") {
                 bignumber += parseInt(req.body.Ammount);
@@ -205,7 +256,7 @@ const countdownTimer = () => {
         if (remainingTimeInSeconds > 0) {
             let minutes = Math.floor(remainingTimeInSeconds / 60);
             let seconds = remainingTimeInSeconds % 60;
-            // console.log(`remaining time: ${minutes}:${seconds}`);
+            // console.log(remaining time: ${minutes}:${seconds});
         } else {
             clearInterval(intervalId);
             console.log('Countdown finished. Sending results to frontend...');
@@ -263,23 +314,26 @@ const result = async (req, res) => {
 
     let colorresult;
     let result = "";
-    const nobat = [blue, red, green];
-    console.log(blue, red, green);
+    let minValueNumber;
+    const nobat = ["blue", "red", "green"];
 
 
     if (IncomingResult.color == "" && IncomingResult.BS == "") {
         console.log("code with auto")
         if (blue === red && red === green) {
-            colorresult = nobat[Math.floor(Math.random() * 3)];
+            const point = Math.floor(Math.random() * 3)
+            console.log(point)
+            result = nobat[point];
+            console.log("colorresult", colorresult)
             console.log("when all is same", colorresult);
 
-            if (colorresult === blue) {
-                result = "blue";
-            } else if (colorresult === red) {
-                result = "red";
-            } else {
-                result = "green";
-            }
+            // if (colorresult === "blue") {
+            //     result = "blue";
+            // } else if (colorresult === "red") {
+            //     result = "red";
+            // } else {
+            //     result = "green";
+            // }
         } else {
             colorresult = Math.min(blue, red, green);
 
@@ -291,34 +345,62 @@ const result = async (req, res) => {
                 result = "green";
             }
         }
-        function findMinValueNumber(mapping) {
-            let minNumber = null;
-            let minValue = Infinity;
-
-            for (let number in mapping) {
-                if (mapping[number] < minValue) {
-                    minValue = mapping[number];
-                    minNumber = number;
-                }
-            }
-
-            return minNumber;
+        function areAllValuesSame(obj) {
+            const values = Object.values(obj);
+            return values.every(v => v === values[0]);
+        }
+        function generateRandomKeyValue(obj) {
+            console.log("all number is same")
+            const keys = Object.keys(obj);
+            var randomKey = keys[Math.floor(Math.random() * keys.length)];
+            random_key = randomKey
+            console.log(random_key)
         }
 
-        const minValueNumber = findMinValueNumber(numberValues);
-        console.log(numberValues)
-        console.log(minValueNumber);
+        if (areAllValuesSame(numberValues)) {
+            let key;
+            generateRandomKeyValue(numberValues)
+            minValueNumber = random_key;
+            console.log(minValueNumber)
 
-        let Bsresult = "";
-        const BSresult = Math.min(bignumber, smallnumber)
-        if (BSresult == bignumber) {
-            Bsresult = "Big"
         }
         else {
-            Bsresult = "Small"
-        }
+            function findMinValueNumber(mapping) {
+                let minNumber = null;
+                let minValue = Infinity;
 
-        console.log({ Bsresult, BSresult })
+                for (let number in mapping) {
+                    if (mapping[number] < minValue) {
+                        minValue = mapping[number];
+                        minNumber = number;
+                    }
+                }
+
+                return minNumber;
+            }
+
+            minValueNumber = findMinValueNumber(numberValues);
+
+            console.log(numberValues)
+            console.log(minValueNumber);
+        }
+        let Bsresult = "";
+        const Bs_arr = ["Big", "Small"]
+
+        if (bignumber != smallnumber) {
+            const BSresult = Math.min(bignumber, smallnumber)
+            if (BSresult == bignumber) {
+                Bsresult = "Big"
+            }
+            else {
+                Bsresult = "Small"
+            }
+        }
+        else {
+            Bsresult = Bs_arr[Math.floor(Math.random() * 3)]
+
+        }
+        // console.log({ Bsresult, BSresult })
         const id = generateUniqueId();
         await Result.create({
             Number: minValueNumber,
@@ -333,161 +415,56 @@ const result = async (req, res) => {
         try {
             if (minData.length > 0) {
 
-                const dataWithIds = minData.map(data => {
+                const dataWithIds = await Promise.all(minData.map(async (data) => {
                     let status = 'loss';
-
                     const trimmedChoose = data.choose.trim().toLowerCase();
                     const trimmedResult = result.trim().toLowerCase();
-
-                    if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
-                        status = 'won';
-                        Return.ColorX.findOne().then((Data) => {
-                            console.log("data from colorx", Data)
+            
+                    try {
+                        const user = await Usermodel.findById(userid);
+                        if (!user) {
+                            throw new Error('User not found');
+                        }
+            
+                        if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
+                            status = 'won';
+                            const Data = await Return.ColorX.findOne();
                             const X = Data.color;
-                            try {
-                                console.log(userid)
-                                Usermodel.findById(userid).then((user) => {
-                                    console.log("user", user)
+                            const total_adding_ammount =  X* data.Ammount;
+                            await Usermodel.updateOne({_id:userid},{$inc:{wallet:total_adding_ammount}})
 
-                                    if (!user) {
-                                        throw new Error('User not found');
-                                    }
-                                    // let result = minData.find(obj => obj.Username === user.Username)
-                                    console.log(result)
-                                    user.wallet += X * (data.Ammount);
+                            
+                            console.log("x color",X)
+                        }  if (data.Batoption === 'number' && (data.choose) === maxValueNumber) {
+                            status = 'won';
+                            const Data = await Return.NumberX.findOne().sort({ _id: -1 });
+                            const X = Data[data.choose];
+                            const total_adding_ammount = X* data.Ammount;
+                            await Usermodel.updateOne({_id:userid},{$inc:{wallet:total_adding_ammount}})
 
-                                    user.save().then(() => {
-                                        console.log('Money credited successfully!');
+                           
+                            console.log("x number",X)
 
-                                    })
-                                        .catch((err) => console.log(err));
-                                })
+                        }  if (data.Batoption === 'Bs' &&
+                            ((data.choose == 'big' &&  Bsresult == "Big") ||
+                             (data.choose == 'small' && Bsresult == "Small"))) {
+                            status = 'won';
+                            const Data = await Return.BgX.findOne();
+                            const X = Bsresult == "Big" ? Data.big : Data.small;
+                            const total_adding_ammount =  X* data.Ammount;
+                            await Usermodel.updateOne({_id:userid},{$inc:{wallet:total_adding_ammount}})
+                            console.log('Big/Small amount credited successfully!', user.wallet);
 
-
-                            }
-                            catch (error) {
-                                console.error('Error crediting money:', error.message);
-                            }
-
-                        })
-
-                    } else if (data.Batoption === 'number' && (data.choose) === minValueNumber) {
-                        status = 'won';
-                        Return.NumberX.findOne().limit(1).sort({ _id: -1 }).then((Data) => {
-                            // let result = Data.find(obj => obj.Username === user.Username)
-                            const X = Data[data.choose]
-
-                            try {
-                                console.log(userid)
-                                Usermodel.findById(userid).then((user) => {
-                                    console.log("user", user)
-
-                                    if (!user) {
-                                        throw new Error('User not found');
-                                    }
-                                    // let result = minData.find(obj => obj.Username === user.Username)
-                                    console.log(result)
-                                    user.wallet += X * (data.Ammount);
-
-                                    user.save().then(() => {
-                                        console.log('Money credited successfully!');
-
-                                    })
-                                        .catch((err) => console.log(err));
-                                })
-
-
-                            }
-                            catch (error) {
-                                console.error('Error crediting money:', error.message);
-                            }
-
-
-                        })
-
-
-
-
-
-                    } else if (data.Batoption === 'Bs' &&
-                        ((data.choose == 'big' && Bsresult == "Big") ||
-                            (data.choose == 'small' && Bsresult == "Small"))) {
-                        status = 'won';
-                        if (Bsresult == "Big") {
-                            Return.BgX.findOne().then((DATA) => {
-                                const X = DATA.big
-                                try {
-                                    console.log(userid)
-                                    Usermodel.findById(userid).then((user) => {
-                                        console.log("user", user)
-
-                                        if (!user) {
-                                            throw new Error('User not found');
-                                        }
-                                        // let result = minData.find(obj => obj.Username === user.Username)
-                                        // nconsole.log(result)
-                                        user.wallet += parseInt(X) * (data.Ammount);
-                                        console.log(user.wallet);
-
-                                        user.save().then(() => {
-                                            console.log('Money credited successfully!');
-
-                                        })
-                                            .catch((err) => console.log(err));
-                                    })
-
-
-                                }
-                                catch (error) {
-                                    console.error('Error crediting money:', error.message);
-                                }
-
-
-                            })
+                            console.log("x bg",X)
 
                         }
-                        if (Bsresult == "Small") {
-                            Return.BgX.find().then((DATA) => {
-                                const X = DATA.BatXsmall
-                                try {
-                                    console.log(userid)
-                                    Usermodel.findById(userid).then((user) => {
-                                        console.log("user", user)
-
-                                        if (!user) {
-                                            throw new Error('User not found');
-                                        }
-                                        // let result = minData.find(obj => obj.Username === user.Username)
-                                        // console.log(result);
-                                        user.wallet += parseInt(X) * (data.Ammount);
-                                        console.log(user.wallet);
-
-                                        user.save().then(() => {
-                                            console.log('Money credited successfully!');
-
-                                        })
-                                            .catch((err) => console.log(err));
-                                    })
-
-
-                                }
-                                catch (error) {
-                                    console.error('Error crediting money:', error.message);
-                                }
-
-
-                            })
-
-                        }
+                         console.log("final waller",user.wallet)
+                        return { ...data, Uid: id, status: status };
+                    } catch (error) {
+                        console.error('Error crediting money:', error.message);
+                        return { ...data, Uid: id, status: status }; // Ensure data is still returned even if an error occurs
                     }
-
-                    console.log("Final status:", status);
-
-
-                    // return { ...data, Uid: id, status:status };
-                    return { ...data, Uid: id, status: status };
-
-                });
+                }));
                 console.log(dataWithIds)
                 maindata = dataWithIds;
 
@@ -499,7 +476,7 @@ const result = async (req, res) => {
         } catch (error) {
             console.error("Error inserting data into the database:", error);
         }
-       
+
         res.json({
             color: result,
             number: minValueNumber,
@@ -507,13 +484,14 @@ const result = async (req, res) => {
         })
 
     }
+
     else {
         const id = generateUniqueId();
 
         await Result.create({
-            Number:IncomingResult.number ,
-            Color:IncomingResult.color ,
-            Bs: IncomingResult.BS ,
+            Number: IncomingResult.number,
+            Color: IncomingResult.color,
+            Bs: IncomingResult.BS,
             Uid: id
 
         })
@@ -521,179 +499,74 @@ const result = async (req, res) => {
         let maindata = [];
 
         try {
+
             if (minData.length > 0) {
-
-                const dataWithIds = minData.map(data => {
+                // let total_adding_ammount = 0;
+                const dataWithIds = await Promise.all(minData.map(async (data) => {
                     let status = 'loss';
-
                     const trimmedChoose = data.choose.trim().toLowerCase();
                     const trimmedResult = IncomingResult.color.trim().toLowerCase();
 
-                    if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
-                        status = 'won';
-                        Return.ColorX.findOne().then((Data) => {
-                            console.log("data from colorx", Data)
+                    try {
+                        const user = await Usermodel.findById(userid);
+                        if (!user) {
+                            throw new Error('User not found');
+                        }
+
+                        if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
+                            status = 'won';
+                            const Data = await Return.ColorX.findOne();
                             const X = Data.color;
-                            try {
-                                console.log(userid)
-                                Usermodel.findById(userid).then((user) => {
-                                    console.log("user", user)
-
-                                    if (!user) {
-                                        throw new Error('User not found');
-                                    }
-                                    // let result = minData.find(obj => obj.Username === user.Username)
-                                    console.log(result)
-                                    user.wallet += X * (data.Ammount);
-
-                                    user.save().then(() => {
-                                        console.log('Money credited successfully!');
-
-                                    })
-                                        .catch((err) => console.log(err));
-                                })
+                            const total_adding_ammount = X * data.Ammount;
+                            await Usermodel.updateOne({ _id: userid }, { $inc: { wallet: total_adding_ammount } })
 
 
-                            }
-                            catch (error) {
-                                console.error('Error crediting money:', error.message);
-                            }
-
-                        })
-
-                    } else if (data.Batoption === 'number' && (data.choose) == IncomingResult.number) {
-                        status = 'won';
-                        Return.NumberX.findOne().limit(1).sort({ _id: -1 }).then((Data) => {
-                            // let result = Data.find(obj => obj.Username === user.Username)
-                            const X = Data[data.choose]
-
-                            try {
-                                console.log(userid)
-                                Usermodel.findById(userid).then((user) => {
-                                    console.log("user", user)
-
-                                    if (!user) {
-                                        throw new Error('User not found');
-                                    }
-                                    // let result = minData.find(obj => obj.Username === user.Username)
-                                    console.log(result)
-                                    user.wallet += X * (data.Ammount);
-
-                                    user.save().then(() => {
-                                        console.log('Money credited successfully!');
-
-                                    })
-                                        .catch((err) => console.log(err));
-                                })
+                            console.log("x color", X)
+                        } if (data.Batoption === 'number' && (data.choose) == IncomingResult.number) {
+                            status = 'won';
+                            const Data = await Return.NumberX.findOne().sort({ _id: -1 });
+                            const X = Data[data.choose];
+                            const total_adding_ammount = X * data.Ammount;
+                            await Usermodel.updateOne({ _id: userid }, { $inc: { wallet: total_adding_ammount } })
 
 
-                            }
-                            catch (error) {
-                                console.error('Error crediting money:', error.message);
-                            }
+                            console.log("x number", X)
 
+                        } if (data.Batoption === 'Bs' &&
+                            ((data.choose == 'big' && "big" == IncomingResult.BS) ||
+                                (data.choose == 'small' && "small" == IncomingResult.BS))) {
+                            status = 'won';
+                            const Data = await Return.BgX.findOne();
+                            const X = IncomingResult.BS == "Big" ? Data.big : Data.small;
+                            const total_adding_ammount = X * data.Ammount;
+                            await Usermodel.updateOne({ _id: userid }, { $inc: { wallet: total_adding_ammount } })
+                            console.log('Big/Small amount credited successfully!', user.wallet);
 
-                        })
-
-
-
-
-
-                    } else if (data.Batoption === 'Bs' &&
-                        ((data.choose == 'big' && Bsresult == IncomingResult.BS) ||
-                            (data.choose == 'small' && Bsresult ==IncomingResult.BS))) {
-                        status = 'won';
-                        if (Bsresult == "Big") {
-                            Return.BgX.findOne().then((DATA) => {
-                                const X = DATA.big
-                                try {
-                                    console.log(userid)
-                                    Usermodel.findById(userid).then((user) => {
-                                        console.log("user", user)
-
-                                        if (!user) {
-                                            throw new Error('User not found');
-                                        }
-                                        // let result = minData.find(obj => obj.Username === user.Username)
-                                        // nconsole.log(result)
-                                        user.wallet += parseInt(X) * (data.Ammount);
-                                        console.log(user.wallet);
-
-                                        user.save().then(() => {
-                                            console.log('Money credited successfully!');
-
-                                        })
-                                            .catch((err) => console.log(err));
-                                    })
-
-
-                                }
-                                catch (error) {
-                                    console.error('Error crediting money:', error.message);
-                                }
-
-
-                            })
+                            console.log("x bg", X)
 
                         }
-                        if (Bsresult == "Small") {
-                            Return.BgX.find().then((DATA) => {
-                                const X = DATA.BatXsmall
-                                try {
-                                    console.log(userid)
-                                    Usermodel.findById(userid).then((user) => {
-                                        console.log("user", user)
-
-                                        if (!user) {
-                                            throw new Error('User not found');
-                                        }
-                                        // let result = minData.find(obj => obj.Username === user.Username)
-                                        // console.log(result);
-                                        user.wallet += parseInt(X) * (data.Ammount);
-                                        console.log(user.wallet);
-
-                                        user.save().then(() => {
-                                            console.log('Money credited successfully!');
-
-                                        })
-                                            .catch((err) => console.log(err));
-                                    })
-
-
-                                }
-                                catch (error) {
-                                    console.error('Error crediting money:', error.message);
-                                }
-
-
-                            })
-
-                        }
+                        console.log("final waller", user.wallet)
+                        return { ...data, Uid: id, status: status };
+                    } catch (error) {
+                        console.error('Error crediting money:', error.message);
+                        return { ...data, Uid: id, status: status }; // Ensure data is still returned even if an error occurs
                     }
+                }));
 
-                    console.log("Final status:", status);
-
-
-                    // return { ...data, Uid: id, status:status };
-                    return { ...data, Uid: id, status: status };
-
-                });
-                console.log(dataWithIds)
-                maindata = dataWithIds;
-
+                console.log(dataWithIds);
                 await Batmodel.insertMany(dataWithIds);
                 console.log("Data successfully inserted into the database.");
-                
             } else {
                 console.log("No data to insert.");
             }
+
         } catch (error) {
             console.error("Error inserting data into the database:", error);
         }
         res.json({
-            Number:IncomingResult.number ,
-            Color:IncomingResult.color ,
-            BS: IncomingResult.BS 
+            Number: IncomingResult.number,
+            Color: IncomingResult.color,
+            BS: IncomingResult.BS
 
         })
     }
@@ -721,4 +594,3 @@ module.exports = {
     AdminSending,
     IncomingResultfromAdmin
 }
-

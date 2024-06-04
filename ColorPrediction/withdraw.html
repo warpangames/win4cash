@@ -36,6 +36,7 @@
      </div>
      <div class="bankdetails-container">
         <form  class="bankdetails-form" onsubmit="handleBankDetails(event)" method="post">
+
             <label for="Bank-Name">Bank Name</label>
             <input type="text" id="Bank-Name" name="Bank-Name" required>
 
@@ -47,7 +48,6 @@
 
             <label for="Phone">Phone Number</label>
             <input type="text" id="Phone" name="Phone" required>
-
             <label for="IFSC">IFSC Code</label>
             <input type="text" id="IFSC" name="IFSC" required>
 
@@ -63,7 +63,7 @@
      </div>
      <table>
       <thead>
-         <tr>
+         <tr class='table-header'>
             <th>UserName</th>
             <th>Date</th>
             <th>Amount</th>

@@ -40,6 +40,16 @@ router.get('/profile', (req, res) => {
     res.sendFile(loginFilePath);
 });
 
+router.get('/GameHistory', (req, res) => {
+    const loginFilePath = path.join(__dirname, "../ColorPrediction/GameHistory.html");
+    res.sendFile(loginFilePath);
+});
+
+router.get('/WithdrawHistory', (req, res) => {
+    const loginFilePath = path.join(__dirname, "../ColorPrediction/WithdrawHistory.html");
+    res.sendFile(loginFilePath);
+});
+
 router.post("/login",data.Userlogin);
 
 router.post("/bat",Gamelogic.UserData);

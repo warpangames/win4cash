@@ -93,10 +93,6 @@ function formatTime(timeString) {
     return formattedTime;
   }
   
-  const originalTime = "2024-05-30T18:57:23.984Z";
-  const formattedTime = formatTime(originalTime);
-  console.log(formattedTime); // Output: 30 May 2024, 6:57 PM
-  
 
 function populateTable(data) {
     const tbody = document.querySelector("#historyTable");

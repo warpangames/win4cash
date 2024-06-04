@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <style>
@@ -109,7 +110,7 @@ td{
     </style>
 
 <header>
-    <p class="header-left"><</p>
+    <p class="header-left" style="cursor: pointer;" onclick="window.location.href = '/user/profile'"><</p>
     <p class="header-middle">Withdraw History</p>
     <p class="header-right"></p>
   </header>
@@ -117,113 +118,64 @@ td{
     <div class="history-table">
         <table>
             <tr class="table-header">
-                <th>TR. ID</th>
-                <th>Amount</th>
+                <th>Username</th>
                 <th>Date</th>
-                <th>XYZ</th>
-                <th>ABC</th>
+                <th>Amount</th>
+                <th>Status</th>
             </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
-            <tr>
-                <td>123</td>
-                <td>100</td>
-                <td>29/09/2023</td>
-                <td>abc</td>
-                <td>Omp</td>
-            </tr>
+            <tbody id="historyTable">
+
+            </tbody>
             
         </table>
     </div>
   </section>
+  <script>
+    async function withHistory(){
+    const res = await axios.get('https://win4cash.in/user/withdraw/history');
+    console.log(res,'history');
+    populateTable(res.data);
+}
+
+withHistory();
+    function formatTime(timeString) {
+    const date = new Date(timeString);
+    
+    // Format the date components
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+    
+    // Format the time components
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Handle midnight (0 hours)
+  
+    // Construct the formatted time string
+    const formattedTime = `${day} ${month} ${year}, ${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+  
+    return formattedTime;
+  }
+  
+
+function populateTable(data) {
+    const tbody = document.querySelector("#historyTable");
+    tbody.innerHTML = ""; // Clear existing tbody content
+    
+    data.forEach(item => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+      <td>${item.Username}</td>
+      <td>${formatTime(item.createdAt)}</td>
+        <td>${item.Requestedammount}</td>
+        <td>${item.satuts}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+ 
+  </script>
 </body>
 </html>

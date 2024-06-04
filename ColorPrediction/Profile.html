@@ -55,7 +55,7 @@
         width: 200px;
         margin:20px auto 20px auto;
         justify-content: space-around;
-      ">
+      " onclick="window.location.href='/user/GameHistory'">
                 <img width="40px" src="/images/game.png" alt="">
                 <div style="width: 150px;text-align: center;">
                     <div style="font-size: 14px;">Game History</div>
@@ -86,7 +86,7 @@
      width: 200px;
   margin: 20px auto;
   justify-content: space-around;
-   ">
+   " onclick="window.location.href = '/user/WithdrawHistory'">
         <img width="40px" src="/images/withdraw.png" alt="">
         <div style="width: 150px;text-align: center;">
             <div style="font-size: 14px;">Withdraw</div>
@@ -108,12 +108,25 @@
     border: 1px solid #bdb5b5;
     padding: 3px;
     border-radius: 16px;
-    margin: 40px auto;">
+    margin: 40px auto;"
+    onclick="handleLogout()">
         <img style="width: 20px; margin-right: 10px;" src="/Images/logout.png" alt="">
         <div>Logout</div>
     </div>
 
     </div>
+    <script>
+        function handleLogout(){
+          
+            document.cookie = 'AccessToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+
+  setTimeout(()=>{
+    window.location.href = '/user/login';
+  },1000)
+  
+ }
+        
+    </script>
 </body>
 
 </html>

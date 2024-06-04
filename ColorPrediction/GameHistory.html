@@ -116,9 +116,47 @@ header p{
     }
 }
 
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 5px;
+    font-size: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+}
+
+thead {
+    background-color: #007bff;
+    color: white;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+@media (max-width: 768px) {
+    th, td {
+        padding: 10px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
     </style>
     <header>
-        <p class="header-left"><</p>
+        <p class="header-left" style="cursor: pointer;" onclick="window.location.href = '/user/profile'"><</p>
         <p class="header-middle">Statistics</p>
         <p class="header-right"></p>
       </header>
@@ -131,14 +169,102 @@ header p{
     </div>
     <div class="bg-red">
         <div>
-            <p class="bg-red-p1">₹<span>0.00</span></p>
+            <p class="bg-red-p1">₹<span id="totalBetAmount">0.00</span></p>
             <p class="bg-red-p2">Total Bet</p>
         </div>
     </div>
 
-    <div class="img1">
+    
+
+    <!-- <div class="img1">
         <img src="Images/noData.png" alt="">
-    </div>
+    </div> -->
       </section>
+      <table id="betTable">
+        <thead>
+            <tr>
+                <th>UID</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Bet Option</th>
+                <th>Value</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be populated here -->
+        </tbody>
+    </table>
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      <script>
+        let historyData ;
+        async function getData(){
+            // const container = document.getElementById('amount');
+            // const res = await axios.get('https://win4cash.in/Alldata');
+            // container.innerHTML = res.data.wallet;
+            const res1  = await axios.get('https://win4cash.in/user/history');
+             console.log(res1.data)
+             historyData = res1.data;
+
+             populateTable(historyData);
+             const totalBet = calculateTotalBet(historyData);
+    displayTotalBet(totalBet);
+        }
+        getData();
+
+
+        function populateTable(data) {
+    const tbody = document.querySelector('#betTable tbody');
+    tbody.innerHTML = ''; // Clear existing rows
+    data.forEach(bet => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${bet.Uid}</td>
+            <td>${new Date(bet.createdAt).toLocaleString()}</td>
+            <td>${bet.Ammount}</td>
+            <td>${bet.Batoption}</td>
+            <td>${bet.choose}</td>
+            <td>${bet.status}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function calculateTotalBet(data) {
+    return data.reduce((total, bet) => total + bet.Ammount, 0);
+}
+
+function displayTotalBet(amount) {
+    const totalBetAmount = document.getElementById('totalBetAmount');
+    totalBetAmount.textContent = amount;
+}
+
+function filterTable(period) {
+    const now = new Date();
+    let startDate;
+
+    switch (period) {
+        case 'today':
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            break;
+        case 'yesterday':
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+            break;
+        case 'thisWeek':
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+            break;
+        case 'thisMonth':
+            startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            break;
+        default:
+            startDate = new Date(0); // Invalid period, show all
+    }
+
+    const filteredBets = bets.filter(bet => new Date(bet.createdAt) >= startDate);
+    populateTable(filteredBets);
+    const totalBet = calculateTotalBet(filteredBets);
+    displayTotalBet(totalBet);
+}
+      </script>
 </body>
 </html>
