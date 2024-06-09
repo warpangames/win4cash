@@ -40,7 +40,7 @@
                     <div style="font-size: 35px;">💵</div>
                     <div>Withdraw</div>
                 </div>
-                <div style="text-align: center;">
+                <div style="text-align: center;" onclick="window.location.href='/user/Payment'">
                     <div style="font-size: 35px;">🏦</div>
                     <div>Deposit</div>
                 </div>
@@ -99,8 +99,8 @@
         <div style="margin-bottom: 10px;font-size: 15px;">Support</div>
         <div style="display: flex;align-items: center; justify-content: space-around;">
             <img width="60px" src="/Images/telegram (1).png" alt="">
-            <img width="60px" src="/Images/whatsApp.png" alt="">
-            <img width="60px" src="/Images/facebook.png" alt="">
+            <img width="60px" src="/Images/whatsApp.png" alt="" onclick="openWhatsAppChat()">
+            <img width="60px" src="/Images/facebook.png" alt=""onclick="openFacebookProfile()">
         </div>
     </div>
 
@@ -115,14 +115,23 @@
     </div>
 
     </div>
-    <script>
-        function handleLogout(){
-          
-            document.cookie = 'AccessToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-  setTimeout(()=>{
-    window.location.href = '/user/login';
-  },1000)
+    <script>
+         function openFacebookProfile() {
+            var url = 'https://www.facebook.com/profile.php?id=61560953813937';
+            window.open(url, '_blank');
+        }
+         function openWhatsAppChat() {
+            var phoneNumber = "1234567890"; // Replace with the actual phone number
+            var url = "https://wa.me/" + phoneNumber;
+            window.open(url, '_blank');
+        }
+
+       async  function handleLogout(){
+          
+        const res = await axios.get('https://win4cash.in/user/logout');
+        window.location.reload();
   
  }
         

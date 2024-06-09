@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction</title>
+</head>
+<body>
+    <style>
+        header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color:rgb(238, 244, 249) ;
+    height: 80px;
+}
+
+header p{
+    margin: 0;
+}
+
+.header-left{
+    color: rgb(31, 31, 31);
+    font-size: 35px;
+}
+.header-middle{
+    color: rgb(31, 31, 31);
+    font-size: 20px;
+    font-weight: bold;
+}
+.header-right{
+    color: rgb(31, 31, 31);
+    font-size: 17px;
+}
+
+    </style>
+    <div class="main">
+        <header>
+            <p class="header-left" style="cursor: pointer;" onclick="window.history.back()"><</p>
+            <p class="header-middle">Payment</p>
+            <p class="header-right"></p>
+          </header>
+        <div style=" margin:auto;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;background-color: rgba(255, 0, 0, 0.76);
+     color:white;
+     width: 90%;
+     border-radius: 10px;
+     padding: 10px;
+     margin-top: 15px;">
+            <div style="color:white; text-align: center;">Total balance</div>
+            <div style="margin: 10px 0;
+      font-weight: bold; text-align: center; font-size: 47px;">₹<span class="balance-amount">0.00</span></div>
+      </div>
+      <div style="text-align: center; margin-top: 40px;">
+      <!-- <label for="amount">Enter Amount</label> -->
+      <input type="text" id="amount" name="amount" placeholder="Enter Amount" style="padding: 8px;
+      border-radius: 5px;
+      border: none;
+      background: #c7bebe;
+      color: #0a0a0a;
+      width: 200px;
+      margin: auto;
+      text-align: center;">
+      </div>
+
+      <img src="" id="qr-img" alt="" style="display:block; width: 70%; margin: auto;max-width: 300px; margin-top: 34px;">
+      <div style="text-align: center; margin-top: 40px;">
+          <!-- <label for="amount">Enter Amount</label> -->
+          <input type="text" id="txn" name="txn" placeholder="Enter Transaction Id" style="padding: 8px;
+          border-radius: 5px;
+          border: none;
+          background: #c7bebe;
+          color: #0a0a0a;
+          width: 200px;
+          margin: auto;
+          text-align: center;">
+          </div>
+       
+          <button style="display: block;
+          margin: auto;
+            margin-top: auto;
+          margin-top: 29px;
+          border: none;
+          background-color: cadetblue;
+          padding: 5px 15px;
+          font-size: 17px;
+          color: white;
+          border-radius: 3px;" onclick="handlePayment()">Submit</button>
+     
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+
+        async function getAllData(){
+    const res = await axios.get('https://win4cash.in/Alldata');
+    console.log(res,'allData')
+    if(res.status===200){
+        const walletContainer  = document.querySelector('.balance-amount');
+        walletContainer.innerHTML = res.data.wallet;
+        AvailableAmount = res.data.wallet;
+    }
+}
+
+getAllData();
+
+        async function getQr(){
+         const res = await axios.get('https://win4cash.in/user/payment/qr');
+         console.log(res,'qr')
+         const bufferData = res.data.data.data;
+
+// Step 2: Convert the buffer data to a Uint8Array
+const uint8Array = new Uint8Array(bufferData);
+
+// Step 3: Convert the Uint8Array to a base64 string
+const base64String = btoa(String.fromCharCode(...uint8Array));
+
+// Step 4: Create the data URL
+const contentType = res.data.contentType;
+const imageURL = `data:${contentType};base64,${base64String}`;
+
+console.log(imageURL);
+
+const qrImg = document.getElementById('qr-img')
+qrImg.src = imageURL;
+
+
+        }
+        getQr();
+      async function handlePayment(){
+        const inpt = document.getElementById('amount');
+       const  ammount = inpt.value;
+       const Transcation_id1 = document.getElementById('txn');
+       const Transcation_id  = Transcation_id1.value;
+        if(ammount<100){
+            alert('Amount must be greater than 100 rupees');
+            return;
+        }
+        console.log(ammount,Transcation_id,'hekko')
+        const res = await axios.post('https://win4cash.in/user/payment/request',{ammount,Transcation_id});
+        inpt.value = '';
+        Transcation_id1.value = '';
+        }
+    </script>
+   
+</body>
+</html>

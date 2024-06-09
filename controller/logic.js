@@ -53,14 +53,10 @@ const DataforAdmin = {
     "7": 0,
     "8": 0,
     "9": 0,
-    "userdata": [],
-    "won": 0,
-    "loss": 0,
-    "wonammount": 0,
-    "lossammount": 0
+    "userdata":[]
 
 }
-console.log("min data", minData)
+console.log("min data",minData)
 
 let IncomingResult = {
     color: "",
@@ -70,7 +66,7 @@ let IncomingResult = {
 }
 
 const IncomingResultfromAdmin = async (req, res) => {
-    console.log("this data for admin side", req.body)
+    console.log("this data for admin side",req.body)
     IncomingResult.color = req.body.color,
         IncomingResult.number = req.body.number,
         IncomingResult.BS = req.body.Bs
@@ -110,64 +106,7 @@ const UserData = async (req, res) => {
         }
         minData.push(Data);
         DataforAdmin.userdata = minData;
-        const LastBatData = await Batmodel.find({ Username: Username }).limit(5).sort({ _id: -1 })
-        if (LastBatData.length != 0) {
-           await Promise.all(LastBatData.filter(async (data) => {
-                const RetX = await Result.findOne({ Uid: data.Uid })
-                // console.log("Retx",RetX)
-
-                //   console.log("data for admim ", data)
-     
-                if (data.status == "won") {
-                    if (data.Batoption == "color") {
-                        const Multi_ = await Return.ColorX.findOne().sort({ _id: -1 })
-                        const Multi = Multi_.color
-                        console.log(Multi)
-                        DataforAdmin.won += 1;
-                        DataforAdmin[wonammount] += parseFloat(data.Ammount * Multi)
-                        console.log( LastBatData.wonammount)
-                    }
-                    else if (data.Batoption == "number") {
-                        const Multi_ = await Return.NumberX.findOne().sort({ _id: -1 })
-                        const Multi = Multi_[data.choose]
-                        DataforAdmin.won += 1;
-                        DataforAdmin.wonammount += data.Ammount * Multi
-                    }
-                    else if (data.Batoption == "Bs") {
-                        const Multi = await Return.BgX.findOne().sort({ _id: -1 })
-                        DataforAdmin.won += 1;
-                        DataforAdmin.wonammount += data.Ammount * Multi
-                    }
-                }
-                else {
-                    if (data.status == "loss") {
-                        if (data.Batoption == "color") {
-
-                            DataforAdmin.loss += 1;
-                            DataforAdmin.lossammount += data.Ammount
-                            console.log("loss data", DataforAdmin.lossammount)
-
-                        }
-                        else if (data.Batoption == "number") {
-
-                            DataforAdmin.loss += 1;
-                            DataforAdmin.lossammount += data.Ammount
-                        }
-                        else if (data.Batoption == "Bs") {
-
-                            DataforAdmin.loss += 1;
-                            DataforAdmin.lossammount += data.Ammount
-                        }
-                    }
-            console.log("Data for Admin",DataforAdmin)
-
-                }
-            }))
-
-        }
         console.log(minData);
-        console.log("Data for Admin",DataforAdmin)
-
 
         const Batoption = req.body.batoption;
         if (Batoption == "color") {
@@ -192,7 +131,17 @@ const UserData = async (req, res) => {
                 console.log(green);
             }
         }
+        // if (Batoption == "Bs") {
+        //     if (req.body.choose == "big") {
+        //         bignumber += parseInt(req.body.Ammount);
 
+        //     }
+        //     else {
+        //         smallnumber += parseInt(req.body.Ammount);
+        //     }
+
+        // }
+        //  console.log(blue)
         else if (Batoption === "Bs") {
             if (req.body.choose === "Bignumber") {
                 bignumber += parseInt(req.body.Ammount);
@@ -300,42 +249,23 @@ const result = async (req, res) => {
 
 
 
-    // let result = "";
-    // const colorresult = Math.min(blue,red,green);
-    // if(colorresult==blue){
-    //     result= "blue"
-    // }
-    // else if(colorresult == red){
-    //     result= "red"
-    // }
-    // else{
-    //     result = "green"
-    // }
 
     let colorresult;
     let result = "";
-    let minValueNumber;
     const nobat = ["blue", "red", "green"];
+    console.log(blue, red, green);
+    let maxValueNumber ;
 
 
     if (IncomingResult.color == "" && IncomingResult.BS == "") {
         console.log("code with auto")
         if (blue === red && red === green) {
-            const point = Math.floor(Math.random() * 3)
-            console.log(point)
-            result = nobat[point];
-            console.log("colorresult", colorresult)
-            console.log("when all is same", colorresult);
+            result = nobat[Math.floor(Math.random() * 3)];
+            console.log("when all is same", result);
 
-            // if (colorresult === "blue") {
-            //     result = "blue";
-            // } else if (colorresult === "red") {
-            //     result = "red";
-            // } else {
-            //     result = "green";
-            // }
+            
         } else {
-            colorresult = Math.min(blue, red, green);
+            colorresult = Math.max(blue, red, green);
 
             if (colorresult === blue) {
                 result = "blue";
@@ -345,6 +275,7 @@ const result = async (req, res) => {
                 result = "green";
             }
         }
+     
         function areAllValuesSame(obj) {
             const values = Object.values(obj);
             return values.every(v => v === values[0]);
@@ -360,35 +291,34 @@ const result = async (req, res) => {
         if (areAllValuesSame(numberValues)) {
             let key;
             generateRandomKeyValue(numberValues)
-            minValueNumber = random_key;
-            console.log(minValueNumber)
+            maxValueNumber = random_key;
+            // console.log(minValueNumber)
 
         }
-        else {
-            function findMinValueNumber(mapping) {
-                let minNumber = null;
-                let minValue = Infinity;
+        else{
 
-                for (let number in mapping) {
-                    if (mapping[number] < minValue) {
-                        minValue = mapping[number];
-                        minNumber = number;
-                    }
+        function findMaxValueNumber(mapping) {
+            let maxNumber = null;
+            let maxValue = -Infinity;
+        
+            for (let number in mapping) {
+                if (mapping[number] > maxValue) {
+                    maxValue = mapping[number];
+                    maxNumber = number;
                 }
-
-                return minNumber;
             }
-
-            minValueNumber = findMinValueNumber(numberValues);
-
-            console.log(numberValues)
-            console.log(minValueNumber);
+        
+            return maxNumber;
         }
+
+         maxValueNumber = findMaxValueNumber(numberValues);
+    }
+
         let Bsresult = "";
         const Bs_arr = ["Big", "Small"]
 
         if (bignumber != smallnumber) {
-            const BSresult = Math.min(bignumber, smallnumber)
+            const BSresult = Math.max(bignumber, smallnumber)
             if (BSresult == bignumber) {
                 Bsresult = "Big"
             }
@@ -396,14 +326,15 @@ const result = async (req, res) => {
                 Bsresult = "Small"
             }
         }
-        else {
-            Bsresult = Bs_arr[Math.floor(Math.random() * 3)]
+        else{
+            Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
 
         }
-        // console.log({ Bsresult, BSresult })
+
+        console.log({ Bsresult })
         const id = generateUniqueId();
         await Result.create({
-            Number: minValueNumber,
+            Number: maxValueNumber,
             Color: result,
             Bs: Bsresult,
             Uid: id
@@ -476,22 +407,22 @@ const result = async (req, res) => {
         } catch (error) {
             console.error("Error inserting data into the database:", error);
         }
-
+       
         res.json({
             color: result,
-            number: minValueNumber,
+            number: maxValueNumber,
             BS: Bsresult
         })
 
     }
-
-    else {
+    
+    else{
         const id = generateUniqueId();
 
         await Result.create({
-            Number: IncomingResult.number,
-            Color: IncomingResult.color,
-            Bs: IncomingResult.BS,
+            Number:IncomingResult.number ,
+            Color:IncomingResult.color ,
+            Bs: IncomingResult.BS ,
             Uid: id
 
         })
@@ -499,53 +430,52 @@ const result = async (req, res) => {
         let maindata = [];
 
         try {
-
+           
             if (minData.length > 0) {
-                // let total_adding_ammount = 0;
                 const dataWithIds = await Promise.all(minData.map(async (data) => {
                     let status = 'loss';
                     const trimmedChoose = data.choose.trim().toLowerCase();
                     const trimmedResult = IncomingResult.color.trim().toLowerCase();
-
+            
                     try {
                         const user = await Usermodel.findById(userid);
                         if (!user) {
                             throw new Error('User not found');
                         }
-
+            
                         if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
                             status = 'won';
                             const Data = await Return.ColorX.findOne();
                             const X = Data.color;
-                            const total_adding_ammount = X * data.Ammount;
-                            await Usermodel.updateOne({ _id: userid }, { $inc: { wallet: total_adding_ammount } })
+                            const total_adding_ammount =  X* data.Ammount;
+                            await Usermodel.updateOne({_id:userid},{$inc:{wallet:total_adding_ammount}})
 
-
-                            console.log("x color", X)
-                        } if (data.Batoption === 'number' && (data.choose) == IncomingResult.number) {
+                            
+                            console.log("x color",X)
+                        }  if (data.Batoption === 'number' && (data.choose) == IncomingResult.number) {
                             status = 'won';
                             const Data = await Return.NumberX.findOne().sort({ _id: -1 });
                             const X = Data[data.choose];
-                            const total_adding_ammount = X * data.Ammount;
-                            await Usermodel.updateOne({ _id: userid }, { $inc: { wallet: total_adding_ammount } })
+                            const total_adding_ammount = X* data.Ammount;
+                            await Usermodel.updateOne({_id:userid},{$inc:{wallet:total_adding_ammount}})
 
+                           
+                            console.log("x number",X)
 
-                            console.log("x number", X)
-
-                        } if (data.Batoption === 'Bs' &&
+                        }  if (data.Batoption === 'Bs' &&
                             ((data.choose == 'big' && "big" == IncomingResult.BS) ||
-                                (data.choose == 'small' && "small" == IncomingResult.BS))) {
+                             (data.choose == 'small' && "small" == IncomingResult.BS))) {
                             status = 'won';
                             const Data = await Return.BgX.findOne();
                             const X = IncomingResult.BS == "Big" ? Data.big : Data.small;
-                            const total_adding_ammount = X * data.Ammount;
-                            await Usermodel.updateOne({ _id: userid }, { $inc: { wallet: total_adding_ammount } })
+                            const total_adding_ammount =  X* data.Ammount;
+                            await Usermodel.updateOne({_id:userid},{$inc:{wallet:total_adding_ammount}})
                             console.log('Big/Small amount credited successfully!', user.wallet);
 
-                            console.log("x bg", X)
+                            console.log("x bg",X)
 
                         }
-                        console.log("final waller", user.wallet)
+                         console.log("final waller",user.wallet)
                         return { ...data, Uid: id, status: status };
                     } catch (error) {
                         console.error('Error crediting money:', error.message);
@@ -559,14 +489,14 @@ const result = async (req, res) => {
             } else {
                 console.log("No data to insert.");
             }
-
+            
         } catch (error) {
             console.error("Error inserting data into the database:", error);
         }
         res.json({
-            Number: IncomingResult.number,
-            Color: IncomingResult.color,
-            BS: IncomingResult.BS
+            Number:IncomingResult.number ,
+            Color:IncomingResult.color ,
+            BS: IncomingResult.BS 
 
         })
     }

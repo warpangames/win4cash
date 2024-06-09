@@ -15,7 +15,12 @@ const WithdrawRequest = new mongoose.Schema({
     satuts:{
         type:String,
         default:"Pending"
-    }
+    },
+    Uid:{
+        type:String,
+        
+    },
+
    
 },{timestamps:true})
 

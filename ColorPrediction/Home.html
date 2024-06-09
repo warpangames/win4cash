@@ -30,7 +30,7 @@
                 <div class="balancetext">₹<span id="balance-data">0.00</span></div>
                 <div class="withdraw-diposit-button">
                     <div class="withdraw-button" onclick="window.location.href = '/user/withdraw'">Withdraw</div>
-                    <div class="deposit-button">Deposit</div>
+                    <div class="deposit-button" onclick="window.location.href = '/user/Payment'">Deposit</div>
                 </div>
             </div>
         </section>
@@ -146,6 +146,12 @@
             </div>
         </section>
         <section class="big-small section">
+            <div style="position: absolute;top: 4px;left: 10px; display: flex; align-items: center;margin-right: 10px;font-size: 10px;">
+            <img src="/Images/info.png" style="width: 15px;width: 20px;" class="Bs-Info" alt="">
+            <div style="box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;background-color: white;border-radius: 3px; display: none;" class="bs-InfoData">Small represents number from 0 to 4 and big represents number from 5 to 9 <br>
+                छोटा 0 से 4 तक की संख्या को दर्शाता है और बड़ा 5 से 9 तक की संख्या को दर्शाता है
+            </div>
+            </div>
             <div class="small" onclick="handleBet('small',true)">
             <div style="text-align: center;">
                 <div>SMALL</div>

@@ -9,6 +9,23 @@ const timer = document.querySelector('.timer-box');
 const numberBetBhav = document.querySelectorAll('.bet-bhav-number');
 const colorBetBhav = document.querySelectorAll('.color-bhav');
 const BsBhav = document.querySelectorAll('.Bs-bhav');
+const BsInfoImg = document.querySelector('.Bs-Info');
+const BsInfo = document.querySelector('.bs-InfoData');
+console.log(BsInfoImg,BsInfo);
+BsInfoImg.addEventListener('click',(e)=>{
+    e.stopPropagation();
+    console.log('jk')
+    BsInfo.style.display = 'block';
+})
+document.addEventListener('click',()=>{
+    console.log('jk')
+    BsInfo.style.display = 'none';
+})
+// BsInfoImg.addEventListener('mouseout',()=>{
+//     console.log('jk')
+//     BsInfo.style.display = 'none';
+// })
+
 let Amount = 1;
 let Quantity = 1;
 let initial = true;
@@ -33,6 +50,7 @@ getAllData();
 async function getHistory(){
     const res1  = await axios.get('https://win4cash.in/user/history');
     betHistoryData = res1.data;
+    console.log(betHistoryData)
     const res2 = await axios.get('https://win4cash.in/bathistory');
     slotHistoryData = res2.data;
     populateTable(slotHistoryData,['Uid','Color' ,'Number','Bs']);
@@ -249,7 +267,8 @@ function handleBet(val,type=false){
             item.innerHTML = `+${returnAmt}`;
         }
         else{
-            item.innerHTML = `-${((returnAmt*returnData.number[index])/totalReturn).toFixed(2)}`;
+            // item.innerHTML = `-${((returnAmt*returnData.number[index])/totalReturn).toFixed(2)}`;
+            item.innerHTML = `-${returnAmt}`;
         }
     })
    }
@@ -260,7 +279,8 @@ function handleBet(val,type=false){
                 item.innerHTML = `+${returnAmt}`;
             }
             else{
-                item.innerHTML = `-${returnAmt/2}`;
+                // item.innerHTML = `-${returnAmt/2}`;
+                item.innerHTML = `-${returnAmt}`;
             }
             
         })
@@ -271,7 +291,8 @@ function handleBet(val,type=false){
                 item.innerHTML = `+${returnAmt}`;
             }
             else{
-                item.innerHTML = `-${returnAmt/2}`;
+                // item.innerHTML = `-${returnAmt/2}`;
+                item.innerHTML = `-${returnAmt}`;
             }
             
         })
@@ -282,7 +303,8 @@ function handleBet(val,type=false){
                 item.innerHTML = `+${returnAmt}`;
             }
             else{
-                item.innerHTML = `-${returnAmt/2}`;
+                // item.innerHTML = `-${returnAmt/2}`;
+                item.innerHTML = `-${returnAmt}`;
             }
             
         })
@@ -378,7 +400,15 @@ async function handleSubmit(){
     }
 
     const res  = await axios.post('https://win4cash.in/user/bat',{batoption,choose,Ammount});
-    console.log(res,'res')
+    console.log(res,'res');
+    betHistoryData.unshift({
+        Ammount:Ammount,
+        Batoption:batoption,
+        Uid:'Panding',
+        choose:choose,
+        status:'panding'
+    })
+    populateTable(betHistoryData,['Uid','Batoption','Ammount','choose','status']);
     handleCancleBet();
     getAllData();
 }

@@ -28,7 +28,9 @@
 
                 <div class="bar">
                     <i class="fa fa-user"></i>
-                    <input type="text" id="username" name="username" placeholder="Enter your Username"></div>
+                    <input type="text" id="username" name="username" placeholder="Enter your Username">
+                <div class="warning" style="color: red; font-size: 10px;display: none;">Username already exist!</div>
+                </div>
                 
                 <label for="password">Password</label>
 
@@ -53,8 +55,16 @@
       const Username = document.getElementById('username').value;
       const Password = document.getElementById('password').value;
       const res = await axios.post('https://win4cash.in/user/signup',{Phoneno,Username,Password});
+      console.log(res);
       if(res.status===200){
-        window.location.href = 'login'
+        if(res.data==='Username already exists! Choose another username'){
+            const warning = document.querySelector('.warning');
+            const input = document.getElementById('username');
+            input.style.border = '1px solid red';
+            warning.style.display = 'block';
+
+        }
+        // window.location.href = 'login'
       }
      })
     </script>

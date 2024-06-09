@@ -4,7 +4,10 @@ const AdminData = require("../models/Admin.model.js");
 const returnmodel = require("../models/Return.model.js")
 const withdrawammountmodel = require("../models/withdrawammount.model.js");
 const Usermodel = require("../models/usermodel.model.js");
-const Withdraw = require("../models/bankdetail.model.js")
+const Withdraw = require("../models/bankdetail.model.js");
+const QRmodel = require('../models/Qrgateway.model.js');
+const Paymentmodel = require('../models/payment.model.js');
+const Gstmodel = require('../models/Gstwithdraw.model.js')
 
 
 const BatXupdate = async (req,res)=>{
@@ -94,16 +97,18 @@ const Accepted_request = async (req, res) => {
     // Fetch all pending withdrawal amounts, sorted by _id in descending order
     const data = await withdrawammountmodel.find({ satuts: "accepted" }).sort({ _id: -1 }).lean();
     // console.log(data)
+
     if (data.length === 0) {
       return res.status(404).json({ message: "No pending withdrawals found." });
     }
 
     // Process each data object
     const results = await Promise.all(data.map(async (item) => {
-      const details = await Withdraw.find({ Username: item.Username }).lean();
+      const details = await Withdraw.findOne({ Username: item.Username }).sort({_id:-1}).lean();
       const phonenoDoc = await Usermodel.findOne({ Username: item.Username });
+      const Gst= await Gstmodel.find({Username:item.Username,Uid:item.Uid})
 
-      return { ...item, details, phoneno: phonenoDoc.Phoneno };
+      return { ...item, details, Gst,phoneno: phonenoDoc.Phoneno };
     }));
 
     console.log(results);
@@ -113,6 +118,7 @@ const Accepted_request = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
 const WithdrawRequest = async (req,res) =>{
    const withdraw_id = req.body.id
    if(req.body.satuts == "accepted"){
@@ -152,4 +158,61 @@ const Counter = async (req,res) =>{
 
 }
 
-module.exports = {BatXupdate,Pending_request,WithdrawRequest,rejected_request,Accepted_request,Counter};
+const QRSet = async(req,res) =>{
+  const { originalname, mimetype, buffer } = req.file;
+
+  await QRmodel.create({
+    filename: originalname,
+    contentType: mimetype,
+    data: buffer,
+  });
+ res.json("QR save sucessfully !")
+}
+
+const PaymentAllData = async (req, res) => {
+  try {
+    // Fetch all Payment data and sort it
+    const Payment = await Paymentmodel.find().sort({ _id: -1 });
+    console.log(Payment);
+
+    // Map over each Payment item to fetch corresponding wallet data
+    const data = await Promise.all(Payment.map(async (item) => {
+      const user = await Usermodel.findOne({ Username: item.Username });
+      const wallet = user ? user.wallet : null; // Ensure wallet is fetched correctly
+      console.log(wallet);
+
+      return { item, wallet };
+    }));
+
+    console.log(data);
+
+    // Send the aggregated data as a JSON response
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching payment data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const IncreamtWallet = async (req,res) =>{
+  if(req.body.type == "tr"){
+     const tr_id = req.body.Transcation_id
+     await Paymentmodel.updateOne({Transcation_id:tr_id},{$set:{stauts:"apporved"}});
+     await Usermodel.updateOne({Username:req.body.username},{$inc:{wallet:parseFloat(req.body.Ammount)}})
+    res.json("updated sucessfully !")
+
+
+  }
+  else{
+    await Usermodel.updateOne({Username:req.body.username},{$inc:{wallet:parseFloat(req.body.Ammount)}})
+    res.json("updated sucessfully !")
+
+  }
+}
+const RejectPayment = async(req,res) =>{
+  const tr_id = req.body.Transcation_id;
+  await Paymentmodel.updateOne({Transcation_id:tr_id},{$set:{stauts:"rejcted"}});
+  res.json("rejected")
+}
+
+module.exports = {BatXupdate,Pending_request,WithdrawRequest,rejected_request,Accepted_request,Counter,QRSet,PaymentAllData,IncreamtWallet,RejectPayment};

@@ -13,7 +13,7 @@
     <div class="main">
      <header>
         <div class="header">
-            <div class="back-arrow" onclick="window.location.href='/'"><</div>
+            <div class="back-arrow" onclick="window.history.back()"><</div>
             <div class="header-heading">Withdraw</div>
             <div></div>
         </div>
@@ -58,9 +58,53 @@
         <input type="text" id="widthdraw" name="amount" placeholder="Enter Withdraw Amount">
         <p class="withdraw-button" onclick="handleWithdraw()">WITHDRAW</p>
      </div>
+     <div class="gst-container">
+
+      <div class="gst-heading">GST of 18% is applicable on your withdrawal. Please pay: <span id="gst-amount">[calculated_amount].</span>
+         </div>
+
+         <div style="text-align: center; margin-top: 40px;">
+            <!-- <label for="amount">Enter Amount</label> -->
+            <input type="text" id="amount" name="amount" placeholder="Enter Amount" style="padding: 8px;
+            border-radius: 5px;
+            border: none;
+            background: #c7bebe;
+            color: #0a0a0a;
+            width: 200px;
+            margin: auto;
+            text-align: center;">
+            </div>
+      
+            <img src="" id="qr-img" alt="" style="display:block; width: 70%; margin: auto;max-width: 300px; margin-top: 34px;">
+            <div style="text-align: center; margin-top: 40px;">
+                <!-- <label for="amount">Enter Amount</label> -->
+                <input type="text" id="txn" name="txn" placeholder="Enter Transaction Id" style="padding: 8px;
+                border-radius: 5px;
+                border: none;
+                background: #c7bebe;
+                color: #0a0a0a;
+                width: 200px;
+                margin: auto;
+                text-align: center;">
+                </div>
+             
+                <button style="display: block;
+                margin: auto;
+                  margin-top: auto;
+                margin-top: 29px;
+                border: none;
+                background-color: cadetblue;
+                padding: 5px 15px;
+                font-size: 17px;
+                color: white;
+                border-radius: 3px;" onclick="handlePayment()">Submit</button>
+           
+
+     </div>
      <div class="withdraw-histry" style="padding: 20px 0;">
         <p style="font-weight: bolder;">Withdraw History</p>
      </div>
+     
      <table>
       <thead>
          <tr class='table-header'>
@@ -70,10 +114,11 @@
             <th>Status</th>
          </tr>
       </thead>
-      <tbody id="historyTable">
+      <!-- <tbody id="historyTable">
 
-      </tbody>
+      </tbody> -->
      </table>
+     <img src="/Images/no-data.jpg" style="width: 80%; margin: auto; max-width: 300px;" alt="">
     </div>
     <script src="/withdraw.js"></script>
 </body>

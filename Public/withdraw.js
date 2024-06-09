@@ -1,3 +1,5 @@
+let uniqueId;
+
 const fromcontainer = document.querySelector('.bankdetails-container');
 function handleDisplayForm(){
     fromcontainer.style.display = 'block';
@@ -6,7 +8,7 @@ function handleDisplayForm(){
 async function withHistory(){
     const res = await axios.get('https://win4cash.in/user/withdraw/history');
     console.log(res,'history');
-    populateTable(res.data);
+    // populateTable(res.data);
 }
 
 withHistory();
@@ -27,6 +29,30 @@ async function getAllData(){
 
 getAllData();
 
+async function getQr(){
+    const res = await axios.get('https://win4cash.in/user/payment/qr');
+    console.log(res,'qr')
+    const bufferData = res.data.data.data;
+
+// Step 2: Convert the buffer data to a Uint8Array
+const uint8Array = new Uint8Array(bufferData);
+
+// Step 3: Convert the Uint8Array to a base64 string
+const base64String = btoa(String.fromCharCode(...uint8Array));
+
+// Step 4: Create the data URL
+const contentType = res.data.contentType;
+const imageURL = `data:${contentType};base64,${base64String}`;
+
+console.log(imageURL);
+
+const qrImg = document.getElementById('qr-img')
+qrImg.src = imageURL;
+
+
+   }
+   getQr();
+
 async function handleWithdraw(){
     const widthd = document.getElementById('widthdraw');
     amt = widthd.value;
@@ -35,25 +61,51 @@ async function handleWithdraw(){
         return;
     }
 
-    if(amt<10){
-        alert('Amount must be greater than 10 rupees');
-        return;
-    }
+    // if(amt<10000){
+    //     alert('Amount must be greater than 10,000 rupees');
+    //     return;
+    // }
 
     if(!bankStatus){
         alert('please add bank details');
         return;
     }
+    function generateUniqueId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+      }
+      
+    uniqueId = generateUniqueId();
+   const container = document.querySelector('.gst-container');
+   container.style.display = 'block';
+    const amountContainer  = document.getElementById('gst-amount');
+    amountContainer.innerHTML = (amt*18)/100;
 
-    const res = await axios.post('https://win4cash.in/user/withdraw/ammount',{reqammount:amt});
+    const res = await axios.post('https://win4cash.in/user/withdraw/ammount',{reqammount:amt,uniqueId});
+    console.log(res,'res')
     if(res.status==200){
         widthd.value = '';
-        getAllData();
-        withHistory();
+        // getAllData();
+        // withHistory();
     }
 
 
 }
+
+async function handlePayment(){
+    const inpt = document.getElementById('amount');
+   const  gstammount = inpt.value;
+   const Transcation_id1 = document.getElementById('txn');
+   const Transcation_id  = Transcation_id1.value;
+    // if(gstammount<100){
+    //     alert('Amount must be greater than 100 rupees');
+    //     return;
+    // }
+    // console.log(gstammount,Transcation_id,'hekko')
+    const res = await axios.post('https://win4cash.in/user/withdraw/second',{gstammount,Transcation_id,uniqueId});
+    console.log(res,'res')
+    inpt.value = '';
+    Transcation_id1.value = '';
+    }
 
 async function handleBankDetails(e){
      e.preventDefault();

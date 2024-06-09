@@ -7,7 +7,10 @@ const auth = require("../middleware/auth.middleware.js");
 const Usermodel = require("../models/usermodel.model.js");
 const Batmodel = require("../models/Batmodel.model.js");
 const Withdraw = require("../models/bankdetail.model.js")
-const Withdrawammount = require("../models/withdrawammount.model.js")
+const Withdrawammount = require("../models/withdrawammount.model.js");
+const Paymentmodel = require('../models/payment.model.js');
+const QRmodel=  require('../models/Qrgateway.model.js');
+const Gstmodel = require("../models/Gstwithdraw.model.js");
 
 const UserRegister = async (req, res) => {
     try {
@@ -118,13 +121,15 @@ const WithdrawAmmount = async (req,res) =>{
    
     console.log(typeof req.body)
 
-    await Withdrawammount.create({
+    const data = await Withdrawammount.create({
         Requestedammount:parseFloat(req.body.reqammount),
         Username:user.Username,
-        Walletammount:Blance
+        Walletammount:Blance,
+        Uid :req.body.uniqueId
 
     })
-    user.wallet -= parseFloat(req.body.reqammount);
+    console.log(data)
+    // user.wallet -= parseFloat(req.body.reqammount);
     await user.save()
     res.json("your request sucessfully sended !")
     }
@@ -134,6 +139,36 @@ const WithdrawAmmount = async (req,res) =>{
     }
 }
 
+    const widthdraw_second = async(req,res) =>{
+        const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+        // console.log(req.header("Authorization")?.replace("Bearer",""))
+    
+        if(Incomingaccesstoken){
+        const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
+        const id = Decodedtoken?.id;
+        const Username = Decodedtoken?.Username;
+    
+        console.log(id)
+        const user = await Usermodel.findById(id)
+         const withdraw = await Withdrawammount.updateOne({Uid:req.body.uniqueId},{$set:{satuts:"accepted"}})
+    
+    
+         await Withdrawammount.deleteMany({ status: "Pending", Username: Username });
+    
+       const data =   await Gstmodel.create({
+            Username:user.Username,
+            Trancation_id:req.body.Trancation_id,
+            Gst:req.body.gstammount,
+            Uid :req.body.uniqueId
+        })
+        console.log(data)
+        res.json("sucessfully !")
+        }
+        else{
+            res.json("token didn't get");
+        }
+    
+    }
 const UserHistory = async (req, res) => {
     
         const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
@@ -155,10 +190,40 @@ const UserHistory = async (req, res) => {
     
 };
 
+const PaymentRequest = async (req,res) =>{
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+    try {
+        const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
+        const id = Decodedtoken?.id;
+        const Username = Decodedtoken?.Username;
+        await Paymentmodel.create({
+            Username:Username,
+            Ammount:req.body.ammount,
+            Transcation_id:req.body.Transcation_id
+        })
+               
+        
+            res.json("Request sended sucessfully !");
+    } catch (error) {
+        console.log(error)
+        
+    }
+
+}
+
+const PyamentQR = async(req,res) =>{
+    const QR = await QRmodel.findOne().sort({_id:-1})
+    res.json(QR)
+
+ }
+
 module.exports = {
     UserRegister,
     Userlogin,
     UserHistory,
     withdraw,
-    WithdrawAmmount
+    WithdrawAmmount,
+    PaymentRequest,
+    PyamentQR,
+    widthdraw_second
 };
