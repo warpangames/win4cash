@@ -99,8 +99,8 @@ header p{
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balance-amount');
-        walletContainer.innerHTML = res.data.wallet;
-        AvailableAmount = res.data.wallet;
+        walletContainer.innerHTML = res.data.userdata.wallet;
+        AvailableAmount = res.data.userdata.wallet;
     }
 }
 

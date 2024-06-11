@@ -11,6 +11,7 @@ const Withdrawammount = require("../models/withdrawammount.model.js");
 const Paymentmodel = require('../models/payment.model.js');
 const QRmodel=  require('../models/Qrgateway.model.js');
 const Gstmodel = require("../models/Gstwithdraw.model.js");
+const guestBatmodel = require("../models/GuestBat.model.js")
 
 const UserRegister = async (req, res) => {
     try {
@@ -40,6 +41,9 @@ const UserRegister = async (req, res) => {
 };
 
 const Userlogin = async (req, res) => {
+
+    const Incominggustid = req.cookies?.guestid
+
     console.log(req.body)
     try {
         const AuthByUsername = await usermodel.findOne({ Username: req.body.Username });
@@ -53,7 +57,15 @@ const Userlogin = async (req, res) => {
                 };
                 const AccessToken = AuthByUsername.genrateAcesstoken();
                 console.log(AccessToken)
-                res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!");
+                if(Incominggustid){
+                    res.clearCookies("guestid")               
+                     res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!")
+
+
+                }
+                else{
+                res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!")
+                }
             } else {
                 res.json("Password is wrong!");
             }
@@ -121,14 +133,12 @@ const WithdrawAmmount = async (req,res) =>{
    
     console.log(typeof req.body)
 
-    const data = await Withdrawammount.create({
+    await Withdrawammount.create({
         Requestedammount:parseFloat(req.body.reqammount),
         Username:user.Username,
-        Walletammount:Blance,
-        Uid :req.body.uniqueId
+        Walletammount:Blance
 
     })
-    console.log(data)
     // user.wallet -= parseFloat(req.body.reqammount);
     await user.save()
     res.json("your request sucessfully sended !")
@@ -155,13 +165,12 @@ const WithdrawAmmount = async (req,res) =>{
     
          await Withdrawammount.deleteMany({ status: "Pending", Username: Username });
     
-       const data =   await Gstmodel.create({
+        await Gstmodel.create({
             Username:user.Username,
             Trancation_id:req.body.Trancation_id,
             Gst:req.body.gstammount,
             Uid :req.body.uniqueId
         })
-        console.log(data)
         res.json("sucessfully !")
         }
         else{
@@ -173,7 +182,8 @@ const UserHistory = async (req, res) => {
     
         const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
     // console.log(req.header("Authorization")?.replace("Bearer",""))
-
+        const Incominguestid = req.cookies?.guestid
+        if(!Incominguestid)
     try {
         const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
         const id = Decodedtoken?.id;
@@ -186,6 +196,10 @@ const UserHistory = async (req, res) => {
     } catch (error) {
         console.log(error)
         
+    }
+    else{
+        const data = await guestBatmodel.find({Uid:Incominguestid}).sort({_id:-1})
+        res.json(data)
     }
     
 };

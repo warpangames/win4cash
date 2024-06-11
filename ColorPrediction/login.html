@@ -34,6 +34,8 @@
             </form>
             <div style="text-align: center;color: #3c3838;margin: 10px;">or</div>
             <div onclick="window.location.href = '/user/signup'" class="login-button">Sign Up</div>
+            <div style="text-align: center;color: #3c3838;margin: 10px;">or</div>
+            <div onclick="handleDemoPlay()" class="login-button">Demo Id</div>
         </section>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -49,6 +51,22 @@
        window.location.href = '/';
       }
      })
+     async function handleDemoPlay() {
+    try {
+        const res = await axios.get("https://win4cash.in/guestuser");
+        console.log(res.data);  // Log the response data
+
+        if (res.status === 200) {
+            console.log("Status is 200, redirecting...");  // Log the status
+            window.location.href = "/";
+        } else {
+            console.error("Unexpected status code:", res.status);  // Log unexpected status
+        }
+    } catch (error) {
+        console.error("Error during request:", error);  // Log any errors
+    }
+}
+
     </script>
 </body>
 </html>

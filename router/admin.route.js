@@ -24,6 +24,6 @@ router.post("/setqr",upload.single('file'),Admin.QRSet);
  router.post("/updatewallet",Admin.IncreamtWallet);
  router.post("/paymentreq/reject",Admin.RejectPayment)
 
-
+  router.post("/deleteall",Admin.deleleAllData)
 
 module.exports = router;

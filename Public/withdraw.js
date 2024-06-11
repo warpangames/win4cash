@@ -21,9 +21,9 @@ async function getAllData(){
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balance-data');
-        walletContainer.innerHTML = res.data.wallet;
-        wallet = res.data.wallet;
-        bankStatus = res.data.bankdetail;
+        walletContainer.innerHTML = res.data.userdata.wallet;
+        wallet = res.data.userdata.wallet;
+        bankStatus = res.data.userdata.bankdetail;
     }
 }
 

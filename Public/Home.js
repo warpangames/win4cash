@@ -40,7 +40,7 @@ async function getAllData(){
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
-        walletContainer.innerHTML = res.data.wallet;
+        walletContainer.innerHTML = res.data.userdata.wallet;
         AvailableAmount = res.data.wallet;
     }
 }
@@ -268,7 +268,7 @@ function handleBet(val,type=false){
         }
         else{
             // item.innerHTML = `-${((returnAmt*returnData.number[index])/totalReturn).toFixed(2)}`;
-            item.innerHTML = `-${returnAmt}`;
+            item.innerHTML = `-${finalBet}`;
         }
     })
    }
@@ -280,7 +280,7 @@ function handleBet(val,type=false){
             }
             else{
                 // item.innerHTML = `-${returnAmt/2}`;
-                item.innerHTML = `-${returnAmt}`;
+                item.innerHTML = `-${finalBet}`;
             }
             
         })
@@ -292,7 +292,7 @@ function handleBet(val,type=false){
             }
             else{
                 // item.innerHTML = `-${returnAmt/2}`;
-                item.innerHTML = `-${returnAmt}`;
+                item.innerHTML = `-${finalBet}`;
             }
             
         })
@@ -304,7 +304,7 @@ function handleBet(val,type=false){
             }
             else{
                 // item.innerHTML = `-${returnAmt/2}`;
-                item.innerHTML = `-${returnAmt}`;
+                item.innerHTML = `-${finalBet}`;
             }
             
         })
@@ -316,7 +316,7 @@ function handleBet(val,type=false){
             item.innerHTML = `+${returnAmt}`;
         }
         else{
-            item.innerHTML = `-${returnAmt}`;
+            item.innerHTML = `-${finalBet}`;
         }
         
     })
@@ -328,7 +328,7 @@ if(val==='big'){
             item.innerHTML = `+${returnAmt}`;
         }
         else{
-            item.innerHTML = `-${returnAmt}`;
+            item.innerHTML = `-${finalBet}`;
         }
         
     })

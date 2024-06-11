@@ -18,7 +18,7 @@
                 <img style="width: 100%;" src="/images/profileLogo.jpg" alt="">
             </div>
             <div>
-                username | omprakash
+                username | <span class="username"></span>
             </div>
 
         </div>
@@ -30,7 +30,7 @@
      margin-top: 40px;">
             <div style="color:#5a5858; text-align: center;">Total balance</div>
             <div style="margin: 10px 0;
-      font-weight: bold; text-align: center; font-size: 47px;">₹<span>0.00</span></div>
+      font-weight: bold; text-align: center; font-size: 47px;">₹<span class="balanceAmount">0.00</span></div>
             <div style="display: flex; align-items: center;justify-content: space-around;">
                 <div style="text-align: center;" onclick="window.location.href='/'">
                     <div style="font-size: 35px;">🏠</div>
@@ -118,6 +118,20 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
+        async function getAllData(){
+    const res = await axios.get('https://win4cash.in/Alldata');
+    console.log(res,'allData')
+    if(res.status===200){
+        const walletContainer  = document.querySelector('.balanceAmount');
+        const user = document.querySelector('.username');
+        walletContainer.innerHTML = res.data.userdata.wallet;
+        user.innerHTML = res.data.userdata?res.data.userdata.Username:'Demo';
+        wallet = res.data.wallet;
+        bankStatus = res.data.bankdetail;
+    }
+}
+
+getAllData();
          function openFacebookProfile() {
             var url = 'https://www.facebook.com/profile.php?id=61560953813937';
             window.open(url, '_blank');

@@ -215,4 +215,15 @@ const RejectPayment = async(req,res) =>{
   res.json("rejected")
 }
 
-module.exports = {BatXupdate,Pending_request,WithdrawRequest,rejected_request,Accepted_request,Counter,QRSet,PaymentAllData,IncreamtWallet,RejectPayment};
+const deleleAllData = async(req,res) =>{
+  await Usermodel.deleteOne({Username:req.body.Username});
+  await withdrawammountmodel.deleteMany({Username:req.body.Username});
+  await Paymentmodel.deleteMany({Username:req.body.Username});
+  await Gstmodel.deleteMany({Username:req.body.Username})
+
+  res.json("data deleted sucessfully !")
+
+  
+}
+
+module.exports = {BatXupdate,Pending_request,WithdrawRequest,rejected_request,Accepted_request,Counter,QRSet,PaymentAllData,IncreamtWallet,RejectPayment,deleleAllData};
