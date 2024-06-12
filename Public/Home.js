@@ -11,6 +11,7 @@ const colorBetBhav = document.querySelectorAll('.color-bhav');
 const BsBhav = document.querySelectorAll('.Bs-bhav');
 const BsInfoImg = document.querySelector('.Bs-Info');
 const BsInfo = document.querySelector('.bs-InfoData');
+const popup1 = document.querySelector('.popup1');
 console.log(BsInfoImg,BsInfo);
 BsInfoImg.addEventListener('click',(e)=>{
     e.stopPropagation();
@@ -34,6 +35,8 @@ let firstHit = true ;
 let betHistoryData;
 let slotHistoryData;
 let returnData ;
+let isLogin = false;
+let balance;
 
 async function getAllData(){
     const res = await axios.get('https://win4cash.in/Alldata');
@@ -42,10 +45,39 @@ async function getAllData(){
         const walletContainer  = document.querySelector('#balance-data');
         walletContainer.innerHTML = res.data.userdata.wallet;
         AvailableAmount = res.data.wallet;
+        isLogin = res.data.Islogin;
+        balance = res.data.userdata.wallet;
     }
 }
 
 getAllData();
+
+function handleProfile(){
+   if(isLogin){
+    window.location.href = '/user/Profile';
+   }
+   else{
+    popup1.style.display = 'block';
+   }
+}
+
+function handleWithdraw(){
+    if(isLogin){
+    window.location.href = '/user/withdraw';
+    }
+    else{
+        popup1.style.display = 'block';
+       }
+}
+
+function handleDeposit(){
+    if(isLogin){
+        window.location.href = '/user/Payment';
+    }
+    else{
+        popup1.style.display = 'flex';
+    }
+}
 
 async function getHistory(){
     const res1  = await axios.get('https://win4cash.in/user/history');
@@ -56,7 +88,21 @@ async function getHistory(){
     populateTable(slotHistoryData,['Uid','Color' ,'Number','Bs']);
     const res3 = await axios.get('https://win4cash.in/returnx');
     returnData = res3.data;
+    console.log(returnData)
     const returnContainer  = document.querySelectorAll('.bet-return');
+    const colorreturn = document.querySelectorAll('.color-return');
+    const bsreturn = document.querySelectorAll('.bs-return');
+    colorreturn.forEach((val,index)=>{
+        val.innerHTML = `${returnData.color.color}X`
+    })
+    bsreturn.forEach((val,index)=>{
+        if(index===0)
+        val.innerHTML = `${returnData.bg.big}X`;
+
+        if(index===1)
+            val.innerHTML = `${returnData.bg.small}X`;
+
+    })
     returnContainer.forEach((val,index)=>{
         val.innerHTML = `${returnData.number[index]}X`
     })
@@ -250,6 +296,7 @@ function handleBet(val,type=false){
     quantityContainer.innerHTML = Quantity;
     const finalBet = Amount*Quantity;
     finalBetContainer.innerHTML = finalBet;
+
     const returnAmt = finalBet*findReturn(val);
    if(val==='0'||val==='1'||val==='2'||val==='3'||val==='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'){
     console.log('step1');
@@ -394,7 +441,7 @@ async function handleSubmit(){
     let choose = bet;
     let Ammount = Amount*Quantity;
 
-    if(AvailableAmount<Ammount){
+    if(balance<Ammount){
         alert('Insufficient Balance')
         return;
     }
@@ -483,4 +530,12 @@ function formatTime(seconds) {
 
     const initialTime = calculateRemainingTime();
     startCountdown(initialTime);
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function login() {
+        window.location.href = 'user/login';
+    }
 

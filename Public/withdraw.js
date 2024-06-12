@@ -8,7 +8,7 @@ function handleDisplayForm(){
 async function withHistory(){
     const res = await axios.get('https://win4cash.in/user/withdraw/history');
     console.log(res,'history');
-    // populateTable(res.data);
+    populateTable(res.data);
 }
 
 withHistory();
@@ -61,10 +61,10 @@ async function handleWithdraw(){
         return;
     }
 
-    // if(amt<10000){
-    //     alert('Amount must be greater than 10,000 rupees');
-    //     return;
-    // }
+    if(amt<10000){
+        alert('Amount must be greater than 10,000 rupees or try after 24 hours');
+        return;
+    }
 
     if(!bankStatus){
         alert('please add bank details');
@@ -84,8 +84,8 @@ async function handleWithdraw(){
     console.log(res,'res')
     if(res.status==200){
         widthd.value = '';
-        // getAllData();
-        // withHistory();
+        getAllData();
+        withHistory();
     }
 
 

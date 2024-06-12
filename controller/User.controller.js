@@ -58,8 +58,8 @@ const Userlogin = async (req, res) => {
                 const AccessToken = AuthByUsername.genrateAcesstoken();
                 console.log(AccessToken)
                 if(Incominggustid){
-                    res.clearCookies("guestid")               
-                     res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!")
+                    res.clearCookie('guestid');
+                    res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!")
 
 
                 }
@@ -198,7 +198,8 @@ const UserHistory = async (req, res) => {
         
     }
     else{
-        const data = await guestBatmodel.find({Uid:Incominguestid}).sort({_id:-1})
+        const data = await guestBatmodel.find({guestid:Incominguestid}).sort({_id:-1})
+        console.log(data)
         res.json(data)
     }
     

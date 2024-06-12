@@ -66,7 +66,7 @@ router.get("/Alldata",async(req,res)=>{
         // const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
         // const id = Decodedtoken?.id;
         // const id = Decodedtoken?.id;
-       const userdata =   await Guestusermodel.findOne({Uid:req.cookies.guestid})
+       const userdata =   await Guestusermodel.findOne({guestid:req.cookies.guestid})
        res.json({userdata, Islogin:false})    }
 
 })

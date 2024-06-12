@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const guest = new mongoose.Schema({
-    Uid :{
+    guestid :{
         type:String
     },
     wallet:{

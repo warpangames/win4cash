@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const Bat = new mongoose.Schema({
-    Username:{
+    guestid:{
         type:String,
         trim:true
     },

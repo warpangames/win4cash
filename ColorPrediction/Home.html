@@ -17,7 +17,7 @@
         <header>
             <nav class="navbar">
                     <img src="./Images/logo.png"></img>
-                <div class="profile-logo" onclick="window.location.href = '/user/profile'">
+                <div class="profile-logo" onclick="handleProfile()">
                     <div style="width: 30px; height: 30px; border-radius: 50%; background-color: white; display: flex; align-items: center; justify-content: center;">
                         <i class="fa fa-user" style="color: rgb(71, 71, 71); font-size: 24px;"></i>
                     </div>
@@ -29,8 +29,8 @@
                 <div class="withdrawtext">Wallet Balance</div>
                 <div class="balancetext">₹<span id="balance-data">0.00</span></div>
                 <div class="withdraw-diposit-button">
-                    <div class="withdraw-button" onclick="window.location.href = '/user/withdraw'">Withdraw</div>
-                    <div class="deposit-button" onclick="window.location.href = '/user/Payment'">Deposit</div>
+                    <div class="withdraw-button" onclick="handleWithdraw()">Withdraw</div>
+                    <div class="deposit-button" onclick="handleDeposit()">Deposit</div>
                 </div>
             </div>
         </section>
@@ -51,18 +51,21 @@
                     <div>Red</div>
                     <div class="color-bhav"></div>
                 </div>
+                <div class="color-return"></div>
                 </div>
                 <div class="green-box" onclick="handleBet('green',true)">
                     <div style="text-align: center;">
                         <div>Green</div>
                         <div class="color-bhav"></div>
                     </div>
+                    <div class="color-return"></div>
                     </div>
                     <div class="blue-box" onclick="handleBet('blue',true)">
                         <div style="text-align: center;">
                             <div>Blue</div>
                             <div class="color-bhav"></div>
                         </div>
+                        <div class="color-return"></div>
                         </div>
 
             </div>
@@ -157,12 +160,14 @@
                 <div>SMALL</div>
                 <div class="Bs-bhav"></div>
             </div>
+            <div class="bs-return"></div>
             </div>
             <div class="big" onclick="handleBet('big',true)">
                 <div style="text-align: center;">
                     <div>BIG</div>
                     <div class="Bs-bhav"></div>
                 </div>
+                <div class="bs-return"></div>
             </div>
   </section>
         <section class="history section">
@@ -214,6 +219,17 @@
                 <div class="add-bet" onclick="handleSubmit()">Total Amount ₹<span class="final-bet"></span></div>
             </div>
             </div>
+    </div>
+
+    <div class="popup1" id="popup">
+        <div class="popup-content">
+            <h2 class="popup-title">Attention Required</h2>
+            <p class="popup-message">Please log in and recharge to continue using our services.</p>
+            <div class="popup-buttons">
+                <button class="popup-button cancel-button" onclick="closePopup()">Cancel</button>
+                <button class="popup-button login-button" onclick="login()">Login</button>
+            </div>
+        </div>
     </div>
 
    
