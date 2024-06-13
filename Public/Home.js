@@ -39,7 +39,7 @@ let isLogin = false;
 let balance;
 
 async function getAllData(){
-    const res = await axios.get('http://localhost:7000/Alldata');
+    const res = await axios.get('https://win4cash.in/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
@@ -80,13 +80,13 @@ function handleDeposit(){
 }
 
 async function getHistory(){
-    const res1  = await axios.get('http://localhost:7000/user/history');
+    const res1  = await axios.get('https://win4cash.in/user/history');
     betHistoryData = res1.data;
     console.log(betHistoryData)
-    const res2 = await axios.get('http://localhost:7000/bathistory');
+    const res2 = await axios.get('https://win4cash.in/bathistory');
     slotHistoryData = res2.data;
     populateTable(slotHistoryData,['Uid','Color' ,'Number','Bs']);
-    const res3 = await axios.get('http://localhost:7000/returnx');
+    const res3 = await axios.get('https://win4cash.in/returnx');
     returnData = res3.data;
     console.log(returnData,'return');
     const returnContainer  = document.querySelectorAll('.bet-return');
@@ -446,7 +446,7 @@ async function handleSubmit(){
         return;
     }
 
-    const res  = await axios.post('http://localhost:7000/user/bat',{batoption,choose,Ammount});
+    const res  = await axios.post('https://win4cash.in/user/bat',{batoption,choose,Ammount});
     console.log(res,'res');
     betHistoryData.unshift({
         Ammount:Ammount,
@@ -500,7 +500,7 @@ function formatTime(seconds) {
             mainDiv.classList.add('unclickable');
             // console.log(mainDiv,remainingTime,'hehehe');
             if(firstHit){
-                const res = await axios.get('http://localhost:7000/user/result');
+                const res = await axios.get('https://win4cash.in/user/result');
                 console.log(res,'final data')
                 firstHit = false;
             }
