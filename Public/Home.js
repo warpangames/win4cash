@@ -39,7 +39,7 @@ let isLogin = false;
 let balance;
 
 async function getAllData(){
-    const res = await axios.get('https://win4cash.in/Alldata');
+    const res = await axios.get('http://localhost:7000/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
@@ -80,15 +80,15 @@ function handleDeposit(){
 }
 
 async function getHistory(){
-    const res1  = await axios.get('https://win4cash.in/user/history');
+    const res1  = await axios.get('http://localhost:7000/user/history');
     betHistoryData = res1.data;
     console.log(betHistoryData)
-    const res2 = await axios.get('https://win4cash.in/bathistory');
+    const res2 = await axios.get('http://localhost:7000/bathistory');
     slotHistoryData = res2.data;
     populateTable(slotHistoryData,['Uid','Color' ,'Number','Bs']);
-    const res3 = await axios.get('https://win4cash.in/returnx');
+    const res3 = await axios.get('http://localhost:7000/returnx');
     returnData = res3.data;
-    console.log(returnData)
+    console.log(returnData,'return');
     const returnContainer  = document.querySelectorAll('.bet-return');
     const colorreturn = document.querySelectorAll('.color-return');
     const bsreturn = document.querySelectorAll('.bs-return');
@@ -446,7 +446,7 @@ async function handleSubmit(){
         return;
     }
 
-    const res  = await axios.post('https://win4cash.in/user/bat',{batoption,choose,Ammount});
+    const res  = await axios.post('http://localhost:7000/user/bat',{batoption,choose,Ammount});
     console.log(res,'res');
     betHistoryData.unshift({
         Ammount:Ammount,
@@ -500,7 +500,7 @@ function formatTime(seconds) {
             mainDiv.classList.add('unclickable');
             // console.log(mainDiv,remainingTime,'hehehe');
             if(firstHit){
-                const res = await axios.get('https://win4cash.in/user/result');
+                const res = await axios.get('http://localhost:7000/user/result');
                 console.log(res,'final data')
                 firstHit = false;
             }
@@ -538,4 +538,13 @@ function formatTime(seconds) {
     function login() {
         window.location.href = 'user/login';
     }
+
+    function getRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    const liveUser = document.getElementById('live-user');
+    liveUser.innerHTML = getRandomNumber(1000,3000);
+
+
 

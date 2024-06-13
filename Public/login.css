@@ -19,7 +19,7 @@ body{
         margin: 50px 0;
     }
 
-    #phone,#username, #password{
+    #phone,#username, #password,#confirm-password{
         display: block;
         border: none;
         padding: 10px 0;

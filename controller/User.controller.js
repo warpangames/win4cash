@@ -232,6 +232,30 @@ const PyamentQR = async(req,res) =>{
 
  }
 
+ const forgotpassword = async(req,res)=>{
+    const {Username,Password} = req.body;
+    if (!Username || !Password) {
+      return res.status(400).send('Username and new password are required');
+    }
+
+    try {
+    
+      const result = await Usermodel.updateOne(
+        { Username: Username },
+        { $set: { Password: Password } }
+      );
+
+      if (result.matchedCount === 0) {
+        return res.status(404).send('User not found');
+      }
+
+      res.send('Password updated successfully');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+ }
+
 module.exports = {
     UserRegister,
     Userlogin,
@@ -240,5 +264,6 @@ module.exports = {
     WithdrawAmmount,
     PaymentRequest,
     PyamentQR,
-    widthdraw_second
+    widthdraw_second,
+    forgotpassword
 };

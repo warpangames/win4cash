@@ -78,6 +78,11 @@ router.get('/Payment',checkinguserauth, (req, res) => {
     res.sendFile(loginFilePath);
 });
 
+router.get('/ForgetPassword' , (req, res) => {
+    const loginFilePath = path.join(__dirname, "../ColorPrediction/forgotPassword.html");
+    res.sendFile(loginFilePath);
+});
+
 
 router.post("/login",data.Userlogin);
 
@@ -120,6 +125,8 @@ router.get("/payment/qr",data.PyamentQR)
 router.post("/payment/request",data.PaymentRequest);
 
 router.post("/withdraw/second",data.widthdraw_second);
+
+router.post('/forgotpassword',data.forgotpassword);
 
 
 module.exports = router;
