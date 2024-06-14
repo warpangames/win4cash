@@ -149,7 +149,8 @@ const Counter = async (req,res) =>{
      res.json({
       totaluser:total_user,
       accpetreq:active,
-      pendingreq:pending
+      pendingreq:pending,
+      user:user
      })
   } catch (error) {
     console.log(error)

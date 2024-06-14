@@ -12,6 +12,7 @@ const BsBhav = document.querySelectorAll('.Bs-bhav');
 const BsInfoImg = document.querySelector('.Bs-Info');
 const BsInfo = document.querySelector('.bs-InfoData');
 const popup1 = document.querySelector('.popup1');
+const liveUser = document.getElementById('live-user');
 console.log(BsInfoImg,BsInfo);
 BsInfoImg.addEventListener('click',(e)=>{
     e.stopPropagation();
@@ -198,15 +199,11 @@ historyButtons.forEach((item)=>{
     })
 })
 
-// const dataArray1 = [
-//     { column1: 'Value 1A', column2: 'Value 1B', column3: 'Value 1C' },
-//     { column1: 'Value 2A', column2: 'Value 2B', column3: 'Value 2C' },
-// ];
-
-// const dataArray2 = [
-//     { column1: 'Value 3A', column2: 'Value 3B', column3: 'Value 3C' },
-//     { column1: 'Value 4A', column2: 'Value 4B', column3: 'Value 4C' },
-// ];
+function removeDecimal(number) {
+    let cleanedStr = number.replace('.', '');
+   
+    return cleanedStr;
+  }
 
 
 function populateTable(data, keysToShow) {
@@ -234,7 +231,10 @@ function populateTable(data, keysToShow) {
             keysToShow.forEach(key => {
                 const cell = document.createElement('td');
                 cell.classList.add('table-column');
-                if(key==='Color'){
+                if(key==='Uid'){
+                    cell.textContent = removeDecimal(obj[key]);
+                }
+              else if(key==='Color'){
                    
                     cell.innerHTML = `<div style='width:15px;height:15px;border-radius:50%; background-color:${obj[key]};margin:auto'></div>`;
                 }
@@ -540,11 +540,14 @@ function formatTime(seconds) {
     }
 
     function getRandomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        const val =  Math.floor(Math.random() * (max - min + 1)) + min;
+        liveUser.innerHTML = val;
     }
 
-    const liveUser = document.getElementById('live-user');
-    liveUser.innerHTML = getRandomNumber(1000,3000);
+    getRandomNumber(1000,5000);
+
+    
+   
 
 
 

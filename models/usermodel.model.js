@@ -30,7 +30,7 @@ const UserRegister = new mongoose.Schema({
     wallet:{
         type:Number,
         trim:true,
-        default:0,
+        default:500,    
     },
     bankdetail:{
         type:Boolean,
