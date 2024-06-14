@@ -100,10 +100,7 @@ const UserData = async (req, res) => {
         const user = await Usermodel.findById(id)
         user.wallet -= req.body.Ammount;
 
-        user.save().then(() => {
-            console.log("ammount debited sucessfully !")
-            console.log(user.wallet)
-        })
+        await user.save();
 
 
         const Data = {
@@ -259,6 +256,8 @@ countdownTimer();
 
 const result = async (req, res) => {
 
+    const id = generateUniqueId();
+
     const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
     // console.log(req.header("Authorization")?.replace("Bearer",""))
     const guestid = req.cookies?.guestid
@@ -342,23 +341,126 @@ const result = async (req, res) => {
             const check = areAllUsernamesSame(minData)
             if (check) {
                 const random = Math.floor(Math.random() * 1001);
+                console.log(minData)
+                console.log(minData.length)
                 if (random >= 300) {
-                    for (var i = 1; i <= minData.length; i++) {
+                    for (let i = 0; i < minData.length; i++) {
+                        console.log(minData[i])
                         if (minData[i].Batoption == "color") {
     
                             result = minData[i].choose
+
+                            // for others 
+                            
+                            function areAllValuesSame(obj) {
+                                const values = Object.values(obj);
+                                return values.every(v => v === values[0]);
+                            }
+                            function generateRandomKeyValue(obj) {
+                                console.log("all number is same")
+                                const keys = Object.keys(obj);
+                                var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                                random_key = randomKey
+                                console.log(random_key)
+                            }
+                    
+                            if (areAllValuesSame(numberValues)) {
+                                let key;
+                                generateRandomKeyValue(numberValues)
+                                maxValueNumber = random_key;
+                                // console.log(minValueNumber)
+                    
+                            }
+                            else {
+                    
+                                function findMaxValueNumber(mapping) {
+                                    let maxNumber = null;
+                                    let maxValue = -Infinity;
+                    
+                                    for (let number in mapping) {
+                                        if (mapping[number] > maxValue) {
+                                            maxValue = mapping[number];
+                                            maxNumber = number;
+                                        }
+                                    }
+                    
+                                    return maxNumber;
+                                }
+                    
+                                maxValueNumber = findMaxValueNumber(numberValues);
+                            }
+                    
+                    
+                            if (bignumber != smallnumber) {
+                                const BSresult = Math.max(bignumber, smallnumber)
+                                if (BSresult == bignumber) {
+                                    Bsresult = "Big"
+                                }
+                                else {
+                                    Bsresult = "Small"
+                                }
+                            }
+                            else {
+                                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                    
+                            }
     
                         }
-                        else if (minData[i].Batoption == "number") {
+                        if (minData[i].Batoption == "number") {
                             maxValueNumber = minData[i].choose
+                            Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                            result = nobat[Math.floor(Math.random() * 3)];
+
+
+
                         }
-                        else {
+                        if(minData[i].Batoption == "Bs") {
                             Bsresult = minData[i].choose
+                            result = nobat[Math.floor(Math.random() * 3)];
+                            function areAllValuesSame(obj) {
+                                const values = Object.values(obj);
+                                return values.every(v => v === values[0]);
+                            }
+                            function generateRandomKeyValue(obj) {
+                                console.log("all number is same")
+                                const keys = Object.keys(obj);
+                                var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                                random_key = randomKey
+                                console.log(random_key)
+                            }
+                    
+                            if (areAllValuesSame(numberValues)) {
+                                let key;
+                                generateRandomKeyValue(numberValues)
+                                maxValueNumber = random_key;
+                                // console.log(minValueNumber)
+                    
+                            }
+                            else {
+                    
+                                function findMaxValueNumber(mapping) {
+                                    let maxNumber = null;
+                                    let maxValue = -Infinity;
+                    
+                                    for (let number in mapping) {
+                                        if (mapping[number] > maxValue) {
+                                            maxValue = mapping[number];
+                                            maxNumber = number;
+                                        }
+                                    }
+                    
+                                    return maxNumber;
+                                }
+                    
+                                maxValueNumber = findMaxValueNumber(numberValues);
+                            }
+
+                            
                         }
     
                     }
 
-                    var id = generateUniqueId();
+                    // var id = generateUniqueId();
                     await Result.create({
                         Number: maxValueNumber,
                         Color: result,
@@ -450,7 +552,7 @@ const result = async (req, res) => {
                 }
         
                 console.log({ Bsresult })
-                var id = generateUniqueId();
+                // var id = generateUniqueId();
                 await Result.create({
                     Number: maxValueNumber,
                     Color: result,
@@ -464,18 +566,67 @@ const result = async (req, res) => {
 
         else if (minData.length == 1){
              console.log(minData)
-            if (minData[0].Batoption == "color") {
+             const random = Math.floor(Math.random() * 1001);
+             console.log("random for length 1",random)
+             if(random>=400){
+                         if (minData[0].Batoption == "color") {
     
                 result = minData[0].choose
+                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                function areAllValuesSame(obj) {
+                    const values = Object.values(obj);
+                    return values.every(v => v === values[0]);
+                }
+                function generateRandomKeyValue(obj) {
+                    console.log("all number is same")
+                    const keys = Object.keys(obj);
+                    var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                    random_key = randomKey
+                    console.log(random_key)
+                }
+        
+                if (areAllValuesSame(numberValues)) {
+                    let key;
+                    generateRandomKeyValue(numberValues)
+                    maxValueNumber = random_key;
+                    // console.log(minValueNumber)
+        
+                }
+
 
             }
             else if (minData[0].Batoption == "number") {
                 maxValueNumber = minData[0].choose
+                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                result = nobat[Math.floor(Math.random() * 3)];
+
+
             }
             else {
-                Bsresult = data.choose
+                Bsresult = minData[0].choose
+                function areAllValuesSame(obj) {
+                    const values = Object.values(obj);
+                    return values.every(v => v === values[0]);
+                }
+                function generateRandomKeyValue(obj) {
+                    console.log("all number is same")
+                    const keys = Object.keys(obj);
+                    var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                    random_key = randomKey
+                    console.log(random_key)
+                }
+        
+                if (areAllValuesSame(numberValues)) {
+                    let key;
+                    generateRandomKeyValue(numberValues)
+                    maxValueNumber = random_key;
+                    // console.log(minValueNumber)
+        
+                }
+                result = nobat[Math.floor(Math.random() * 3)];
+
             }
-            var id = generateUniqueId();
+            // var id = generateUniqueId();
             await Result.create({
                 Number: maxValueNumber,
                 Color: result,
@@ -483,6 +634,27 @@ const result = async (req, res) => {
                 Uid: id
     
             })
+        }
+        else{
+            Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+            result = nobat[Math.floor(Math.random() * 3)];
+            function generateRandomKeyValue(obj) {
+                console.log("all number is same")
+                const keys = Object.keys(obj);
+                var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                random_key = randomKey
+                console.log(random_key)
+            }
+    
+
+                let key;
+                generateRandomKeyValue(numberValues)
+                maxValueNumber = random_key;
+                // console.log(minValueNumber)
+    
+            
+
+        }
         }
 
         else{
@@ -557,7 +729,7 @@ const result = async (req, res) => {
             }
     
             console.log({ Bsresult })
-            var id = generateUniqueId();
+            // var id = generateUniqueId();
             await Result.create({
                 Number: maxValueNumber,
                 Color: result,
