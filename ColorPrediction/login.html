@@ -18,17 +18,20 @@
             <form id="form" method="post" style="position: relative;">
 
                 <label for="username">Username</label>
-                <div class="bar">
+                <div class="bar" style="position: relative;">
                 <i class="fa fa-user"></i>
                 <input type="text" id="username" name="username" placeholder="Enter your Username">
+                
             </div>
+            <div class="wrong1" style="display: none;text-align: center;color: red;font-size: 10px;">Incorrect Username</div>
                 <label for="password">Password</label>
 
                 <div class="bar">
                 <i class="fa fa-lock"></i>
                 <input type="password" id="password" name="password" placeholder="password">
-
+               
             </div>
+            <div class="wrong2" style="display: none;text-align: center;color: red;font-size: 10px;">Wrong Password</div>
                 <input type="submit" value="Login" id="submit">
              <a href="/user/ForgetPassword" style="position: absolute;right: 0;">forgot Password</a>
             </form>
@@ -43,11 +46,33 @@
      const form = document.getElementById('form');
      form.addEventListener('submit',async (e)=>{
       e.preventDefault();
-      const Username = document.getElementById('username').value;
-      const Password = document.getElementById('password').value;
+      const UserName = document.getElementById('username');
+      const Password1 = document.getElementById('password');
+      const wrong1 = document.querySelector('.wrong1');
+      const wrong2 = document.querySelector('.wrong2');
+
+      wrong1.style.display = 'none';
+      UserName.style.border = "none";
+      wrong2.style.display = 'none';
+       Password1.style.border = "none";
+
+      const Username = UserName.value;
+      const Password = Password1.value;
       const res = await axios.post('https://win4cash.in/user/login',{Username,Password});
+
+      if(res.data==='Username is wrong!'){
+       wrong1.style.display = 'block';
+       UserName.style.border = "1px solid red";
+      }
+
+      if(res.data==='Password is wrong!'){
+       wrong2.style.display = 'block';
+       Password1.style.border = "1px solid red";
+    }
+
+      console.log(res,'res');
       
-      if(res.status===200){
+      if(res.data==='You are successfully logged in!'){
        window.location.href = '/';
       }
      })

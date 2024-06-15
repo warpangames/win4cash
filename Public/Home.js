@@ -446,6 +446,8 @@ async function handleSubmit(){
         return;
     }
 
+    balance = balance - Ammount;
+
     const res  = await axios.post('https://win4cash.in/user/bat',{batoption,choose,Ammount});
     console.log(res,'res');
     betHistoryData.unshift({
@@ -539,12 +541,37 @@ function formatTime(seconds) {
         window.location.href = 'user/login';
     }
 
-    function getRandomNumber(min, max) {
-        const val =  Math.floor(Math.random() * (max - min + 1)) + min;
-        liveUser.innerHTML = val;
-    }
+    // function getRandomNumber(min, max) {
+    //     const val =  Math.floor(Math.random() * (max - min + 1)) + min;
+    //     liveUser.innerHTML = val;
+    // }
 
-    getRandomNumber(1000,5000);
+    // getRandomNumber(1000,5000);
+
+
+    let currentNumber = Math.floor(Math.random() * 501) + 1000; 
+        function updateNumber() {
+            const change = Math.floor(Math.random() * 30) + 1; 
+            const increase = Math.random() < 0.5; 
+
+            if (increase) {
+                currentNumber += change;
+            } else {
+                currentNumber -= change;
+            }
+
+            if (currentNumber < 1000) {
+                currentNumber = 1000;
+            } else if (currentNumber > 1500) {
+                currentNumber = 1500;
+            }
+
+            document.getElementById('randomNumber').textContent = currentNumber;
+        }
+
+        document.getElementById('randomNumber').textContent = currentNumber;
+
+        setInterval(updateNumber, 5000);
 
     
    
