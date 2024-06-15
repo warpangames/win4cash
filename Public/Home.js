@@ -1,5 +1,5 @@
 const amountContainer = document.querySelectorAll('.amount-box');
-const multipleContainer  = document.querySelectorAll('.multiple-val');
+// const multipleContainer  = document.querySelectorAll('.multiple-val');
 const quantityContainer  = document.querySelector('.quantity-val');
 const popup  = document.querySelector('.popup');
 const colorContainer = document.querySelector('.color-container');
@@ -13,6 +13,9 @@ const BsInfoImg = document.querySelector('.Bs-Info');
 const BsInfo = document.querySelector('.bs-InfoData');
 const popup1 = document.querySelector('.popup1');
 const liveUser = document.getElementById('live-user');
+const inpt = document.getElementById('BetInput');
+
+
 console.log(BsInfoImg,BsInfo);
 BsInfoImg.addEventListener('click',(e)=>{
     e.stopPropagation();
@@ -44,14 +47,43 @@ async function getAllData(){
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
+        const username = document.querySelector('.user-name');
         walletContainer.innerHTML = res.data.userdata.wallet;
         AvailableAmount = res.data.wallet;
         isLogin = res.data.Islogin;
         balance = res.data.userdata.wallet;
+        username.innerHTML = res.data.userdata.Username
     }
 }
 
 getAllData();
+
+// console.log(inpt,finalBetContainer,'hehehe1')
+
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+   
+    function debounce(func, delay) {
+        let debounceTimer;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => func.apply(context, args), delay);
+        }
+    }
+
+    // Event handler
+    const handleChange = () => {
+        console.log('hehehe');
+        finalBetContainer.innerHTML = inpt.value;
+    };
+
+    // Add the input event listener with debounce
+    inpt.addEventListener('input', debounce(handleChange, 300));
+});
+
 
 function handleProfile(){
    if(isLogin){
@@ -147,17 +179,17 @@ function cookieExists(cookieName) {
 
 
 
-function handlemultiple(element,val){
-    const bet = getCookie('betType');
-    Quantity = val;
-    multipleContainer.forEach(item=>{
-        item.style.backgroundColor='#D9D9D9';
-        item.style.color='black';
-    })
-    element.style.backgroundColor='red';
-    element.style.color = 'white';
-    handleBet(bet);
-   }
+// function handlemultiple(element,val){
+//     const bet = getCookie('betType');
+//     Quantity = val;
+//     multipleContainer.forEach(item=>{
+//         item.style.backgroundColor='#D9D9D9';
+//         item.style.color='black';
+//     })
+//     element.style.backgroundColor='red';
+//     element.style.color = 'white';
+//     handleBet(bet);
+//    }
 
    function handleQunatity(val){
     const bet = getCookie('betType');
@@ -240,7 +272,7 @@ function populateTable(data, keysToShow) {
                 }
                else if (key === 'Number') {
 
-                    cell.textContent = obj[key].toString(); // Convert integer to string for 'number' key
+                    cell.textContent = obj[key]; // Convert integer to string for 'number' key
                 } else {
                     cell.textContent = obj[key] || ''; // If key not present in object, set empty string
                 }
@@ -282,9 +314,9 @@ function handleBet(val,type=false){
     console.log(numberBetBhav,'betbhav');
     if(type&&initial){
         amountContainer[0].style.backgroundColor='red';
-        multipleContainer[0].style.backgroundColor='red';
+        // multipleContainer[0].style.backgroundColor='red';
         amountContainer[0].style.color='white';
-        multipleContainer[0].style.color='white';
+        // multipleContainer[0].style.color='white';
     }
 
     initial = false;
@@ -387,18 +419,18 @@ function handleCancleBet(){
     initial = true;
      Amount = 1;
      Quantity = 1;
-     multipleContainer.forEach(item=>{
-        item.style.backgroundColor='#D9D9D9';
-        item.style.color='black';
-    })
+    //  multipleContainer.forEach(item=>{
+    //     item.style.backgroundColor='#D9D9D9';
+    //     item.style.color='black';
+    // })
     amountContainer.forEach(item=>{
         item.style.backgroundColor='#D9D9D9';
         item.style.color='black';
     })
     amountContainer[0].style.backgroundColor='red';
-    multipleContainer[0].style.backgroundColor='red';
+    // multipleContainer[0].style.backgroundColor='red';
     amountContainer[0].style.color='white';
-    multipleContainer[0].style.color='white';
+    // multipleContainer[0].style.color='white';
 
     numberBetBhav.forEach((item,index)=>{
        
@@ -439,10 +471,25 @@ async function handleSubmit(){
         batoption = 'Bs';
     }
     let choose = bet;
-    let Ammount = Amount*Quantity;
+    let Ammount ;
+
+    if(inpt.value){
+        Ammount = inpt.value;
+    }
+
+    else{
+        Ammount = Amount*Quantity;
+    }
+
+    console.log(Ammount,'Ammount');
 
     if(balance<Ammount){
         alert('Insufficient Balance')
+        return;
+    }
+
+    if(Ammount<50){
+        alert('Amount must be greater than 50 rupees');
         return;
     }
 
@@ -522,7 +569,7 @@ function formatTime(seconds) {
         if (remainingTime <= 0) {
             remainingTime = 1 * 60;
             firstHit = true;
-            window.location.reload();
+            // window.location.reload();
         }
     }, 1000);
 
