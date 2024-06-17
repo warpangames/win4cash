@@ -47,7 +47,7 @@ let slotResult;
 let userBets;
 
 async function getAllData(){
-    const res = await axios.get('https://admin.win4cash.in/Alldata');
+    const res = await axios.get('https://win4cash.in/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
@@ -120,13 +120,13 @@ function handleDeposit(){
 }
 
 async function getHistory(){
-    const res1  = await axios.get('https://admin.win4cash.in/user/history');
+    const res1  = await axios.get('https://win4cash.in/user/history');
     betHistoryData = res1.data;
     console.log(betHistoryData)
-    const res2 = await axios.get('https://admin.win4cash.in/bathistory');
+    const res2 = await axios.get('https://win4cash.in/bathistory');
     slotHistoryData = res2.data;
     populateTable(slotHistoryData,['Uid','Color' ,'Number','Bs']);
-    const res3 = await axios.get('https://admin.win4cash.in/returnx');
+    const res3 = await axios.get('https://win4cash.in/returnx');
     returnData = res3.data;
     console.log(returnData,'return');
     const returnContainer  = document.querySelectorAll('.bet-return');
@@ -543,7 +543,7 @@ async function handleSubmit(){
 
     balance = balance - Ammount;
 
-    const res  = await axios.post('https://admin.win4cash.in/user/bat',{batoption,choose,Ammount});
+    const res  = await axios.post('https://win4cash.in/user/bat',{batoption,choose,Ammount});
     console.log(res,'res');
     betHistoryData.unshift({
         Ammount:Ammount,
@@ -643,7 +643,7 @@ function formatTime(seconds) {
             console.log(remainingTime,firstHit,'aqwd')
         if(remainingTime == 5 && !firstHit){
             console.log('saasd')
-            const res = await axios.get('https://admin.win4cash.in/user/result');
+            const res = await axios.get('https://win4cash.in/user/result');
             console.log(res,'final data');
             slotResult = res.data.Lastresult;
             userBets = res.data.resultObject;

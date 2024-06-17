@@ -125,7 +125,7 @@
 
     <script>
         async function getAllData(){
-    const res = await axios.get('https://admin.win4cash.in/Alldata');
+    const res = await axios.get('https://win4cash.in/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balanceAmount');
@@ -154,7 +154,7 @@ getAllData();
 
        async  function handleLogout(){
           
-        const res = await axios.get('https://admin.win4cash.in/user/logout');
+        const res = await axios.get('https://win4cash.in/user/logout');
         window.location.reload();
   
  }
