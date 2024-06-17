@@ -54,7 +54,7 @@
       const Phoneno = document.getElementById('phone').value;
       const Username = document.getElementById('username').value;
       const Password = document.getElementById('password').value;
-      const res = await axios.post('https:/win4cash.in/user/signup',{Phoneno,Username,Password});
+      const res = await axios.post('http://localhost:7000/user/signup',{Phoneno,Username,Password});
       console.log(res);
       if(res.status===200){
         if(res.data==='Username already exists! Choose another username'){

@@ -132,7 +132,7 @@ td{
   </section>
   <script>
     async function withHistory(){
-    const res = await axios.get('https:/win4cash.in/user/withdraw/history');
+    const res = await axios.get('http://localhost:7000/user/withdraw/history');
     console.log(res,'history');
     populateTable(res.data);
 }

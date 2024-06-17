@@ -19,7 +19,7 @@ connectdb()
 
 
 // {
-//     origin:["https:/admin.win4cash.in","https:/win4cash.in"],
+//     origin:["http://localhost:5000","http://localhost:7000"],
 //     credentials:true
 // }
 

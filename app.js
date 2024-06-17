@@ -7,7 +7,7 @@ const cookieparser = require("cookie-parser");
 
 app.use(cookieparser())
 
-const allowedOrigins = [ 'https:/win4cash.in', 'https:/admin.win4cash.in'];
+const allowedOrigins = [ 'http://localhost:7000', 'http://localhost:5000'];
 const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)

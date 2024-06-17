@@ -138,12 +138,21 @@ const WithdrawRequest = async (req,res) =>{
 }
 const Counter = async (req,res) =>{
   try {
+    let total_user = 0;
+   let active = 0;
+   let pending = 0;
     const user = await Usermodel.find();
-    const total_user = user.length;
+     total_user = user.length;
      const fetching_accpet = await withdrawammountmodel.find({satuts:"accepted"})
-     const active = fetching_accpet.length
+     if(fetching_accpet){
+      active = fetching_accpet.length;
+     }
+    
      const fetching_pending = await withdrawammountmodel.find({satuts:"Pending"})
-     const pending = fetching_pending.length;
+     if(fetching_pending){
+       pending = fetching_pending.length;
+     }
+    
    
      console.log(active,total_user,pending)
   
