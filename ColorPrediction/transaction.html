@@ -95,7 +95,7 @@ header p{
     <script>
 
         async function getAllData(){
-    const res = await axios.get('https:/win4cash.in/Alldata');
+    const res = await axios.get('https://win4cash.in/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balance-amount');
@@ -107,7 +107,7 @@ header p{
 getAllData();
 
         async function getQr(){
-         const res = await axios.get('https:/win4cash.in/user/payment/qr');
+         const res = await axios.get('https://win4cash.in/user/payment/qr');
          console.log(res,'qr')
          const bufferData = res.data.data.data;
 
@@ -139,7 +139,7 @@ qrImg.src = imageURL;
             return;
         }
         console.log(ammount,Transcation_id,'hekko')
-        const res = await axios.post('https:/win4cash.in/user/payment/request',{ammount,Transcation_id});
+        const res = await axios.post('https://win4cash.in/user/payment/request',{ammount,Transcation_id});
         inpt.value = '';
         Transcation_id1.value = '';
         }
