@@ -28,26 +28,45 @@
         <!-- <marquee behavior="scroll" direction="left" scrollamount="5">
            <span id="live-user"></span> users online now!
         </marquee> -->
-        <div style="font-size: 20px;
-        margin-top: 5px;text-align: center;color: azure;"><span id="randomNumber" style="font-weight: bold; color: blueviolet;"> </span> users online now!</div>
+        <div style="font-size: 13px;
+        margin: 5px 0;text-align: center;color: azure;"><span id="randomNumber" style="font-weight: bold; color: blueviolet;"> </span> users online now!</div>
        
-        <section>
-            <div class="balance-withdraw-container">
-                <div class="withdrawtext">Wallet Balance</div>
-                <div class="balancetext">₹<span id="balance-data">0.00</span></div>
-                <div class="withdraw-diposit-button">
-                    <div class="withdraw-button" onclick="handleWithdraw()">Withdraw</div>
-                    <div class="deposit-button" onclick="handleDeposit()">Deposit</div>
+     <!-- <section>
+         <div class="balance-withdraw-container">
+             <div class="withdrawtext">Wallet Balance</div>
+             <div class="balancetext">₹<span id="balance-data">0.00</span></div>
+             <div class="withdraw-diposit-button">
+                 <div class="withdraw-button" onclick="handleWithdraw()">Withdraw</div>
+                 <div class="deposit-button" onclick="handleDeposit()">Deposit</div>
+             </div>
+         </div>
+     </section> -->
+     <!-- <section class="timer section">
+         <div class="timer-box">
+              
+            </div>
+        </section> -->
+
+        <div class="ticket">
+            <div class="how-to-play" id="openRulesBtn">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/bus.png" alt="How to play">
+               <div>How to play</div>
+            </div>
+            <div class="left-section">
+                <div class="title" style="font-size: 20px;">Balance</div>
+                <div class="balls" style="margin: auto;">
+                   <div><span id="balance-data"></span></div>
                 </div>
             </div>
-        </section>
-        <section class="timer section">
-            <div class="timer-box">
-                <!-- <div>03</div>
-                <div>:</div>
-                <div>34</div> -->
+            <div class="right-section">
+                <div class="timer">Time remaining</div>
+                <div class="time">00:45</div>
+                <div class="code">20240616010887</div>
             </div>
-        </section>
+        </div>
+
+        <div style="position:relative;">
+            <div class="CompleteBet">
         <section class="color-bet section">
             
             
@@ -82,8 +101,7 @@
                 <div class="greenBlur"></div>
                 <div class="blueBlur"></div>         
                 </div>
-
-        </section>
+        </section>
         <section class="number-bet section">
             <div class='numberBet-line'>Bet on number</div>
             <div class="numberBet-box">
@@ -156,12 +174,12 @@
             </div>
         </section>
         <section class="big-small section">
-            <div style="position: absolute;top: 4px;left: 10px; display: flex; align-items: center;margin-right: 10px;font-size: 10px;">
+            <!-- <div style="position: absolute;top: 4px;left: 10px; display: flex; align-items: center;margin-right: 10px;font-size: 10px; display: none;">
             <img src="/Images/info.png" style="width: 15px;width: 20px;" class="Bs-Info" alt="">
             <div style="box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;background-color: white;border-radius: 3px; display: none;z-index: 1;" class="bs-InfoData">Small represents number from 0 to 4 and big represents number from 5 to 9 <br>
                 छोटा 0 से 4 तक की संख्या को दर्शाता है और बड़ा 5 से 9 तक की संख्या को दर्शाता है
             </div>
-            </div>
+            </div> -->
             <div class="small" onclick="handleBet('small',true)">
             <div style="text-align: center;">
                 <div>SMALL</div>
@@ -177,6 +195,12 @@
                 <div class="bs-return"></div>
             </div>
   </section>
+</div>
+<div style="position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; top: 0;left: 0;">
+  <div class="AnimationTimer">
+  </div>
+</div>
+</div>
         <section class="history section">
             <div class="history-filter">
                 <div class="history-button active-history" onclick="handleHistoryClick('bet')">Bet History</div>
@@ -193,9 +217,17 @@
         </section>
         <div class="popup">
             <div class="color-container">
-                <div class="popup-text"> Win Go 5Min</div>
+                <div class="popup-text"> Win Go 3Min</div>
                 <div class="selected-bet-div">select <span class="slected-bet"></span></div>
             </div>
+            <form method="post" style="display: flex;justify-content: space-evenly; align-items: center; margin-top: 10px;" onsubmit="handleSubmit(event)">
+                <input type="Number" id="BetInput" name="BetInput" placeholder="Enter Bet Amount">
+                <!-- <input style="background-color: #2121bb;
+                color: white;
+                padding: 5px 12px;
+                font-size: 15px;
+                border-radius: 5px;" type="submit" value="Place Bet"> -->
+            </form>
             <div class="balance">
                 <div>Balance</div>
                 <div class="set-bet-amount">
@@ -213,18 +245,23 @@
                     <div class="quantity-handle" onclick="handleQunatity(1)">+</div>
                 </div>
             </div>
-            <div class="multiple"> 
-                <!-- <div class="multiple-val" onclick="handlemultiple(this,1)">X1</div>
+            <div >
+                
+              
+               
+            </div>
+            <!-- <div class="multiple"> 
+                <div class="multiple-val" onclick="handlemultiple(this,1)">X1</div>
                 <div class="multiple-val" onclick="handlemultiple(this,5)">X5</div>
                 <div class="multiple-val" onclick="handlemultiple(this,10)">X10</div>
                 <div class="multiple-val" onclick="handlemultiple(this,20)">X20</div>
                 <div class="multiple-val" onclick="handlemultiple(this,50)">X50</div>
                 <div class="multiple-val" onclick="handlemultiple(this,100)">X100</div> -->
-                <input type="Number" id="BetInput" name="BetInput" placeholder="Enter Bet Amount">
-            </div>
+                <!-- <input type="Number" id="BetInput" name="BetInput" placeholder="Enter Bet Amount"> -->
+            <!-- </div> -->
             <div class="final-step">
                 <div class="cancel-bet" onclick="handleCancleBet()">Cancel</div>
-                <div class="add-bet" onclick="handleSubmit()">Total Amount ₹<span class="final-bet"></span></div>
+                <div class="add-bet" onclick="handleSubmit(event)">Total Amount ₹<span class="final-bet"></span></div>
             </div>
             </div>
     </div>
@@ -240,6 +277,56 @@
         </div>
     </div>
 
+    <div id="rulesPopup" class="popup1">
+        <div class="popup-content">
+            <span id="closeBtn" class="close">&times;</span>
+            <div class="popup-header">
+                <h2 class="h2">How to Play</h2>
+            </div>
+            <div class="popup-body">
+                <p class="p">1 minute 1 issue, 50 seconds to order, 10 seconds waiting for the draw. It opens all day. </p>
+                <!-- <p class="p">If you spend 100 to trade, after deducting a 2 service fee, your contract amount is 98:</p> -->
+                <h3 class="h3">Color Bet Rules:</h3>
+                <ul class="ul">
+                    <li class="li"><b>Select Green:</b> If the result shows green you will get return multiple of your bet amount.</li>
+                    <li class="li"><b>Select Red:</b>  If the result shows red you will get return multiple of your bet amount.</li>
+                    <li class="li"><b>Select blue:</b>  If the result shows blue you will get return multiple of your bet amount.</li>
+                </ul>
+                <h3 class="h3">Number Bet Rules:</h3>
+                <p class="p">Select a specific number (0-9). If the result shows your selected number, you will get return multiple of your bet amount.</p>
+                <h3 class="h3">Big/Small Bet Rules:</h3>
+                <ul>
+                    <li class="li"><b>Big:</b> If the result shows numbers from 5 to 9, return multiple of your bet amount.</li>
+                    <li class="li"><b>Small:</b> If the result shows numbers from 0 to 4, return multiple of your bet amount.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 60px;
+    position: fixed;
+    bottom: 329px;
+    z-index: 9;
+    right: 0;"  onclick="openWhatsAppChat()">
+        <img width="100%" src="/Images/whatsApp.png" alt="">  
+    </div>
+
+    <div class="result-popup animate__animated" id="resultPopup">
+        <div class="popup-content1">
+          <span class="close-btn" id="closePopup">&times;</span>
+          <h2 class="result-h2" class="animate__animated animate__fadeInDown">Game Result</h2>
+          <div class="result-details animate__animated animate__fadeInUp">
+            <div class="slotResult">
+            <p>Number: <span id="slotNumber">0</span></p>
+            <p>Color: <span id="slotColor">Red</span></p>
+            <p>Big/Small: <span id="slotBs">Big</span></p>
+        </div>
+            <div id="userBets">
+              <!-- User bets will be appended here -->
+            </div>
+          </div>
+        </div>
+      </div>
    
     <script src="/Home.js"></script>
 </body>

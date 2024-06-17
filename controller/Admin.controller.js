@@ -1,4 +1,3 @@
-
 const jwt = require("jsonwebtoken")
 const AdminData = require("../models/Admin.model.js");
 const returnmodel = require("../models/Return.model.js")
@@ -8,6 +7,8 @@ const Withdraw = require("../models/bankdetail.model.js");
 const QRmodel = require('../models/Qrgateway.model.js');
 const Paymentmodel = require('../models/payment.model.js');
 const Gstmodel = require('../models/Gstwithdraw.model.js')
+const bankdetail = require("../models/bankdetail.model.js");
+const Batmodel = require("../models/Batmodel.model.js")
 
 
 const BatXupdate = async (req,res)=>{
@@ -142,15 +143,18 @@ const Counter = async (req,res) =>{
      const fetching_accpet = await withdrawammountmodel.find({satuts:"accepted"})
      const active = fetching_accpet.length
      const fetching_pending = await withdrawammountmodel.find({satuts:"Pending"})
-     const pending = fetching_pending
-     .length;
+     const pending = fetching_pending.length;
+   
      console.log(active,total_user,pending)
   
      res.json({
       totaluser:total_user,
       accpetreq:active,
       pendingreq:pending,
-      user:user
+      user:user,
+     
+
+
      })
   } catch (error) {
     console.log(error)

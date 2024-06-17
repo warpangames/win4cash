@@ -91,8 +91,7 @@ const withdraw = async (req,res)=>{
 
     console.log(id)
     const user = await Usermodel.findById(id)
-    // const Blance = user.wallet;
-    // user.wallet -= req.body.Ammount;
+    
     user.bankdetail = true;
 
        await Withdraw.create({
@@ -126,12 +125,13 @@ const WithdrawAmmount = async (req,res) =>{
     const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
     const id = Decodedtoken?.id;
     const Username = Decodedtoken?.Username;
-
+    
     console.log(id)
     const user = await Usermodel.findById(id)
     const Blance = user.wallet;
+    // user.wallet -= req.body.Ammount;
    
-    console.log(typeof req.body)
+    console.log(req.body)
 
     await Withdrawammount.create({
         Requestedammount:parseFloat(req.body.reqammount),
@@ -139,7 +139,7 @@ const WithdrawAmmount = async (req,res) =>{
         Walletammount:Blance
 
     })
-    // user.wallet -= parseFloat(req.body.reqammount);
+    user.wallet -= parseFloat(req.body.reqammount);
     await user.save()
     res.json("your request sucessfully sended !")
     }

@@ -83,12 +83,17 @@ router.get('/ForgetPassword' , (req, res) => {
     res.sendFile(loginFilePath);
 });
 
+router.get('/rules' , (req, res) => {
+    const loginFilePath = path.join(__dirname, "../ColorPrediction/rules.html");
+    res.sendFile(loginFilePath);
+});
+
 
 router.post("/login",data.Userlogin);
 
 router.post("/bat",Gamelogic.UserData);
 
-router.get("/result",Gamelogic.result);
+router.get("/result",Gamelogic.UserResult);
 
 router.get("/history",data.UserHistory);
 router.post("/bankdetail", data.withdraw);

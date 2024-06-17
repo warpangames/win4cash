@@ -8,7 +8,12 @@ function handleDisplayForm(){
 async function withHistory(){
     const res = await axios.get('https://win4cash.in/user/withdraw/history');
     console.log(res,'history');
-    populateTable(res.data);
+    if(res.data.length>0){
+        populateTable(res.data);
+        const container = document.querySelector('.gst-container');
+        container.style.display = 'block';
+    }
+   
 }
 
 withHistory();

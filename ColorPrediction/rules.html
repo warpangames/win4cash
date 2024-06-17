@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Prediction Game Rules</title>
+    <link rel="stylesheet" href="/rules.css">
+</head>
+<body>
+    <div class="rules-panel">
+        <h2>Color Prediction Game Rules</h2>
+        <p>Welcome to the Color Prediction Game! Here’s everything you need to know to start playing:</p>
+        
+        <h3>Game Overview</h3>
+        <p>The Color Prediction Game allows you to place bets in three different categories:</p>
+        <ul>
+            <li>Bet on Color</li>
+            <li>Bet on Number</li>
+            <li>Bet on Big or Small</li>
+        </ul>
+
+        <h3>Bet on Color</h3>
+        <p><strong>Colors Available:</strong> Red, Blue, Green</p>
+        <p><strong>Payout:</strong> 2x your bet amount</p>
+        <p><strong>How to Play:</strong></p>
+        <ol>
+            <li>Choose one of the three colors: Red, Blue, or Green.</li>
+            <li>Place your bet on the selected color.</li>
+            <li>If the chosen color is selected during the draw, you win 2 times the amount you bet.</li>
+        </ol>
+
+        <h3>Bet on Number</h3>
+        <p><strong>Numbers Available:</strong> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9</p>
+        <p><strong>Payouts:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Payout</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>0</td><td>9x</td></tr>
+                <tr><td>1</td><td>3x</td></tr>
+                <tr><td>2</td><td>3x</td></tr>
+                <tr><td>3</td><td>3x</td></tr>
+                <tr><td>4</td><td>3x</td></tr>
+                <tr><td>5</td><td>3x</td></tr>
+                <tr><td>6</td><td>3x</td></tr>
+                <tr><td>7</td><td>3x</td></tr>
+                <tr><td>8</td><td>3x</td></tr>
+                <tr><td>9</td><td>9x</td></tr>
+            </tbody>
+        </table>
+        <p><strong>How to Play:</strong></p>
+        <ol>
+            <li>Choose a number from 0 to 9.</li>
+            <li>Place your bet on the selected number.</li>
+            <li>If the chosen number is drawn, you win the corresponding payout for that number.</li>
+        </ol>
+
+        <h3>Bet on Big or Small</h3>
+        <p><strong>Small Numbers:</strong> 0, 1, 2, 3, 4</p>
+        <p><strong>Big Numbers:</strong> 5, 6, 7, 8, 9</p>
+        <p><strong>Payout:</strong> 1.5x your bet amount</p>
+        <p><strong>How to Play:</strong></p>
+        <ol>
+            <li>Choose either "Big" (numbers 5-9) or "Small" (numbers 0-4).</li>
+            <li>Place your bet on the selected category.</li>
+            <li>If a number from the chosen category is drawn, you win 1.5 times the amount you bet.</li>
+        </ol>
+
+        <h3>General Rules</h3>
+        <ul>
+            <li><strong>Bet Placement:</strong> Players must place their bets before the draw.</li>
+            <li><strong>Draw:</strong> A number and color are randomly selected during each draw.</li>
+            <li><strong>Winning:</strong> Payouts are based on the type of bet placed and the drawn result.</li>
+            <li><strong>Multiple Bets:</strong> Players can place bets on multiple categories in a single round.</li>
+        </ul>
+
+        <h3>Example</h3>
+        <p>If you place a bet of $10 on Red, and Red is drawn, you win $20.</p>
+        <p>If you place a bet of $10 on the number 0, and 0 is drawn, you win $90.</p>
+        <p>If you place a bet of $10 on Big, and a number between 5 and 9 is drawn, you win $15.</p>
+
+        <h3>Additional Information</h3>
+        <ul>
+            <li>Bets must be placed before the draw starts.</li>
+            <li>The game ensures fairness and randomness in the draw process.</li>
+            <li>Players can check their betting history and current balance in their account section.</li>
+        </ul>
+        <p>We hope you enjoy playing the Color Prediction Game! Good luck!</p>
+
+        <button class="close-button" onclick="closeRules()">Close</button>
+    </div>
+
+    <script>
+        function closeRules() {
+           window.history.back();
+        }
+    </script>
+</body>
+</html>

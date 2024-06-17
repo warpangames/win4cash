@@ -5,7 +5,7 @@ const popup  = document.querySelector('.popup');
 const colorContainer = document.querySelector('.color-container');
 const betContainer  = document.querySelector('.slected-bet');
 const finalBetContainer = document.querySelector('.final-bet');
-const timer = document.querySelector('.timer-box');
+const timer = document.querySelector('.time');
 const numberBetBhav = document.querySelectorAll('.bet-bhav-number');
 const colorBetBhav = document.querySelectorAll('.color-bhav');
 const BsBhav = document.querySelectorAll('.Bs-bhav');
@@ -14,18 +14,19 @@ const BsInfo = document.querySelector('.bs-InfoData');
 const popup1 = document.querySelector('.popup1');
 const liveUser = document.getElementById('live-user');
 const inpt = document.getElementById('BetInput');
+const AnimationTimer = document.querySelector('.AnimationTimer');
 
 
-console.log(BsInfoImg,BsInfo);
-BsInfoImg.addEventListener('click',(e)=>{
-    e.stopPropagation();
-    console.log('jk')
-    BsInfo.style.display = 'block';
-})
-document.addEventListener('click',()=>{
-    console.log('jk')
-    BsInfo.style.display = 'none';
-})
+// console.log(BsInfoImg,BsInfo);
+// BsInfoImg.addEventListener('click',(e)=>{
+//     e.stopPropagation();
+//     console.log('jk')
+//     BsInfo.style.display = 'block';
+// })
+// document.addEventListener('click',()=>{
+//     console.log('jk')
+//     BsInfo.style.display = 'none';
+// })
 // BsInfoImg.addEventListener('mouseout',()=>{
 //     console.log('jk')
 //     BsInfo.style.display = 'none';
@@ -41,6 +42,9 @@ let slotHistoryData;
 let returnData ;
 let isLogin = false;
 let balance;
+let remainingTime;
+let slotResult;
+let userBets;
 
 async function getAllData(){
     const res = await axios.get('https://win4cash.in/Alldata');
@@ -76,7 +80,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Event handler
     const handleChange = () => {
-        console.log('hehehe');
+       amountContainer.forEach(item=>{
+        item.style.backgroundColor='#D9D9D9';
+        item.style.color='black';
+       })
         finalBetContainer.innerHTML = inpt.value;
     };
 
@@ -232,9 +239,11 @@ historyButtons.forEach((item)=>{
 })
 
 function removeDecimal(number) {
-    let cleanedStr = number.replace('.', '');
+    if(number){
+        let cleanedStr = number.replace('.', '');
+        return cleanedStr;
+    }
    
-    return cleanedStr;
   }
 
 
@@ -317,17 +326,54 @@ function handleBet(val,type=false){
         // multipleContainer[0].style.backgroundColor='red';
         amountContainer[0].style.color='white';
         // multipleContainer[0].style.color='white';
+      
     }
+
+    console.log(type,initial,remainingTime,'ho')
+
+    if(type&&initial&&remainingTime>=10){
+        popup.classList.toggle('active');
+    }
+
+    
+
+
+    numberBetBhav.forEach((item,index)=>{
+       
+        item.innerHTML ='';
+    
+})
+
+BsBhav.forEach((item,index)=>{
+   
+        item.innerHTML = '';
+    
+    
+})
+
+colorBetBhav.forEach((item,index)=>{
+   
+        item.innerHTML = '';
+
+    
+    
+})
+
+
+
 
     initial = false;
    
     document.cookie = `betType=${val}`;
     popup.style.display = 'block';
+   
     colorContainer.style.background = val==='green'?'linear-gradient(180deg, #0EB200 0%, #064C00 100%)':val==='blue'?'linear-gradient(180deg, #2838CD 0%, #141C67 100%)':val==='red'?'linear-gradient(180deg, #FF0000 0%, #990000 100%)':val==='0'||val==='1'||val=='2'||val=='3'||val=='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'?'radial-gradient(50% 345.95% at 50% 50%, #FFD700 0%, #A18800 100%)':val==='big'?'linear-gradient(180deg, #C342FF 0%, #440088 100%)':'linear-gradient(180deg, #00FFF0 0%, #006889 100%)';
     betContainer.innerHTML=val;
     quantityContainer.innerHTML = Quantity;
     const finalBet = Amount*Quantity;
     finalBetContainer.innerHTML = finalBet;
+
+    inpt.value = finalBet;
 
     const returnAmt = finalBet*findReturn(val);
    if(val==='0'||val==='1'||val==='2'||val==='3'||val==='4'||val==='5'||val==='6'||val==='7'||val==='8'||val==='9'){
@@ -448,12 +494,14 @@ function handleCancleBet(){
     colorBetBhav.forEach((item,index)=>{
        
             item.innerHTML = '';
+
         
         
     })
 
-    popup.style.display = 'none';
-
+    // popup.style.display = 'none';
+    popup.classList.remove('active');
+    inpt.value = '';
 }
 
 
@@ -504,6 +552,7 @@ async function handleSubmit(){
         choose:choose,
         status:'panding'
     })
+    inpt.value = '';
     populateTable(betHistoryData,['Uid','Batoption','Ammount','choose','status']);
     handleCancleBet();
     getAllData();
@@ -511,7 +560,7 @@ async function handleSubmit(){
 
 
 function calculateRemainingTime() {
-    const countdownDuration = 1 * 60; // 5 minutes in seconds
+    const countdownDuration = 3 * 60; // 5 minutes in seconds
 
     // Synchronization point: start of the day in UTC
     const syncPoint = new Date();
@@ -522,7 +571,8 @@ function calculateRemainingTime() {
     let remainingTime = countdownDuration - (elapsedTime % countdownDuration);
 
     // Add 4 seconds to initial time but don't display it
-    remainingTime += 4;
+    // remainingTime += 4;
+
 
     return Math.round(remainingTime); // in seconds
 }
@@ -537,38 +587,75 @@ function formatTime(seconds) {
 }
 
  function startCountdown(initialTime) {
-    let remainingTime = initialTime;
+     remainingTime = initialTime;
     const countdownInterval = setInterval(async () => {
         // Display the remaining time
         const formattedTime = formatTime(remainingTime);
         // console.log('Remaining Time:', formattedTime);
         timer.innerHTML = formattedTime;
+        // remainingTime = 5
         if (remainingTime <= 10) {
+            AnimationTimer.innerHTML = formattedTime;
             // Add a class to the 'main' div to make it unclickable
-            const mainDiv = document.querySelector('.main');
+            const mainDiv = document.querySelector('.CompleteBet');
+            popup.classList.remove('active');
+            inpt.value = '';
             mainDiv.classList.add('unclickable');
+            initial = true;
             // console.log(mainDiv,remainingTime,'hehehe');
             if(firstHit){
-                const res = await axios.get('https://win4cash.in/user/result');
-                console.log(res,'final data')
+              
                 firstHit = false;
+                numberBetBhav.forEach((item,index)=>{
+       
+                    item.innerHTML ='';
+                
+            })
+        
+            BsBhav.forEach((item,index)=>{
+               
+                    item.innerHTML = '';
+                
+                
+            })
+        
+            colorBetBhav.forEach((item,index)=>{
+               
+                    item.innerHTML = '';
+        
+                
+                
+            })
             }
            
 
         }
         else{
             
-                const mainDiv = document.querySelector('.main');
+                const mainDiv = document.querySelector('.CompleteBet');
                 mainDiv.classList.remove('unclickable');
+                AnimationTimer.innerHTML = "";
             
         }
         // Decrease remaining time by 1 second
         remainingTime--;
 
+
+        if(remainingTime <= 5 && !firstHit){
+            const res = await axios.get('https://win4cash.in/user/result');
+            console.log(res,'final data');
+            slotResult = res.data.Lastresult;
+            userBets = res.data.resultObject;
+            if(userBets.length>0){
+                showResultPopup();
+            }
+        }
+
         // Check if remaining time is 0
         if (remainingTime <= 0) {
-            remainingTime = 1 * 60;
+            remainingTime = 3 * 60;
             firstHit = true;
+            getHistory()
             // window.location.reload();
         }
     }, 1000);
@@ -619,6 +706,89 @@ function formatTime(seconds) {
         document.getElementById('randomNumber').textContent = currentNumber;
 
         setInterval(updateNumber, 5000);
+
+
+        document.getElementById('openRulesBtn').addEventListener('click', function() {
+            document.getElementById('rulesPopup').style.display = 'block';
+        });
+        
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            document.getElementById('rulesPopup').style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target == document.getElementById('rulesPopup')) {
+                document.getElementById('rulesPopup').style.display = 'none';
+            }
+        });
+
+        function openWhatsAppChat() {
+            var phoneNumber = "9649504608"; // Replace with the actual phone number
+            var url = "https://wa.me/" + phoneNumber;
+            window.open(url, '_blank');
+        }
+
+
+       
+            const resultPopup = document.getElementById('resultPopup');
+            const closeResultPopup = document.getElementById('closePopup');
+      
+            // Sample data to simulate the game result
+            // const slotResult = {
+            //   number: 7,
+            //   color: "Red",
+            //   Bs: "Big"
+            // };
+      
+            // const userBets = [
+            //   { Type: "Color", Choose: "Red", status: "Win" },
+            //   { Type: "Number", Choose: 5, status: "Lose" },
+            //   { Type: "Big/Small", Choose: "Big", status: "Win" }
+            // ];
+      
+            // Function to show the popup with result
+            const showResultPopup = () => {
+              document.getElementById('slotNumber').textContent = slotResult.Number;
+              document.getElementById('slotColor').textContent = slotResult.Color;
+              document.getElementById('slotBs').textContent = slotResult.Bs;
+      
+              const userBetsContainer = document.getElementById('userBets');
+              userBetsContainer.innerHTML = '';
+              
+              userBets.forEach(bet => {
+                const betDiv = document.createElement('div');
+                betDiv.classList.add('user-bet', 'animate__animated', 'animate__fadeInUp');
+                betDiv.innerHTML = `
+                  <p>${bet.Batoption}</p>
+                  <p>${bet.choose}</p>
+                  <p class="${bet.stauts === 'won' ? 'win' : 'lose'}">${bet.stauts}</p>
+                `;
+                userBetsContainer.appendChild(betDiv);
+              });
+              
+              resultPopup.style.display = 'flex';
+              resultPopup.classList.add('animate__fadeIn');
+              document.querySelector('.popup-content').classList.add('animate__zoomIn');
+            };
+      
+            // Event listener to close the popup
+            closeResultPopup.addEventListener('click', () => {
+              resultPopup.classList.remove('animate__fadeIn');
+              resultPopup.classList.add('animate__fadeOut');
+              document.querySelector('.popup-content').classList.remove('animate__zoomIn');
+              document.querySelector('.popup-content').classList.add('animate__zoomOut');
+      
+              setTimeout(() => {
+                resultPopup.style.display = 'none';
+                resultPopup.classList.remove('animate__fadeOut');
+                document.querySelector('.popup-content').classList.remove('animate__zoomOut');
+              }, 1000);
+            });
+      
+            // Simulate the result popup display after some event
+            // setTimeout(showResultPopup, 2000); // Show popup after 2 seconds for demo
+          
+
 
     
    
