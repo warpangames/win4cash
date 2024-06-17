@@ -560,7 +560,7 @@ async function handleSubmit(){
 
 
 function calculateRemainingTime() {
-    const countdownDuration = 3 * 60; // 5 minutes in seconds
+    const countdownDuration = 2 * 60; // 5 minutes in seconds
 
     // Synchronization point: start of the day in UTC
     const syncPoint = new Date();
@@ -640,8 +640,9 @@ function formatTime(seconds) {
         // Decrease remaining time by 1 second
         remainingTime--;
 
-
-        if(remainingTime <= 5 && !firstHit){
+            console.log(remainingTime,firstHit,'aqwd')
+        if(remainingTime == 5 && !firstHit){
+            console.log('saasd')
             const res = await axios.get('https://win4cash.in/user/result');
             console.log(res,'final data');
             slotResult = res.data.Lastresult;
@@ -653,7 +654,7 @@ function formatTime(seconds) {
 
         // Check if remaining time is 0
         if (remainingTime <= 0) {
-            remainingTime = 3 * 60;
+            remainingTime = 2 * 60;
             firstHit = true;
             getHistory()
             // window.location.reload();

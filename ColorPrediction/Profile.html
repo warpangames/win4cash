@@ -104,7 +104,7 @@
         style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px; border-radius: 10px;width: 90%;margin: 30px auto; padding: 20px 0;">
         <div style="margin-bottom: 10px;font-size: 15px;">Support</div>
         <div style="display: flex;align-items: center; justify-content: space-around;">
-            <img width="60px" src="/Images/telegram (1).png" alt="">
+            <img width="60px" src="/Images/telegram (1).png" alt="" onclick="openTelegramChat()">
             <img width="60px" src="/Images/whatsApp.png" alt="" onclick="openWhatsAppChat()">
             <img width="60px" src="/Images/facebook.png" alt=""onclick="openFacebookProfile()">
         </div>
@@ -146,6 +146,10 @@ getAllData();
             var phoneNumber = "9649504608"; // Replace with the actual phone number
             var url = "https://wa.me/" + phoneNumber;
             window.open(url, '_blank');
+        }
+
+        function openTelegramChat(){
+            window.open('https://t.me/+-HpcpzPJIeAyOTFl','_blank');
         }
 
        async  function handleLogout(){

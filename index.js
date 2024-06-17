@@ -19,7 +19,7 @@ connectdb()
 
 
 // {
-//     origin:["https://admin.win4cash.in","https://win4cash.in"],
+//     origin:["https:/admin.win4cash.in","https://win4cash.in"],
 //     credentials:true
 // }
 

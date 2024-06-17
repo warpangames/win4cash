@@ -213,7 +213,7 @@ const clearMinData = () => {
 let last_seconds ;
 
 const countdownTimer = () => {
-    const countdownDuration = 3 * 60 * 1000; // 5 minutes in milliseconds
+    const countdownDuration = 2 * 60 * 1000; // 5 minutes in milliseconds
 
     // Synchronization point: start of the day in UTC
     const syncPoint = new Date();
@@ -232,14 +232,14 @@ const countdownTimer = () => {
         if (remainingTimeInSeconds > 0) {
             let minutes = Math.floor(remainingTimeInSeconds / 60);
             let seconds = remainingTimeInSeconds % 60;
-            if(seconds == 9){
+            if(remainingTimeInSeconds == 9){
                 console.log("hey i am nine")
                 await ResultFunction()
             }
             last_seconds = seconds
             // console.log(last_seconds)
             // updateCallback(last_seconds);
-            // console.log(remaining time: ${minutes}:${seconds});
+            console.log(`remaining time: ${minutes}:${seconds}`);
         } else {
             clearInterval(intervalId);
             console.log('Countdown finished. Sending results to frontend...');
@@ -835,6 +835,7 @@ const resultApi = async ( ) => {
                 // minData.length = 0; // Clear the array
                 // minDataForguest.length = 0;
                 // blue = red = green = bignumber = smallnumber = 0;
+                clearMinData();
             } else {
                 console.log("No data to insert.");
             }
@@ -1074,8 +1075,11 @@ const UserResult = async(req,res) =>{
 
 
         const Lastresult = await Result.findOne().sort({_id:-1});
+        console.log(Lastresult);
+
         const Unqiue_id = Lastresult.Uid;
-        const userresult = await Batmodel.find({Uid:Unqiue_id})
+        // console.log(Unqiue_id)
+        const userresult = await Batmodel.find({Uid:id})
        const resultObject = userresult.map((item)=>{
            return { Batoption:item.Batoption, choose:item.choose,Ammount:item.Ammount, stauts:item.status}      
 
