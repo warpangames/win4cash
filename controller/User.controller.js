@@ -189,9 +189,9 @@ const UserHistory = async (req, res) => {
         const id = Decodedtoken?.id;
         const Username = Decodedtoken?.Username;
     
-            const data = await Batmodel.find({ Username: Username }).sort({_id:-1});
+            const data = await Batmodel.find({ Username: Username }).sort({createdAt:-1});
                
-            //   console.log(data)
+            //   console.log("bathistory",data)
             res.json(data);
     } catch (error) {
         console.log(error)

@@ -5,7 +5,7 @@ const Result = new mongoose.Schema({
     Color:String,
     Bs:String,
     Uid:String
-},{timestamp:true})
+},{timestamps:true})
 
 const Resultmodel = mongoose.model("Resultmodel",Result)
 

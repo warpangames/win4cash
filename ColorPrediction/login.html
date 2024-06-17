@@ -59,7 +59,7 @@
 
       const Username = UserName.value;
       const Password = Password1.value;
-      const res = await axios.post('https://win4cash.in/user/login',{Username,Password});
+      const res = await axios.post('https://admin.win4cash.in/user/login',{Username,Password});
 
       if(res.data==='Username is wrong!'){
        wrong1.style.display = 'block';
@@ -79,7 +79,7 @@
      })
      async function handleDemoPlay() {
     try {
-        const res = await axios.get("https://win4cash.in/guestuser");
+        const res = await axios.get("https://admin.win4cash.in/guestuser");
         console.log(res.data);  // Log the response data
 
         if (res.status === 200) {

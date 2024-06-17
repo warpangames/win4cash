@@ -101,7 +101,7 @@ const UserData = async (req, res) => {
         const user = await Usermodel.findById(id)
         user.wallet -= req.body.Ammount;
 
-      await user.save().then(() => {
+        await user.save().then(() => {
             // console.log("ammount debited sucessfully !")
             // console.log(user.wallet)
         })
@@ -210,7 +210,7 @@ const clearMinData = () => {
 
 };
 // countdown logic for 
-let last_seconds ;
+let last_seconds;
 
 const countdownTimer = () => {
     const countdownDuration = 2 * 60 * 1000; // 5 minutes in milliseconds
@@ -226,20 +226,20 @@ const countdownTimer = () => {
         return Math.round(remainingTime / 1000); // in seconds
     };
 
-    const intervalId = setInterval(async() => {
+    const intervalId = setInterval(async () => {
         const remainingTimeInSeconds = calculateRemainingTime();
 
         if (remainingTimeInSeconds > 0) {
             let minutes = Math.floor(remainingTimeInSeconds / 60);
             let seconds = remainingTimeInSeconds % 60;
-            if(remainingTimeInSeconds == 9){
+            if (remainingTimeInSeconds == 9) {
                 // console.log("hey i am nine")
                 await ResultFunction()
             }
             last_seconds = seconds
             // // console.log(last_seconds)
             // updateCallback(last_seconds);
-            console.log(`remaining time: ${minutes}:${seconds}`);
+            // console.log(`remaining time: ${minutes}:${seconds}`);
         } else {
             clearInterval(intervalId);
             // console.log('Countdown finished. Sending results to frontend...');
@@ -269,11 +269,11 @@ let result = "";
 const nobat = ["blue", "red", "green"];
 const Bs_arr = ["Big", "Small"]
 let Bsresult = "";
-var id ;
+var id;
 // console.log(id)
 var maxValueNumber;
- const ResultFunction = async () =>{
-    
+const ResultFunction = async () => {
+
     var uid = await generateUniqueId();
     id = uid
     // console.log(id)
@@ -284,10 +284,10 @@ var maxValueNumber;
     function areAllUsernamesSame(array) {
         if (array.length === 0) return false;
 
-        const firstUsername = array[0].username;
+        const firstUsername = array[0].Username;
 
         for (let i = 1; i < array.length; i++) {
-            if (array[i].username !== firstUsername) {
+            if (array[i].Username !== firstUsername) {
                 return false;
             }
         }
@@ -297,12 +297,14 @@ var maxValueNumber;
     if (IncomingResult.color == "" && IncomingResult.BS == "") {
         // console.log("code with auto")
 
- 
+
         if (minData.length > 1) {
 
             const check = areAllUsernamesSame(minData)
+            console.log(check)
             if (check) {
-                // console.log("all user same")
+                console.log("all user same")
+
                 const random = Math.floor(Math.random() * 1001);
                 // console.log(minData)
                 // console.log(minData.length)
@@ -310,169 +312,157 @@ var maxValueNumber;
                     for (let i = 0; i < minData.length; i++) {
                         // console.log(minData[i])
                         if (minData[i].Batoption == "color") {
-    
+
                             result = minData[i].choose
 
                             // for others 
-                            if(! maxValueNumber){
-                            function areAllValuesSame(obj) {
-                                const values = Object.values(obj);
-                                return values.every(v => v === values[0]);
-                            }
-                            function generateRandomKeyValue(obj) {
-                                // console.log("all number is same")
-                                const keys = Object.keys(obj);
-                                var randomKey = keys[Math.floor(Math.random() * keys.length)];
-                                random_key = randomKey
-                                // console.log(random_key)
-                            }
-                    
-                            if (areAllValuesSame(numberValues)) {
-                                let key;
-                                generateRandomKeyValue(numberValues)
-                                maxValueNumber = random_key;
-                                // // console.log(minValueNumber)
-                    
-                            }
-                            else {
-                    
-                                function findMaxValueNumber(mapping) {
-                                    let maxNumber = null;
-                                    let maxValue = -Infinity;
-                    
-                                    for (let number in mapping) {
-                                        if (mapping[number] > maxValue) {
-                                            maxValue = mapping[number];
-                                            maxNumber = number;
-                                        }
-                                    }
-                    
-                                    return maxNumber;
+                            if (!maxValueNumber) {
+                                function areAllValuesSame(obj) {
+                                    const values = Object.values(obj);
+                                    return values.every(v => v === values[0]);
                                 }
-                    
-                                maxValueNumber = findMaxValueNumber(numberValues);
-                            }
-                        } 
-                        if(Bsresult != ""){
-                    
-                            if (bignumber != smallnumber) {
-                                const BSresult = Math.max(bignumber, smallnumber)
-                                if (BSresult == bignumber) {
-                                    Bsresult = "Big"
+                                function generateRandomKeyValue(obj) {
+                                    // console.log("all number is same")
+                                    const keys = Object.keys(obj);
+                                    var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                                    random_key = randomKey
+                                    // console.log(random_key)
+                                }
+
+                                if (areAllValuesSame(numberValues)) {
+                                    let key;
+                                    generateRandomKeyValue(numberValues)
+                                    maxValueNumber = random_key;
+                                    // // console.log(minValueNumber)
+
                                 }
                                 else {
-                                    Bsresult = "Small"
+
+                                    function findMaxValueNumber(mapping) {
+                                        let maxNumber = null;
+                                        let maxValue = -Infinity;
+
+                                        for (let number in mapping) {
+                                            if (mapping[number] > maxValue) {
+                                                maxValue = mapping[number];
+                                                maxNumber = number;
+                                            }
+                                        }
+
+                                        return maxNumber;
+                                    }
+
+                                    maxValueNumber = findMaxValueNumber(numberValues);
                                 }
                             }
-                            else {
-                                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
-                    
+                            if (Bsresult != "") {
+
+                                if (bignumber != smallnumber) {
+                                    const BSresult = Math.max(bignumber, smallnumber)
+                                    if (BSresult == bignumber) {
+                                        Bsresult = "Big"
+                                    }
+                                    else {
+                                        Bsresult = "Small"
+                                    }
+                                }
+                                else {
+                                    Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+
+                                }
                             }
-                        }
-    
+
                         }
                         else if (minData[i].Batoption == "number") {
                             maxValueNumber = minData[i].choose
-                            if(Bsresult != ""){
-                            Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                            if (Bsresult != "") {
+                                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
                             }
-                            if(result != ""){
-                            result = nobat[Math.floor(Math.random() * 3)];
+                            if (result != "") {
+                                result = nobat[Math.floor(Math.random() * 3)];
                             }
 
 
                         }
-                        else if(minData[i].Batoption == "Bs") {
+                        else if (minData[i].Batoption == "Bs") {
                             Bigsmallresult = minData[i].choose
-                            if(Bigsmallresult == "big"){
+                            if (Bigsmallresult == "big") {
                                 Bsresult = "Big"
                             }
-                            else{
+                            else {
                                 Bsresult = "Small"
                             }
-                            if(result){
-                            result = nobat[Math.floor(Math.random() * 3)];
+                            if (result) {
+                                result = nobat[Math.floor(Math.random() * 3)];
                             }
-                            if(!maxValueNumber){
-                            function areAllValuesSame(obj) {
-                                const values = Object.values(obj);
-                                return values.every(v => v === values[0]);
-                            }
-                            function generateRandomKeyValue(obj) {
-                                // console.log("all number is same")
-                                const keys = Object.keys(obj);
-                                var randomKey = keys[Math.floor(Math.random() * keys.length)];
-                                random_key = randomKey
-                                // console.log(random_key)
-                            }
-                    
-                            if (areAllValuesSame(numberValues)) {
-                                let key;
-                                generateRandomKeyValue(numberValues)
-                                maxValueNumber = random_key;
-                                // // console.log(minValueNumber)
-                    
-                            }
-                            else {
-                    
-                                function findMaxValueNumber(mapping) {
-                                    let maxNumber = null;
-                                    let maxValue = -Infinity;
-                    
-                                    for (let number in mapping) {
-                                        if (mapping[number] > maxValue) {
-                                            maxValue = mapping[number];
-                                            maxNumber = number;
-                                        }
-                                    }
-                    
-                                    return maxNumber;
+                            if (!maxValueNumber) {
+                                function areAllValuesSame(obj) {
+                                    const values = Object.values(obj);
+                                    return values.every(v => v === values[0]);
                                 }
-                    
-                                maxValueNumber = findMaxValueNumber(numberValues);
-                            }
-                        }
-                            
-                        }
-    
-                    }                   
-            
-                    
+                                function generateRandomKeyValue(obj) {
+                                    // console.log("all number is same")
+                                    const keys = Object.keys(obj);
+                                    var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                                    random_key = randomKey
+                                    // console.log(random_key)
+                                }
 
-                //    // console.log("unique id for resutl",id)
-                //     await Result.create({
-                //         Number: maxValueNumber,
-                //         Color: result,
-                //         Bs: Bsresult,
-                //         Uid: id
-                //     })
-    
+                                if (areAllValuesSame(numberValues)) {
+                                    let key;
+                                    generateRandomKeyValue(numberValues)
+                                    maxValueNumber = random_key;
+                                    // // console.log(minValueNumber)
+
+                                }
+                                else {
+
+                                    function findMaxValueNumber(mapping) {
+                                        let maxNumber = null;
+                                        let maxValue = -Infinity;
+
+                                        for (let number in mapping) {
+                                            if (mapping[number] > maxValue) {
+                                                maxValue = mapping[number];
+                                                maxNumber = number;
+                                            }
+                                        }
+
+                                        return maxNumber;
+                                    }
+
+                                    maxValueNumber = findMaxValueNumber(numberValues);
+                                }
+                            }
+
+                        }
+
+                    }
+
+
+
+
                 }
                 else {
                     result = nobat[Math.floor(Math.random() * 3)];
                     const random = Math.floor(Math.random() * 11);
                     maxValueNumber = random
                     Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
-    
-                    // // console.log("unique id for resutl",id)
-                    // await Result.create({
-                    //     Number: maxValueNumber,
-                    //     Color: result,
-                    //     Bs: Bsresult,
-                    //     Uid: id
-                    // })
+
+                   
                 }
-    
+
             }
-            else{
+            else {
+                console.log("all user are different")
                 if (blue === red && red === green) {
                     result = nobat[Math.floor(Math.random() * 3)];
-                    // console.log("when all is same", result);
-        
-        
+                    console.log("when all is same", result);
+
+
                 } else {
                     colorresult = Math.max(blue, red, green);
-        
+
                     if (colorresult === blue) {
                         result = "blue";
                     } else if (colorresult === red) {
@@ -481,7 +471,7 @@ var maxValueNumber;
                         result = "green";
                     }
                 }
-        
+
                 function areAllValuesSame(obj) {
                     const values = Object.values(obj);
                     return values.every(v => v === values[0]);
@@ -493,34 +483,33 @@ var maxValueNumber;
                     random_key = randomKey
                     // console.log(random_key)
                 }
-        
+
                 if (areAllValuesSame(numberValues)) {
                     let key;
                     generateRandomKeyValue(numberValues)
                     maxValueNumber = random_key;
-                    // // console.log(minValueNumber)
-        
+
                 }
                 else {
-        
+
                     function findMaxValueNumber(mapping) {
                         let maxNumber = null;
                         let maxValue = -Infinity;
-        
+
                         for (let number in mapping) {
                             if (mapping[number] > maxValue) {
                                 maxValue = mapping[number];
                                 maxNumber = number;
                             }
                         }
-        
+
                         return maxNumber;
                     }
-        
+
                     maxValueNumber = findMaxValueNumber(numberValues);
                 }
-        
-        
+
+
                 if (bignumber != smallnumber) {
                     const BSresult = Math.max(bignumber, smallnumber)
                     if (BSresult == bignumber) {
@@ -532,74 +521,90 @@ var maxValueNumber;
                 }
                 else {
                     Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
-        
+
                 }
-        
-                // console.log({ Bsresult })
+
+               console.log("result dif",result,maxValueNumber,Bsresult)
+
+            }
+           
+        }
+
+        else if (minData.length == 1) {
+            // console.log(minData)
+            const random = Math.floor(Math.random() * 1001);
+            // console.log("random for length 1",random)
+            if (random >= 400) {
+                if (minData[0].Batoption == "color") {
+
+                    result = minData[0].choose
+                    Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                    function areAllValuesSame(obj) {
+                        const values = Object.values(obj);
+                        return values.every(v => v === values[0]);
+                    }
+                    function generateRandomKeyValue(obj) {
+                        // console.log("all number is same")
+                        const keys = Object.keys(obj);
+                        var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                        random_key = randomKey
+                        // console.log(random_key)
+                    }
+
+                    // if (areAllValuesSame(numberValues)) {
+                    let key;
+                    generateRandomKeyValue(numberValues)
+                    maxValueNumber = random_key;
+                    // // console.log(minValueNumber)
+
+                    // }
+
+
+                }
+                else if (minData[0].Batoption == "number") {
+                    maxValueNumber = minData[0].choose
+                    Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                    result = nobat[Math.floor(Math.random() * 3)];
+                    // console.log(maxValueNumber)
+
+                }
+                else {
+                    Bsresult = minData[0].choose
+                    function areAllValuesSame(obj) {
+                        const values = Object.values(obj);
+                        return values.every(v => v === values[0]);
+                    }
+                    function generateRandomKeyValue(obj) {
+                        // console.log("all number is same")
+                        const keys = Object.keys(obj);
+                        var randomKey = keys[Math.floor(Math.random() * keys.length)];
+                        random_key = randomKey
+                        // console.log(random_key)
+                    }
+
+                    if (areAllValuesSame(numberValues)) {
+                        let key;
+                        generateRandomKeyValue(numberValues)
+                        maxValueNumber = random_key;
+                        // // console.log(minValueNumber)
+
+                    }
+                    result = nobat[Math.floor(Math.random() * 3)];
+
+                }
                 // var id = generateUniqueId();
+                // // console.log("unique id in result",id)
                 // await Result.create({
                 //     Number: maxValueNumber,
                 //     Color: result,
                 //     Bs: Bsresult,
                 //     Uid: id
-        
+
                 // })
-                
-            }
-            // // console.log("unique id in result",id)
-            // await Result.create({
-            //     Number: maxValueNumber,
-            //     Color: result,
-            //     Bs: Bsresult,
-            //     Uid: id
-    
-            // })
-        }
-
-        else if (minData.length == 1){
-             // console.log(minData)
-             const random = Math.floor(Math.random() * 1001);
-             // console.log("random for length 1",random)
-             if(random>=400){
-                if (minData[0].Batoption == "color") {
-    
-                result = minData[0].choose
-                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
-                function areAllValuesSame(obj) {
-                    const values = Object.values(obj);
-                    return values.every(v => v === values[0]);
-                }
-                function generateRandomKeyValue(obj) {
-                    // console.log("all number is same")
-                    const keys = Object.keys(obj);
-                    var randomKey = keys[Math.floor(Math.random() * keys.length)];
-                    random_key = randomKey
-                    // console.log(random_key)
-                }
-        
-                // if (areAllValuesSame(numberValues)) {
-                    let key;
-                    generateRandomKeyValue(numberValues)
-                    maxValueNumber = random_key;
-                    // // console.log(minValueNumber)
-        
-                // }
-
-
-            }
-            else if (minData[0].Batoption == "number") {
-                maxValueNumber = minData[0].choose
-                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
-                result = nobat[Math.floor(Math.random() * 3)];
-              // console.log(maxValueNumber)
-
             }
             else {
-                Bsresult = minData[0].choose
-                function areAllValuesSame(obj) {
-                    const values = Object.values(obj);
-                    return values.every(v => v === values[0]);
-                }
+                Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
+                result = nobat[Math.floor(Math.random() * 3)];
                 function generateRandomKeyValue(obj) {
                     // console.log("all number is same")
                     const keys = Object.keys(obj);
@@ -607,58 +612,27 @@ var maxValueNumber;
                     random_key = randomKey
                     // console.log(random_key)
                 }
-        
-                if (areAllValuesSame(numberValues)) {
-                    let key;
-                    generateRandomKeyValue(numberValues)
-                    maxValueNumber = random_key;
-                    // // console.log(minValueNumber)
-        
-                }
-                result = nobat[Math.floor(Math.random() * 3)];
 
-            }
-            // var id = generateUniqueId();
-            // // console.log("unique id in result",id)
-            // await Result.create({
-            //     Number: maxValueNumber,
-            //     Color: result,
-            //     Bs: Bsresult,
-            //     Uid: id
-    
-            // })
-        }
-        else{
-            Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
-            result = nobat[Math.floor(Math.random() * 3)];
-            function generateRandomKeyValue(obj) {
-                // console.log("all number is same")
-                const keys = Object.keys(obj);
-                var randomKey = keys[Math.floor(Math.random() * keys.length)];
-                random_key = randomKey
-                // console.log(random_key)
-            }
-    
 
                 let key;
                 generateRandomKeyValue(numberValues)
                 maxValueNumber = random_key;
                 // // console.log(minValueNumber)
-    
-            
 
-        }
+
+
+            }
         }
 
-        else{
+        else {
             if (blue === red && red === green) {
                 result = nobat[Math.floor(Math.random() * 3)];
                 // console.log("when all is same", result);
-    
-    
+
+
             } else {
                 colorresult = Math.max(blue, red, green);
-    
+
                 if (colorresult === blue) {
                     result = "blue";
                 } else if (colorresult === red) {
@@ -667,7 +641,7 @@ var maxValueNumber;
                     result = "green";
                 }
             }
-    
+
             function areAllValuesSame(obj) {
                 const values = Object.values(obj);
                 return values.every(v => v === values[0]);
@@ -679,34 +653,34 @@ var maxValueNumber;
                 random_key = randomKey
                 // console.log(random_key)
             }
-    
+
             if (areAllValuesSame(numberValues)) {
                 let key;
                 generateRandomKeyValue(numberValues)
                 maxValueNumber = random_key;
                 // // console.log(minValueNumber)
-    
+
             }
             else {
-    
+
                 function findMaxValueNumber(mapping) {
                     let maxNumber = null;
                     let maxValue = -Infinity;
-    
+
                     for (let number in mapping) {
                         if (mapping[number] > maxValue) {
                             maxValue = mapping[number];
                             maxNumber = number;
                         }
                     }
-    
+
                     return maxNumber;
                 }
-    
+
                 maxValueNumber = findMaxValueNumber(numberValues);
             }
-    
-    
+
+
             if (bignumber != smallnumber) {
                 const BSresult = Math.max(bignumber, smallnumber)
                 if (BSresult == bignumber) {
@@ -718,32 +692,29 @@ var maxValueNumber;
             }
             else {
                 Bsresult = Bs_arr[Math.floor(Math.random() * 2)];
-    
+
             }
-    
-            // console.log({ Bsresult })
-            // var id = generateUniqueId();
-            // // console.log("unique",id)
-            // await Result.create({F
-            //     Number: maxValueNumber,
-            //     Color: result,
-            //     Bs: Bsresult,
-            //     Uid: id
-    
-            // })
-            
+
+
+
         }
-        console.log("unique id for resutl",id)
-                    await Result.create({
-                        Number: maxValueNumber,
-                        Color: result,
-                        Bs: Bsresult,
-                        Uid: id
-                    })
+        console.log("unique id for resutl", id)
+        await Result.create({
+            Number: maxValueNumber,
+            Color: result,
+            Bs: Bsresult,
+            Uid: id
+        })
+        console.log("result sucessfully add",{
+            Number: maxValueNumber,
+            Color: result,
+            Bs: Bsresult,
+            Uid: id
+        })
     }
     else {
         // const id = generateUniqueId();
-        console.log("unique id for result ",id)
+        console.log("unique id for result ", id)
         await Result.create({
             Number: IncomingResult.number,
             Color: IncomingResult.color,
@@ -752,32 +723,18 @@ var maxValueNumber;
 
         })
     }
-       
+
     resultApi()
-    
- }
+
+}
 
 
 
 
 
 
-const resultApi = async ( ) => {
+const resultApi = async () => {
 
-   
-
-    // const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
-    // // // console.log(req.header("Authorization")?.replace("Bearer",""))
-    // const guestid = req.cookies?.guestid
-
-    // if (Incomingaccesstoken) {
-    //     var Decodedtoken = jwt.verify(Incomingaccesstoken, process.env.ACCESS_TOKEN_KEY);
-    //     var userid = Decodedtoken?.id;
-    //     var Username = Decodedtoken?.Username;
-
-    //     // console.log(req.cookies)
-    //     // console.log(Decodedtoken)
-    // }
     if (IncomingResult.color == "" && IncomingResult.BS == "") {
 
 
@@ -795,10 +752,7 @@ const resultApi = async ( ) => {
                     const trimmedResult = result.trim().toLowerCase();
 
                     try {
-                        // const user = await Usermodel.findById(userid);
-                        // if (!user) {
-                        //     throw new Error('User not found');
-                        // }
+
 
                         if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
                             status = 'won';
@@ -822,12 +776,12 @@ const resultApi = async ( ) => {
                         } if (data.Batoption === 'Bs' &&
                             ((data.choose == 'big' && Bsresult == "Big") ||
                                 (data.choose == 'small' && Bsresult == "Small"))) {
-                                    // console.log(Bsresult)
+                            // console.log(Bsresult)
                             status = 'won';
                             const Data = await Return.BgX.findOne();
                             const X = Bsresult == "Big" ? Data.big : Data.small;
                             const total_adding_ammount = X * data.Ammount;
-                            const updatevalueof = await Usermodel.updateOne({ Username: data.Username}, { $inc: { wallet: total_adding_ammount } })
+                            const updatevalueof = await Usermodel.updateOne({ Username: data.Username }, { $inc: { wallet: total_adding_ammount } })
 
                             // // console.log('Big/Small amount credited successfully!', user.wallet);
 
@@ -846,7 +800,7 @@ const resultApi = async ( ) => {
                 maindata = dataWithIds;
                  console.log("maindata",maindata);
                 await Batmodel.insertMany(maindata);
-                // console.log("Data successfully inserted into the database.");
+                console.log("Data successfully inserted into the database.");
                 // minData.length = 0; // Clear the array
                 // minDataForguest.length = 0;
                 // blue = red = green = bignumber = smallnumber = 0;
@@ -858,81 +812,14 @@ const resultApi = async ( ) => {
             console.error("Error inserting data into the database:", error);
         }
 
-        // Logic for Guest 
-        // try {
-        //     // console.log("minDataForguest", minDataForguest)
-        //     if (minDataForguest.length > 0) {
 
-        //         const dataWithIdsforguest = await Promise.all(minDataForguest.map(async (data) => {
-        //             let status = 'loss';
-        //             const trimmedChoose = data.choose.trim().toLowerCase();
-        //             const trimmedResult = result.trim().toLowerCase();
-
-        //             try {
-        //                 const user = await guestUsermodel.findOne({ guestid: guestid });
-        //                 if (!user) {
-        //                     throw new Error('User not found');
-        //                 }
-
-        //                 if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
-        //                     status = 'won';
-        //                     const Data = await Return.ColorX.findOne();
-        //                     const X = Data.color;
-        //                     const total_adding_ammount = X * data.Ammount;
-        //                     await guestUsermodel.updateOne({ guestid: guestid }, { $inc: { wallet: total_adding_ammount } })
-
-
-        //                     // console.log("x color", X)
-        //                 } if (data.Batoption === 'number' && (data.choose) === maxValueNumber) {
-        //                     status = 'won';
-        //                     const Data = await Return.NumberX.findOne().sort({ _id: -1 });
-        //                     const X = Data[data.choose];
-        //                     const total_adding_ammount = X * data.Ammount;
-        //                     await guestUsermodel.updateOne({ guestid: guestid }, { $inc: { wallet: total_adding_ammount } })
-
-
-        //                     // console.log("x number", X)
-
-        //                 } if (data.Batoption === 'Bs' &&
-        //                     ((data.choose == 'big' && Bsresult == "Big") ||
-        //                         (data.choose == 'small' && Bsresult == "Small"))) {
-        //                     status = 'won';
-        //                     const Data = await Return.BgX.findOne();
-        //                     const X = Bsresult == "Big" ? Data.big : Data.small;
-        //                     const total_adding_ammount = X * data.Ammount;
-        //                     await guestUsermodel.updateOne({ guestid: guestid }, { $inc: { wallet: total_adding_ammount } })
-        //                     // // console.log('Big/Small amount credited successfully!', user.wallet);
-
-        //                     // console.log("x bg", X)
-
-        //                 }
-        //                 //  // console.log("final waller",user.wallet)
-        //                 return { ...data, Uid: id, status: status };
-        //             } catch (error) {
-        //                 console.error('Error crediting money:', error.message);
-        //                 return { ...data, Uid: id, status: status }; // Ensure data is still returned even if an error occurs
-        //             }
-        //         }));
-        //         // console.log(dataWithIdsforguest)
-        //         maindataforguest = dataWithIdsforguest;
-
-        //         await guestBatmodel.insertMany(maindataforguest);
-        //         // console.log("Data successfully inserted into the database.");
-        //     } else {
-        //         // console.log("No data to insert.");
-        //     }
-        // } catch (error) {
-        //     console.error("Error inserting data into the database:", error);
-        // }
-
-        // res.json()
 
 
     }
-   
-    else{ 
+
+    else {
         let maindata = [];
-       
+
         try {
 
             if (minData.length > 0) {
@@ -942,17 +829,14 @@ const resultApi = async ( ) => {
                     const trimmedResult = IncomingResult.color.trim().toLowerCase();
 
                     try {
-                        // const user = await Usermodel.findById(userid);
-                        // if (!user) {
-                        //     throw new Error('User not found');
-                        // }
+
 
                         if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
                             status = 'won';
                             const Data = await Return.ColorX.findOne();
                             const X = Data.color;
                             const total_adding_ammount = X * data.Ammount;
-                            await Usermodel.updateOne({Username: data.Username }, { $inc: { wallet: total_adding_ammount } })
+                            await Usermodel.updateOne({ Username: data.Username }, { $inc: { wallet: total_adding_ammount } })
 
 
                             // console.log("x color", X)
@@ -961,7 +845,7 @@ const resultApi = async ( ) => {
                             const Data = await Return.NumberX.findOne().sort({ _id: -1 });
                             const X = Data[data.choose];
                             const total_adding_ammount = X * data.Ammount;
-                            await Usermodel.updateOne({Username: data.Username }, { $inc: { wallet: total_adding_ammount } })
+                            await Usermodel.updateOne({ Username: data.Username }, { $inc: { wallet: total_adding_ammount } })
 
 
                             // console.log("x number", X)
@@ -973,7 +857,7 @@ const resultApi = async ( ) => {
                             const Data = await Return.BgX.findOne();
                             const X = IncomingResult.BS == "Big" ? Data.big : Data.small;
                             const total_adding_ammount = X * data.Ammount;
-                            await Usermodel.updateOne({Username: data.Username }, { $inc: { wallet: total_adding_ammount } })
+                            await Usermodel.updateOne({ Username: data.Username }, { $inc: { wallet: total_adding_ammount } })
                             // // console.log('Big/Small amount credited successfully!', user.wallet);
 
                             // console.log("x bg", X)
@@ -994,91 +878,22 @@ const resultApi = async ( ) => {
                 // console.log("No data to insert.");
             }
 
-        } 
-    
-        
+        }
+
+
         catch (error) {
             console.error("Error inserting data into the database:", error);
         }
-    
-              // Logic for Guest 
-        // // console.log(minDataForguest)
-        // if (minDataForguest.length > 0) {
-        //     // let total_adding_ammount = 0;
-        //     const dataWithIdsforguest = await Promise.all(minDataForguest.map(async (data) => {
-        //         let status = 'loss';
-        //         const trimmedChoose = data.choose.trim().toLowerCase();
-        //         const trimmedResult = IncomingResult.color.trim().toLowerCase();
-
-        //         try {
-        //             const user = await guestUsermodel.findOne({ guestid: guestid });
-        //             if (!user) {
-        //                 throw new Error('User not found');
-        //             }
-
-        //             if ((data.Batoption === 'color') && (trimmedChoose === trimmedResult)) {
-        //                 status = 'won';
-        //                 const Data = await Return.ColorX.findOne();
-        //                 const X = Data.color;
-        //                 const total_adding_ammount = X * data.Ammount;
-        //                 await guestUsermodel.updateOne({ guestid: guestid }, { $inc: { wallet: total_adding_ammount } })
 
 
-        //                 // console.log("x color", X)
-        //             } if (data.Batoption === 'number' && (data.choose) == IncomingResult.number) {
-        //                 status = 'won';
-        //                 const Data = await Return.NumberX.findOne().sort({ _id: -1 });
-        //                 const X = Data[data.choose];
-        //                 const total_adding_ammount = X * data.Ammount;
-        //                 await guestUsermodel.updateOne({ guestid: guestid }, { $inc: { wallet: total_adding_ammount } })
+    }
 
-
-        //                 // console.log("x number", X)
-
-        //             } if (data.Batoption === 'Bs' &&
-        //                 ((data.choose == 'big' && "big" == IncomingResult.BS) ||
-        //                     (data.choose == 'small' && "small" == IncomingResult.BS))) {
-        //                 status = 'won';
-        //                 const Data = await Return.BgX.findOne();
-        //                 const X = IncomingResult.BS == "Big" ? Data.big : Data.small;
-        //                 const total_adding_ammount = X * data.Ammount;
-        //                 await guestUsermodel.updateOne({ guestid: guestid }, { $inc: { wallet: total_adding_ammount } })
-        //                 // // console.log('Big/Small amount credited successfully!', user.wallet);
-
-        //                 // console.log("x bg", X)
-
-        //             }
-        //             // // console.log("final waller", user.wallet)
-        //             return { ...data, Uid: id, status: status };
-        //         } catch (error) {
-        //             console.error('Error crediting money:', error.message);
-        //             return { ...data, Uid: id, status: status }; // Ensure data is still returned even if an error occurs
-        //         }
-        //     }));
-
-        //     // console.log(dataWithIdsforguest);
-        //     await guestBatmodel.insertMany(dataWithIdsforguest);
-        //     // console.log("Data successfully inserted into the database.");
-        // } 
-        // else {
-        //     // console.log("No data to insert.");
-        // }
-
-        // res.json({
-        //     Number: IncomingResult.number,
-        //     Color: IncomingResult.color,
-        //     BS: IncomingResult.BS
-
-        // })
-        // res.json()
-}
-    
 
 }
 
-const UserResult = async(req,res) =>{
+const UserResult = async (req, res) => {
     const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
-  
+
 
     if (Incomingaccesstoken) {
         var Decodedtoken = jwt.verify(Incomingaccesstoken, process.env.ACCESS_TOKEN_KEY);
@@ -1089,25 +904,26 @@ const UserResult = async(req,res) =>{
         // console.log(Decodedtoken)
 
 
-        const Lastresult = await Result.findOne().sort({_id:-1});
-        // console.log(Lastresult);
+        const Lastresult = await Result.findOne({Uid:id});
+        console.log(Lastresult);
 
-        const Unqiue_id = Lastresult.Uid;
-        // // console.log(Unqiue_id)
-        const userresult = await Batmodel.find({Uid:id})
-       const resultObject = userresult.map((item)=>{
-           return { Batoption:item.Batoption, choose:item.choose,Ammount:item.Ammount, stauts:item.status}      
+        // const Unqiue_id = Lastresult.Uid;
+        console.log(id);
+        const userresult = await Batmodel.find({ Uid: id, Username: Username })
+        const resultObject = userresult.map((item) => {
+            return { Batoption: item.Batoption, choose: item.choose, Ammount: item.Ammount, stauts: item.status }
 
-               })
-            // console.log("result object",resultObject)
-       res.json({resultObject,Lastresult})
+        })
+         console.log("result object",resultObject)
+         console.log(userresult)
+        res.json({ resultObject, Lastresult })
 
-    
-    
-}
-else{
-    res.json("Token didn't get")
-}
+
+
+    }
+    else {
+        res.json("Token didn't get")
+    }
 
 }
 
@@ -1117,7 +933,7 @@ else{
 
 const slothistory = async (req, res) => {
     try {
-        const data = await Result.find().limit(25).sort({ _id: -1 })
+        const data = await Result.find().limit(25).sort({ createdAt:-1 })
         console.log(data)
         res.json(data)
     } catch (error) {
