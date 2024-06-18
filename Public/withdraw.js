@@ -1,4 +1,6 @@
 let uniqueId;
+let historyData = [];
+let amt ;
 
 const fromcontainer = document.querySelector('.bankdetails-container');
 function handleDisplayForm(){
@@ -9,9 +11,10 @@ async function withHistory(){
     const res = await axios.get('https://win4cash.in/user/withdraw/history');
     console.log(res,'history');
     if(res.data.length>0){
+        historyData = res.data;
         populateTable(res.data);
-        const container = document.querySelector('.gst-container');
-        container.style.display = 'block';
+      
+        openPopup();
     }
    
 }
@@ -75,15 +78,19 @@ async function handleWithdraw(){
         alert('please add bank details');
         return;
     }
+    if(historyData.length>0){
+        alert('First Pay the GST of requested Withdraw Amount');
+        return;
+    }
     function generateUniqueId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
       }
       
     uniqueId = generateUniqueId();
-   const container = document.querySelector('.gst-container');
-   container.style.display = 'block';
-    const amountContainer  = document.getElementById('gst-amount');
-    amountContainer.innerHTML = (amt*18)/100;
+    openPopup();
+//    const container = document.querySelector('.gst-container');
+//    container.style.display = 'block';
+   
 
     const res = await axios.post('https://win4cash.in/user/withdraw/ammount',{reqammount:amt,uniqueId});
     console.log(res,'res')
@@ -110,6 +117,7 @@ async function handlePayment(){
     console.log(res,'res')
     inpt.value = '';
     Transcation_id1.value = '';
+    closePopup();
     }
 
 async function handleBankDetails(e){
@@ -166,6 +174,22 @@ function populateTable(data) {
       tbody.appendChild(row);
     });
   }
+
+
+  function openPopup() {
+    const amountContainer  = document.getElementById('gst-amount');
+    let gst = amt ? (amt*18)/100 : (historyData[0].Requestedammount*18)/1000;
+    amountContainer.innerHTML = gst;
+    document.getElementById('popupOverlay').style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+}
+
+function closePopup() {
+    document.getElementById('popupOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Re-enable scrolling when popup is closed
+}
+
+
   
   // Call the function with your data array to populate the table
  

@@ -320,6 +320,10 @@ function findReturn(val){
 }
 
 function handleBet(val,type=false){
+    if(balance>=300000){
+        alert('Enjoy your Game After 24 Hours , Best of Luck !');
+        return;
+    }
     console.log(numberBetBhav,'betbhav');
     if(type&&initial){
         amountContainer[0].style.backgroundColor='red';

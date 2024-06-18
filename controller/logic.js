@@ -97,83 +97,80 @@ const UserData = async (req, res) => {
         const id = Decodedtoken?.id;
         const Username = Decodedtoken?.Username;
 
-        // console.log(id)
         const user = await Usermodel.findById(id)
-        user.wallet -= req.body.Ammount;
+        if (user.wallet >= req.body.Ammount) {
+      console.log(  typeof(req.body.Ammount))
+      console.log(  typeof(user.wallet))
 
-        await user.save().then(() => {
-            // console.log("ammount debited sucessfully !")
-            // console.log(user.wallet)
-        })
+            user.wallet -= (req.body.Ammount);
+
+            await user.save().then(() => {
+                // console.log("ammount debited sucessfully !")
+                // console.log(user.wallet)
+            })
+            console.log(  user.wallet,typeof(user.wallet))
 
 
-        const Data = {
-            Username: Username,
-            Ammount: req.body.Ammount,
-            Batoption: req.body.batoption,
-            choose: req.body.choose,
+            const Data = {
+                Username: Username,
+                Ammount: req.body.Ammount,
+                Batoption: req.body.batoption,
+                choose: req.body.choose,
+            }
+            minData.push(Data);
+            DataforAdmin.userdata = minData;
+            // console.log(minData,"this is min data");
+
+            const Batoption = req.body.batoption;
+            if (Batoption == "color") {
+                // console.log("batoption is color")
+                if ("blue" == req.body.choose) {
+                    // console.log("choose color is blue")
+                    blue = blue + parseInt(req.body.Ammount);
+                    DataforAdmin["blue"] = parseInt(req.body.Ammount) + DataforAdmin["blue"]
+
+                }
+                else if ("red" == req.body.choose) {
+
+                    red += parseInt(req.body.Ammount);
+                    // console.log(red)
+                    DataforAdmin["red"] += req.body.Ammount
+
+                }
+                else {
+                    green += parseInt(req.body.Ammount);
+                    DataforAdmin["green"] += req.body.Ammount
+
+                    // console.log(green);
+                }
+            }
+
+            else if (Batoption === "Bs") {
+                if (req.body.choose === "Bignumber") {
+                    bignumber += parseInt(req.body.Ammount);
+                    DataforAdmin["Big"] += req.body.Ammount
+
+
+                } else {
+                    smallnumber += parseInt(req.body.Ammount);
+                    DataforAdmin["Small"] += req.body.Ammount
+
+                }
+            } else if (Batoption === "number") {
+                // console.log(req.body.Ammount)
+                // console.log(typeof req.body.Ammount)
+                // console.log("type of choose of ", typeof req.body.choose);
+                // console.log(numberValues[req.body.choose])
+                numberValues[req.body.choose] += req.body.Ammount;
+                DataforAdmin[req.body.choose] += req.body.Ammount;
+
+            }
+            res.send('true')
         }
-        minData.push(Data);
-        DataforAdmin.userdata = minData;
-        // console.log(minData,"this is min data");
+        else{
+            res.send('false')
 
-        const Batoption = req.body.batoption;
-        if (Batoption == "color") {
-            // console.log("batoption is color")
-            if ("blue" == req.body.choose) {
-                // console.log("choose color is blue")
-                blue = blue + parseInt(req.body.Ammount);
-                DataforAdmin["blue"] = parseInt(req.body.Ammount) + DataforAdmin["blue"]
-
-            }
-            else if ("red" == req.body.choose) {
-
-                red += parseInt(req.body.Ammount);
-                // console.log(red)
-                DataforAdmin["red"] += req.body.Ammount
-
-            }
-            else {
-                green += parseInt(req.body.Ammount);
-                DataforAdmin["green"] += req.body.Ammount
-
-                // console.log(green);
-            }
         }
-        // if (Batoption == "Bs") {
-        //     if (req.body.choose == "big") {
-        //         bignumber += parseInt(req.body.Ammount);
-
-        //     }
-        //     else {
-        //         smallnumber += parseInt(req.body.Ammount);
-        //     }
-
-        // }
-        //  // console.log(blue)
-        else if (Batoption === "Bs") {
-            if (req.body.choose === "Bignumber") {
-                bignumber += parseInt(req.body.Ammount);
-                DataforAdmin["Big"] += req.body.Ammount
-
-
-            } else {
-                smallnumber += parseInt(req.body.Ammount);
-                DataforAdmin["Small"] += req.body.Ammount
-
-            }
-        } else if (Batoption === "number") {
-            // console.log(req.body.Ammount)
-            // console.log(typeof req.body.Ammount)
-            // console.log("type of choose of ", typeof req.body.choose);
-            // console.log(numberValues[req.body.choose])
-            numberValues[req.body.choose] += req.body.Ammount;
-            DataforAdmin[req.body.choose] += req.body.Ammount;
-
-            // // console.log(numberValues);
-        }
-        // // console.log(numberValues);
-
     }
     else if (Inguestid) {
 

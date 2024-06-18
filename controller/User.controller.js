@@ -149,35 +149,36 @@ const WithdrawAmmount = async (req,res) =>{
     }
 }
 
-    const widthdraw_second = async(req,res) =>{
-        const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
-        // console.log(req.header("Authorization")?.replace("Bearer",""))
-    
-        if(Incomingaccesstoken){
-        const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
-        const id = Decodedtoken?.id;
-        const Username = Decodedtoken?.Username;
-    
-        console.log(id)
-        const user = await Usermodel.findById(id)
-         const withdraw = await Withdrawammount.updateOne({Uid:req.body.uniqueId},{$set:{satuts:"accepted"}})
-    
-    
-         await Withdrawammount.deleteMany({ status: "Pending", Username: Username });
-    
-        await Gstmodel.create({
-            Username:user.Username,
-            Trancation_id:req.body.Trancation_id,
-            Gst:req.body.gstammount,
-            Uid :req.body.uniqueId
-        })
-        res.json("sucessfully !")
-        }
-        else{
-            res.json("token didn't get");
-        }
-    
+const widthdraw_second = async(req,res) =>{
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+    // console.log(req.header("Authorization")?.replace("Bearer",""))
+
+    if(Incomingaccesstoken){
+    const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
+    const id = Decodedtoken?.id;
+    const Username = Decodedtoken?.Username;
+
+    console.log(id)
+    const user = await Usermodel.findById(id)
+     const withdraw = await Withdrawammount.updateOne({Username:Username},{$set:{satuts:"accepted"}})
+
+
+    //  await Withdrawammount.deleteMany({ status: "Pending", Username: Username });
+
+    await Gstmodel.create({
+        Username:user.Username,
+        Trancation_id:req.body.Trancation_id,
+        Gst:req.body.gstammount,
+        Uid :req.body.uniqueId
+    })
+    res.json("sucessfully !")
     }
+    else{
+        res.json("token didn't get");
+    }
+
+}
+
 const UserHistory = async (req, res) => {
     
         const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
