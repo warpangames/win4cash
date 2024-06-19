@@ -164,7 +164,7 @@ const widthdraw_second = async(req,res) =>{
 
 
     //  await Withdrawammount.deleteMany({ status: "Pending", Username: Username });
-
+console.log(req.body);
     await Gstmodel.create({
         Username:user.Username,
         Trancation_id:req.body.Trancation_id,

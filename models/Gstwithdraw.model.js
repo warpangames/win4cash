@@ -6,7 +6,7 @@ const GstWithdrawRequest = new mongoose.Schema({
         type:String
     },
     Trancation_id:{
-        type:Number,
+        type:String,
         
     },
     Gst:{

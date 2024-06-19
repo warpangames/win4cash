@@ -194,7 +194,7 @@ const UserData = async (req, res) => {
     // console.log(DataforAdmin);
     // console.log(numberValues);
 
-    res.send('true')
+    // res.send('true')
 }
 
 const clearMinData = () => {

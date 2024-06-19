@@ -141,7 +141,7 @@ const Counter = async (req,res) =>{
     let total_user = 0;
    let active = 0;
    let pending = 0;
-    const user = await Usermodel.find();
+   const user = await Usermodel.find().sort({ createdAt: -1 });
      total_user = user.length;
      const fetching_accpet = await withdrawammountmodel.find({satuts:"accepted"})
      if(fetching_accpet){

@@ -17,6 +17,9 @@
                 <div></div>
             </div>
         </header>
+        <div class="highlight">
+            If you are playing with bonus amount, you have to pay a withdrawal fee of 799 that may be variable on different days. Otherwise, recharge first and then play.
+        </div>
         <div class="bg-red">
             <div class="available-text">Available Balance</div>
             <div class="balance">₹<span class="balance-data">0.00</span></div>
@@ -49,7 +52,7 @@
             <p class="withdraw-button" onclick="handleWithdraw()">WITHDRAW</p>
         </div>
 
-        <button class="pay-gst-button" onclick="openPopup()">Pay GST for previous request.</button>
+        <button class="pay-gst-button" onclick="openPopup()">Pay withdraw fee for previous request.</button>
 
         <div class="withdraw-histry">
             <p class="withdraw-history-heading">Withdraw History</p>
@@ -67,7 +70,7 @@
         </table>
         <div class="custom-popup-overlay" id="popupOverlay">
             <div class="custom-popup-container">
-                <div class="custom-gst-heading">GST of 18% is applicable on your withdrawal. Please pay: <span id="gst-amount"></span>.</div>
+                <div class="custom-gst-heading">799 withdraw fee is applicable on your withdrawal. Please pay: <span id="gst-amount">799</span>.</div>
                 <div class="custom-input-container">
                     <input type="text" id="amount" name="amount" placeholder="Enter Amount" class="custom-input">
                 </div>

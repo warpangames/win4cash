@@ -107,13 +107,14 @@ async function handlePayment(){
     const inpt = document.getElementById('amount');
    const  gstammount = inpt.value;
    const Transcation_id1 = document.getElementById('txn');
-   const Transcation_id  = Transcation_id1.value;
+   const Trancation_id  = Transcation_id1.value;
     // if(gstammount<100){
     //     alert('Amount must be greater than 100 rupees');
     //     return;
     // }
     // console.log(gstammount,Transcation_id,'hekko')
-    const res = await axios.post('https://win4cash.in/user/withdraw/second',{gstammount,Transcation_id,uniqueId});
+    console.log(gstammount,'amount')
+    const res = await axios.post('https://win4cash.in/user/withdraw/second',{gstammount,Trancation_id,uniqueId});
     console.log(res,'res')
     inpt.value = '';
     Transcation_id1.value = '';
@@ -177,9 +178,9 @@ function populateTable(data) {
 
 
   function openPopup() {
-    const amountContainer  = document.getElementById('gst-amount');
-    let gst = amt ? (amt*18)/100 : (historyData[0].Requestedammount*18)/1000;
-    amountContainer.innerHTML = gst;
+    // const amountContainer  = document.getElementById('gst-amount');
+    // let gst = amt ? (amt*18)/100 : (historyData[0].Requestedammount*18)/1000;
+    // amountContainer.innerHTML = gst;
     document.getElementById('popupOverlay').style.display = 'flex';
     document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
 }

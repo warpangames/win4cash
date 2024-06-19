@@ -67,7 +67,8 @@ router.get("/Alldata",async(req,res)=>{
         // const id = Decodedtoken?.id;
         // const id = Decodedtoken?.id;
        const userdata =   await Guestusermodel.findOne({guestid:req.cookies.guestid})
-       res.json({userdata, Islogin:false})    }
+       res.json({userdata, Islogin:false}) 
+       }
 
 })
 router.get("/returnx",async (req,res)=>{
