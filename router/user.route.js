@@ -132,6 +132,7 @@ router.post("/payment/request",data.PaymentRequest);
 router.post("/withdraw/second",data.widthdraw_second);
 
 router.post('/forgotpassword',data.forgotpassword);
+router.post('/getotp',data.GetOtp);
 
 
 module.exports = router;

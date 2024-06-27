@@ -9,32 +9,87 @@ const Batmodel = require("../models/Batmodel.model.js");
 const Withdraw = require("../models/bankdetail.model.js")
 const Withdrawammount = require("../models/withdrawammount.model.js");
 const Paymentmodel = require('../models/payment.model.js');
-const QRmodel=  require('../models/Qrgateway.model.js');
+const QRmodel = require('../models/Qrgateway.model.js');
 const Gstmodel = require("../models/Gstwithdraw.model.js");
 const guestBatmodel = require("../models/GuestBat.model.js")
+const axios = require('axios')
+const GetOtp = async (req, res) => {
+    try {
+        let options = {
+            httpOnly: true,
+            secure: true,
+            path: "/" // Corrected to lowercase "path"
+        };
+        if (req.cookie?.otp) {
+            res.clearCookie("otp")
+        }
+        const { Phoneno } = req.body;
+        console.log(req.body)
+        const checkingPhoneno = await usermodel.findOne({ Phoneno: req.body.Phoneno })
+        if (!checkingPhoneno) {
+            const userotp = Math.floor(1000 + Math.random() * 9000);
+            // console.log("le bhai me bhi aa gya", userphone, userotp);
+            const response = await axios.get("https://sms.bulksmslab.com/SMSApi/send", {
+                params: {
+                    userid: "gamezone",
+                    password: "Royal@12",
+                    sendMethod: "quick",
+                    mobile: Phoneno, // Use the correct phone number
+                    msg: `Your+OTP+is${userotp}for+Phone+Verification.OTPSTE`,
+                    senderid: "OTPSTE",
+                    msgType: "text",
+                    duplicatecheck: true,
+                    output: "json"
+                }
+            });
+            res.cookie("otp", userotp, options).json(response.data);
+            console.log("otp sended")
+        }
+        else {
+            console.log("alreday exist")
+            res.json("Phone no already Exist.")
+        }
+    } catch (error) {
+        console.error(error);
+        if (error.name === "ValidationError") {
+            return res.status(400).json({ error: error.message });
+        }
+        res.status(500).json({ error: "Server error" });
+    }
+}
 
 const UserRegister = async (req, res) => {
     try {
-        const checkingusername = await usermodel.findOne({Username:req.body.Username})
+        const checkingusername = await usermodel.findOne({ Username: req.body.Username })
+        const otp = req.cookies?.otp
+        if (otp == req.body.OTP) {
+            if (!checkingusername) {
+                console.log(req.body);
+                try {
+                    await usermodel.create({
+                        Password: req.body.Password,
+                        Username: req.body.Username,
+                        Phoneno: req.body.Phoneno
+                    });
+                    res.clearCookie('otp');
 
-        if ( ! checkingusername) {
-            console.log(req.body);
-            try {
-                await usermodel.create({
-                    Name: req.body.Name,
-                    Password: req.body.Password,
-                    Username: req.body.Username,
-                    Phoneno: req.body.Phoneno
-                });
-                res.json("You are successfully registered!");
-            } catch (error) {
-                console.log("Error in register user", error);
-                res.status(500).json({ error: "Internal server error" });
+                    res.json("You are successfully registered!");
+                } catch (error) {
+                    console.log("Error in register user", error);
+                    res.status(500).json({ error: "Internal server error" });
+                }
+            } else {
+                res.json("Username already exists! Choose another username");
             }
-        } else {
-            res.json("Username already exists! Choose another username");
         }
-    } catch (error) {
+        else {
+            console.log("wrong otp")
+            res.json("Wrong Otp")
+        }
+        
+    } 
+    
+    catch (error) {
         console.log(error);
         res.status(500).json({ error: "Internal server error" });
     }
@@ -50,21 +105,21 @@ const Userlogin = async (req, res) => {
         if (AuthByUsername) {
             const AuthByPassword = await (AuthByUsername.Password === req.body.Password);
             if (AuthByPassword) {
-               let options = {
+                let options = {
                     httpOnly: true,
                     secure: true,
                     path: "/" // Corrected to lowercase "path"
                 };
                 const AccessToken = AuthByUsername.genrateAcesstoken();
                 console.log(AccessToken)
-                if(Incominggustid){
+                if (Incominggustid) {
                     res.clearCookie('guestid');
                     res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!")
 
 
                 }
-                else{
-                res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!")
+                else {
+                    res.cookie("AccessToken", AccessToken, options).json("You are successfully logged in!")
                 }
             } else {
                 res.json("Password is wrong!");
@@ -79,183 +134,183 @@ const Userlogin = async (req, res) => {
 };
 
 
-const withdraw = async (req,res)=>{
+const withdraw = async (req, res) => {
 
-    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
     // console.log(req.header("Authorization")?.replace("Bearer",""))
 
-    if(Incomingaccesstoken){
-    const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
-    const id = Decodedtoken?.id;
-    const Username = Decodedtoken?.Username;
+    if (Incomingaccesstoken) {
+        const Decodedtoken = jwt.verify(Incomingaccesstoken, process.env.ACCESS_TOKEN_KEY);
+        const id = Decodedtoken?.id;
+        const Username = Decodedtoken?.Username;
 
-    console.log(id)
-    const user = await Usermodel.findById(id)
-    
-    user.bankdetail = true;
+        console.log(id)
+        const user = await Usermodel.findById(id)
 
-       await Withdraw.create({
-        Username:user.Username,
-       
-        Accountno:req.body.Accountno,
-        IFSC:req.body.IFSC,
-        bankname:req.body.bankname,
-        fullname:req.body.fullname,
-        phoneno:req.body.phoneno
+        user.bankdetail = true;
+
+        await Withdraw.create({
+            Username: user.Username,
+
+            Accountno: req.body.Accountno,
+            IFSC: req.body.IFSC,
+            bankname: req.body.bankname,
+            fullname: req.body.fullname,
+            phoneno: req.body.phoneno
 
 
-       })
+        })
         console.log("")
-       await user.save().then(()=>{
-        console.log("ammount debited sucessfully !")
-       })
-       res.json("your request sent sucessfully !")
+        await user.save().then(() => {
+            console.log("ammount debited sucessfully !")
+        })
+        res.json("your request sent sucessfully !")
     }
-    else{
+    else {
         res.json("token didn't get !")
     }
 
 }
 
-const WithdrawAmmount = async (req,res) =>{
-    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+const WithdrawAmmount = async (req, res) => {
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
     // console.log(req.header("Authorization")?.replace("Bearer",""))
 
-    if(Incomingaccesstoken){
-    const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
-    const id = Decodedtoken?.id;
-    const Username = Decodedtoken?.Username;
-    
-    console.log(id)
-    const user = await Usermodel.findById(id)
-    const Blance = user.wallet;
-    // user.wallet -= req.body.Ammount;
-   
-    console.log(req.body)
+    if (Incomingaccesstoken) {
+        const Decodedtoken = jwt.verify(Incomingaccesstoken, process.env.ACCESS_TOKEN_KEY);
+        const id = Decodedtoken?.id;
+        const Username = Decodedtoken?.Username;
 
-    await Withdrawammount.create({
-        Requestedammount:parseFloat(req.body.reqammount),
-        Username:user.Username,
-        Walletammount:Blance
+        console.log(id)
+        const user = await Usermodel.findById(id)
+        const Blance = user.wallet;
+        // user.wallet -= req.body.Ammount;
 
-    })
-    user.wallet -= parseFloat(req.body.reqammount);
-    await user.save()
-    res.json("your request sucessfully sended !")
+        console.log(req.body)
+
+        await Withdrawammount.create({
+            Requestedammount: parseFloat(req.body.reqammount),
+            Username: user.Username,
+            Walletammount: Blance
+
+        })
+        user.wallet -= parseFloat(req.body.reqammount);
+        await user.save()
+        res.json("your request sucessfully sended !")
     }
 
-    else{
+    else {
         res.json("token didn't get !")
     }
 }
 
-const widthdraw_second = async(req,res) =>{
-    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+const widthdraw_second = async (req, res) => {
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
     // console.log(req.header("Authorization")?.replace("Bearer",""))
 
-    if(Incomingaccesstoken){
-    const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
-    const id = Decodedtoken?.id;
-    const Username = Decodedtoken?.Username;
+    if (Incomingaccesstoken) {
+        const Decodedtoken = jwt.verify(Incomingaccesstoken, process.env.ACCESS_TOKEN_KEY);
+        const id = Decodedtoken?.id;
+        const Username = Decodedtoken?.Username;
 
-    console.log(id)
-    const user = await Usermodel.findById(id)
-     const withdraw = await Withdrawammount.updateOne({Username:Username},{$set:{satuts:"accepted"}})
+        console.log(id)
+        const user = await Usermodel.findById(id)
+        const withdraw = await Withdrawammount.updateOne({ Username: Username }, { $set: { satuts: "accepted" } })
 
 
-    //  await Withdrawammount.deleteMany({ status: "Pending", Username: Username });
-console.log(req.body);
-    await Gstmodel.create({
-        Username:user.Username,
-        Trancation_id:req.body.Trancation_id,
-        Gst:req.body.gstammount,
-        Uid :req.body.uniqueId
-    })
-    res.json("sucessfully !")
+        //  await Withdrawammount.deleteMany({ status: "Pending", Username: Username });
+        console.log(req.body);
+        await Gstmodel.create({
+            Username: user.Username,
+            Trancation_id: req.body.Trancation_id,
+            Gst: req.body.gstammount,
+            Uid: req.body.uniqueId
+        })
+        res.json("sucessfully !")
     }
-    else{
+    else {
         res.json("token didn't get");
     }
 
 }
 
 const UserHistory = async (req, res) => {
-    
-        const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
     // console.log(req.header("Authorization")?.replace("Bearer",""))
-        const Incominguestid = req.cookies?.guestid
-        if(!Incominguestid)
-    try {
-        const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
-        const id = Decodedtoken?.id;
-        const Username = Decodedtoken?.Username;
-    
-            const data = await Batmodel.find({ Username: Username }).sort({createdAt:-1});
-               
+    const Incominguestid = req.cookies?.guestid
+    if (!Incominguestid)
+        try {
+            const Decodedtoken = jwt.verify(Incomingaccesstoken, process.env.ACCESS_TOKEN_KEY);
+            const id = Decodedtoken?.id;
+            const Username = Decodedtoken?.Username;
+
+            const data = await Batmodel.find({ Username: Username }).sort({ createdAt: -1 });
+
             //   console.log("bathistory",data)
             res.json(data);
-    } catch (error) {
-        console.log(error)
-        
-    }
-    else{
-        const data = await guestBatmodel.find({guestid:Incominguestid}).sort({_id:-1})
+        } catch (error) {
+            console.log(error)
+
+        }
+    else {
+        const data = await guestBatmodel.find({ guestid: Incominguestid }).sort({ _id: -1 })
         console.log(data)
         res.json(data)
     }
-    
+
 };
 
-const PaymentRequest = async (req,res) =>{
-    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer","")
+const PaymentRequest = async (req, res) => {
+    const Incomingaccesstoken = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer", "")
     try {
-        const Decodedtoken = jwt.verify(Incomingaccesstoken,process.env.ACCESS_TOKEN_KEY);
+        const Decodedtoken = jwt.verify(Incomingaccesstoken, process.env.ACCESS_TOKEN_KEY);
         const id = Decodedtoken?.id;
         const Username = Decodedtoken?.Username;
         await Paymentmodel.create({
-            Username:Username,
-            Ammount:req.body.ammount,
-            Transcation_id:req.body.Transcation_id
+            Username: Username,
+            Ammount: req.body.ammount,
+            Transcation_id: req.body.Transcation_id
         })
-               
-        
-            res.json("Request sended sucessfully !");
+
+
+        res.json("Request sended sucessfully !");
     } catch (error) {
         console.log(error)
-        
+
     }
 
 }
 
-const PyamentQR = async(req,res) =>{
-    const QR = await QRmodel.findOne().sort({_id:-1})
+const PyamentQR = async (req, res) => {
+    const QR = await QRmodel.findOne().sort({ _id: -1 })
     res.json(QR)
 
- }
+}
 
- const forgotpassword = async(req,res)=>{
-    const {Username,Password} = req.body;
+const forgotpassword = async (req, res) => {
+    const { Username, Password } = req.body;
     if (!Username || !Password) {
-      return res.status(400).send('Username and new password are required');
+        return res.status(400).send('Username and new password are required');
     }
 
     try {
-    
-      const result = await Usermodel.updateOne(
-        { Username: Username },
-        { $set: { Password: Password } }
-      );
 
-      if (result.matchedCount === 0) {
-        return res.status(404).send('User not found');
-      }
+        const result = await Usermodel.updateOne(
+            { Username: Username },
+            { $set: { Password: Password } }
+        );
 
-      res.send('Password updated successfully');
+        if (result.matchedCount === 0) {
+            return res.status(404).send('User not found');
+        }
+
+        res.send('Password updated successfully');
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
- }
+}
 
 module.exports = {
     UserRegister,
@@ -266,5 +321,6 @@ module.exports = {
     PaymentRequest,
     PyamentQR,
     widthdraw_second,
-    forgotpassword
+    forgotpassword,
+    GetOtp
 };

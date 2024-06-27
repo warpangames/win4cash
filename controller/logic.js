@@ -97,7 +97,8 @@ const UserData = async (req, res) => {
         const id = Decodedtoken?.id;
         const Username = Decodedtoken?.Username;
 
-        const user = await Usermodel.findById(id)
+        const user = await Usermodel.findById(id);
+        const Balance = user.wallet;
         if (user.wallet >= req.body.Ammount) {
       console.log(  typeof(req.body.Ammount))
       console.log(  typeof(user.wallet))
@@ -116,6 +117,7 @@ const UserData = async (req, res) => {
                 Ammount: req.body.Ammount,
                 Batoption: req.body.batoption,
                 choose: req.body.choose,
+                wallet:Balance
             }
             minData.push(Data);
             DataforAdmin.userdata = minData;

@@ -8,7 +8,7 @@ function handleDisplayForm(){
 }
 
 async function withHistory(){
-    const res = await axios.get('https://win4cash.in/user/withdraw/history');
+    const res = await axios.get('http://localhost:7000/user/withdraw/history');
     console.log(res,'history');
     if(res.data.length>0){
         historyData = res.data;
@@ -25,7 +25,7 @@ let wallet ;
 let bankStatus ;
 
 async function getAllData(){
-    const res = await axios.get('https://win4cash.in/Alldata');
+    const res = await axios.get('http://localhost:7000/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balance-data');
@@ -38,7 +38,7 @@ async function getAllData(){
 getAllData();
 
 async function getQr(){
-    const res = await axios.get('https://win4cash.in/user/payment/qr');
+    const res = await axios.get('http://localhost:7000/user/payment/qr');
     console.log(res,'qr')
     const bufferData = res.data.data.data;
 
@@ -92,7 +92,7 @@ async function handleWithdraw(){
 //    container.style.display = 'block';
    
 
-    const res = await axios.post('https://win4cash.in/user/withdraw/ammount',{reqammount:amt,uniqueId});
+    const res = await axios.post('http://localhost:7000/user/withdraw/ammount',{reqammount:amt,uniqueId});
     console.log(res,'res')
     if(res.status==200){
         widthd.value = '';
@@ -114,7 +114,11 @@ async function handlePayment(){
     // }
     // console.log(gstammount,Transcation_id,'hekko')
     console.log(gstammount,'amount')
-    const res = await axios.post('https://win4cash.in/user/withdraw/second',{gstammount,Trancation_id,uniqueId});
+    if(!Trancation_id){
+        alert('Please enter the transaction Id');
+        return;
+    }
+    const res = await axios.post('http://localhost:7000/user/withdraw/second',{gstammount,Trancation_id,uniqueId});
     console.log(res,'res')
     inpt.value = '';
     Transcation_id1.value = '';
@@ -129,7 +133,7 @@ async function handleBankDetails(e){
     const phoneno = document.getElementById('Phone').value;
     const IFSC  = document.getElementById('IFSC').value;
     console.log(Accountno,bankname,fullname,phoneno,IFSC)
-     const res = await axios.post('https://win4cash.in/user/bankdetail',{Accountno,bankname,fullname,phoneno,IFSC});
+     const res = await axios.post('http://localhost:7000/user/bankdetail',{Accountno,bankname,fullname,phoneno,IFSC});
     if(res.status==200){
         fromcontainer.style.display = 'none';
         getAllData();

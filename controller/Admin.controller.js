@@ -107,7 +107,7 @@ const Accepted_request = async (req, res) => {
     const results = await Promise.all(data.map(async (item) => {
       const details = await Withdraw.findOne({ Username: item.Username }).sort({_id:-1}).lean();
       const phonenoDoc = await Usermodel.findOne({ Username: item.Username });
-      const Gst= await Gstmodel.find({Username:item.Username,Uid:item.Uid})
+      const Gst= await Gstmodel.find({Username:item.Username})
 
       return { ...item, details, Gst,phoneno: phonenoDoc.Phoneno };
     }));

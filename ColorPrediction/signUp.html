@@ -8,65 +8,90 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 </head>
 <body>
     <div class="main">
         <div class="login-text">SignUp</div>
-
         <section>
             <form id="form" method="post" >
-
-                
                 <label for="phone">Phone Number</label>
-
-                <div class="bar">   <i class="fa fa-phone"></i>
-                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number"></div>
-
-             
-
+                <div class="bar">
+                    <i class="fa fa-phone"></i>
+                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    <button type="button" id="get-otp" onclick="getOTP()">Get OTP</button>
+                </div>
+                <label for="otp">OTP</label>
+                <div class="bar">
+                    <i class="fa fa-key"></i>
+                    <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+                </div>
                 <label for="username">Username</label>
-
                 <div class="bar">
                     <i class="fa fa-user"></i>
-                    <input type="text" id="username" name="username" placeholder="Enter your Username">
-                <div class="warning" style="color: red; font-size: 10px;display: none;">Username already exist!</div>
+                    <input type="text" id="username" name="username" placeholder="Enter your Username" required>
+                    <div class="warning" style="color: red; font-size: 10px; display: none;">Username already exists!</div>
                 </div>
-                
                 <label for="password">Password</label>
-
                 <div class="bar">
-                <i class="fa fa-lock"></i>
-
-                <input type="password" id="password" name="password" placeholder="password">
-            </div>
+                    <i class="fa fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
                 <input type="submit" value="SIGN UP" id="submit">
-
             </form>
-            <div style="text-align: center;color: #3c3838;margin: 10px;">or</div>
+            <div style="text-align: center; color: #3c3838; margin: 10px;">or</div>
             <div class="login-button" onclick="window.location.href='/user/login'">Login</div>
         </section>
     </div>
     <script>
-     const form = document.getElementById('form');
-     form.addEventListener('submit',async (e)=>{
-      e.preventDefault();
-      const Phoneno = document.getElementById('phone').value;
-      const Username = document.getElementById('username').value;
-      const Password = document.getElementById('password').value;
-      const res = await axios.post('https://win4cash.in/user/signup',{Phoneno,Username,Password});
-      console.log(res);
-      if(res.status===200){
-        if(res.data==='Username already exists! Choose another username'){
-            const warning = document.querySelector('.warning');
-            const input = document.getElementById('username');
-            input.style.border = '1px solid red';
-            warning.style.display = 'block';
+        async function getOTP() {
+            const Phoneno = document.getElementById('phone').value;
+            if (Phoneno) {
+                const res = await axios.post('http://localhost:7000/user/getotp', { Phoneno });
+                if (res.status === 200) {
+                    if(res.data == "Phone no already Exist."){
+                     console.log(res.status)
+                     alert('Phone no already Exist !')
+                      }
+                      else{
+                        alert('OTP sent to your phone number');
 
+                      }
+                } else {
+                    alert('Failed to send OTP');
+                }
+               
+            } else {
+                alert('Please enter a phone number');
+            }
+           
         }
-        window.location.href = 'login'
-      }
-     })
+
+        const form = document.getElementById('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const Phoneno = document.getElementById('phone').value;
+            const OTP = document.getElementById('otp').value;
+            const Username = document.getElementById('username').value;
+            const Password = document.getElementById('password').value;
+            const res = await axios.post('http://localhost:7000/user/signup', { Phoneno, OTP, Username, Password });
+            console.log(res);
+            if (res.status === 200) {
+                if (res.data === 'Username already exists! Choose another username') {
+                    const warning = document.querySelector('.warning');
+                    const input = document.getElementById('username');
+                    input.style.border = '1px solid red';
+                    warning.style.display = 'block';
+                } 
+                else if(res.data === "Wrong Otp"){
+                    alert("OTP is invalid !")
+  
+                }
+                else {
+                    window.location.href = 'login';
+                }
+            }
+           
+        });
     </script>
 </body>
 </html>
