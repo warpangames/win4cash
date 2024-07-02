@@ -126,12 +126,12 @@
     <script>
         let whatsapp;
         async function getWhatsappPer(){
-        const data = await axios.get('http://localhost:7000/admin/manual');
+        const data = await axios.get('https://win4cash.in/admin/manual');
         whatsapp = data.data.whatsappno;
 }
 getWhatsappPer();
         async function getAllData(){
-    const res = await axios.get('http://localhost:7000/Alldata');
+    const res = await axios.get('https://win4cash.in/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balanceAmount');
@@ -160,7 +160,7 @@ getWhatsappPer();
 
        async  function handleLogout(){
           
-        const res = await axios.get('http://localhost:7000/user/logout');
+        const res = await axios.get('https://win4cash.in/user/logout');
         window.location.reload();
   
  }
