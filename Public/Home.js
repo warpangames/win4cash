@@ -45,9 +45,10 @@ let balance;
 let remainingTime;
 let slotResult;
 let userBets;
+let whatsapp;
 
 async function getAllData(){
-    const res = await axios.get('https://win4cash.in/Alldata');
+    const res = await axios.get('http://localhost:7000/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('#balance-data');
@@ -64,8 +65,12 @@ getAllData();
 
 // console.log(inpt,finalBetContainer,'hehehe1')
 
+async function getWhatsappPer(){
+    const data = await axios.get('http://localhost:7000/admin/manual');
+  whatsapp = data.data.whatsappno;
+}
 
-
+    getWhatsappPer();
 document.addEventListener('DOMContentLoaded', (event) => {
    
     function debounce(func, delay) {
@@ -120,13 +125,13 @@ function handleDeposit(){
 }
 
 async function getHistory(){
-    const res1  = await axios.get('https://win4cash.in/user/history');
+    const res1  = await axios.get('http://localhost:7000/user/history');
     betHistoryData = res1.data;
     console.log(betHistoryData)
-    const res2 = await axios.get('https://win4cash.in/bathistory');
+    const res2 = await axios.get('http://localhost:7000/bathistory');
     slotHistoryData = res2.data;
     populateTable(slotHistoryData,['Uid','Color' ,'Number','Bs']);
-    const res3 = await axios.get('https://win4cash.in/returnx');
+    const res3 = await axios.get('http://localhost:7000/returnx');
     returnData = res3.data;
     console.log(returnData,'return');
     const returnContainer  = document.querySelectorAll('.bet-return');
@@ -547,7 +552,7 @@ async function handleSubmit(){
 
     balance = balance - Ammount;
 
-    const res  = await axios.post('https://win4cash.in/user/bat',{batoption,choose,Ammount});
+    const res  = await axios.post('http://localhost:7000/user/bat',{batoption,choose,Ammount});
     console.log(res,'res');
     betHistoryData.unshift({
         Ammount:Ammount,
@@ -647,7 +652,7 @@ function formatTime(seconds) {
             console.log(remainingTime,firstHit,'aqwd')
         if(remainingTime == 5 && !firstHit){
             console.log('saasd')
-            const res = await axios.get('https://win4cash.in/user/result');
+            const res = await axios.get('http://localhost:7000/user/result');
             console.log(res,'final data');
             slotResult = res.data.Lastresult;
             userBets = res.data.resultObject;
@@ -729,7 +734,7 @@ function formatTime(seconds) {
         });
 
         function openWhatsAppChat() {
-            var phoneNumber = "9649504608"; // Replace with the actual phone number
+            var phoneNumber = whatsapp; // Replace with the actual phone number
             var url = "https://wa.me/" + phoneNumber;
             window.open(url, '_blank');
         }

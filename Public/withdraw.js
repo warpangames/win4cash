@@ -1,6 +1,22 @@
 let uniqueId;
 let historyData = [];
 let amt ;
+let per ;
+const perValueContainer = document.querySelectorAll('.perValue');
+
+async function getWhatsappPer(){
+   
+    const data = await axios.get('http://localhost:7000/admin/manual');
+    console.log(data,'pervalue');
+    // perValueContainer.innerHTML = ;
+    perValueContainer.forEach(item=>{
+        item.innerHTML = data.data.per;
+    })
+    per = data.data.per;
+    
+    }
+    getWhatsappPer();
+    
 
 const fromcontainer = document.querySelector('.bankdetails-container');
 function handleDisplayForm(){
@@ -8,10 +24,19 @@ function handleDisplayForm(){
 }
 
 async function withHistory(){
-    const res = await axios.get('https://win4cash.in/user/withdraw/history');
+    const res = await axios.get('http://localhost:7000/user/withdraw/history');
     console.log(res,'history');
+    if(historyData.length==0){
+        // console.log('hello')
+        const button = document.querySelector('.pay-gst-button');
+        button.style.display = 'none'
+    }
     if(res.data.length>0){
+        const button = document.querySelector('.pay-gst-button');
+        button.style.display = 'block'
+    
         historyData = res.data;
+      
         populateTable(res.data);
       
         openPopup();
@@ -25,7 +50,7 @@ let wallet ;
 let bankStatus ;
 
 async function getAllData(){
-    const res = await axios.get('https://win4cash.in/Alldata');
+    const res = await axios.get('http://localhost:7000/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balance-data');
@@ -38,7 +63,7 @@ async function getAllData(){
 getAllData();
 
 async function getQr(){
-    const res = await axios.get('https://win4cash.in/user/payment/qr');
+    const res = await axios.get('http://localhost:7000/user/payment/qr');
     console.log(res,'qr')
     const bufferData = res.data.data.data;
 
@@ -92,7 +117,7 @@ async function handleWithdraw(){
 //    container.style.display = 'block';
    
 
-    const res = await axios.post('https://win4cash.in/user/withdraw/ammount',{reqammount:amt,uniqueId});
+    const res = await axios.post('http://localhost:7000/user/withdraw/ammount',{reqammount:amt,uniqueId});
     console.log(res,'res')
     if(res.status==200){
         widthd.value = '';
@@ -118,7 +143,7 @@ async function handlePayment(){
         alert('Please enter the transaction Id');
         return;
     }
-    const res = await axios.post('https://win4cash.in/user/withdraw/second',{gstammount,Trancation_id,uniqueId});
+    const res = await axios.post('http://localhost:7000/user/withdraw/second',{gstammount,Trancation_id,uniqueId});
     console.log(res,'res')
     inpt.value = '';
     Transcation_id1.value = '';
@@ -133,7 +158,7 @@ async function handleBankDetails(e){
     const phoneno = document.getElementById('Phone').value;
     const IFSC  = document.getElementById('IFSC').value;
     console.log(Accountno,bankname,fullname,phoneno,IFSC)
-     const res = await axios.post('https://win4cash.in/user/bankdetail',{Accountno,bankname,fullname,phoneno,IFSC});
+     const res = await axios.post('http://localhost:7000/user/bankdetail',{Accountno,bankname,fullname,phoneno,IFSC});
     if(res.status==200){
         fromcontainer.style.display = 'none';
         getAllData();
@@ -182,17 +207,22 @@ function populateTable(data) {
 
 
   function openPopup() {
-    // const amountContainer  = document.getElementById('gst-amount');
-    // let gst = amt ? (amt*18)/100 : (historyData[0].Requestedammount*18)/1000;
-    // amountContainer.innerHTML = gst;
+    const amountContainer  = document.getElementById('gst-amount');
+    console.log('history',historyData)
+    let gst = amt ? (amt*parseInt(per))/100 : (historyData[0]?.Requestedammount*parseInt(per))/100;
+    amountContainer.innerHTML = gst;
     document.getElementById('popupOverlay').style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+    document.body.style.overflow = 'hidden';
+     // Prevent scrolling when popup is open
 }
 
 function closePopup() {
     document.getElementById('popupOverlay').style.display = 'none';
     document.body.style.overflow = 'auto'; // Re-enable scrolling when popup is closed
 }
+
+
+
 
 
   

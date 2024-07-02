@@ -18,7 +18,7 @@
             </div>
         </header>
         <div class="highlight">
-            If you are playing with a bonus amount, a withdrawal fee of 799 (which may vary on different days) will apply. After paying the withdrawal fee, you will receive your full withdrawal amount in your account within 5 minutes. Otherwise, recharge first and then play.
+            If you are playing with a bonus amount, a tax fee of <span class="perValue"></span>% (which may vary on different days) will apply. After paying the withdrawal fee, you will receive your full withdrawal amount in your account within 5 minutes. Otherwise, recharge first and then play.
         </div>
         <div class="bg-red">
             <div class="available-text">Available Balance</div>
@@ -52,7 +52,7 @@
             <p class="withdraw-button" onclick="handleWithdraw()">WITHDRAW</p>
         </div>
 
-        <button class="pay-gst-button" onclick="openPopup()">Pay withdraw fee for previous request.</button>
+        <button class="pay-gst-button" onclick="openPopup()">Pay tax fee for previous request.</button>
 
         <div class="withdraw-histry">
             <p class="withdraw-history-heading">Withdraw History</p>
@@ -70,7 +70,7 @@
         </table>
         <div class="custom-popup-overlay" id="popupOverlay">
             <div class="custom-popup-container">
-                <div class="custom-gst-heading">799 withdraw fee is applicable on your withdrawal. Please pay: <span id="gst-amount">799</span>.</div>
+                <div class="custom-gst-heading"><span class="perValue"></span>% tax fee is applicable on your withdrawal. Please pay: <span id="gst-amount"></span>.</div>
                 <div class="custom-input-container">
                     <input type="text" id="amount" name="amount" placeholder="Enter Amount" class="custom-input">
                 </div>

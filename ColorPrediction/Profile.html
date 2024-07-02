@@ -124,8 +124,14 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
+        let whatsapp;
+        async function getWhatsappPer(){
+        const data = await axios.get('http://localhost:7000/admin/manual');
+        whatsapp = data.data.whatsappno;
+}
+getWhatsappPer();
         async function getAllData(){
-    const res = await axios.get('https://win4cash.in/Alldata');
+    const res = await axios.get('http://localhost:7000/Alldata');
     console.log(res,'allData')
     if(res.status===200){
         const walletContainer  = document.querySelector('.balanceAmount');
@@ -137,13 +143,13 @@
     }
 }
 
-getAllData();
+       getAllData();
          function openFacebookProfile() {
             var url = 'https://www.facebook.com/profile.php?id=61560953813937';
             window.open(url, '_blank');
         }
          function openWhatsAppChat() {
-            var phoneNumber = "9649504608"; // Replace with the actual phone number
+            var phoneNumber = whatsapp; // Replace with the actual phone number
             var url = "https://wa.me/" + phoneNumber;
             window.open(url, '_blank');
         }
@@ -154,7 +160,7 @@ getAllData();
 
        async  function handleLogout(){
           
-        const res = await axios.get('https://win4cash.in/user/logout');
+        const res = await axios.get('http://localhost:7000/user/logout');
         window.location.reload();
   
  }

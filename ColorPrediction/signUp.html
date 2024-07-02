@@ -46,7 +46,7 @@
         async function getOTP() {
             const Phoneno = document.getElementById('phone').value;
             if (Phoneno) {
-                const res = await axios.post('https://win4cash.in/user/getotp', { Phoneno });
+                const res = await axios.post('http://localhost:7000/user/getotp', { Phoneno });
                 if (res.status === 200) {
                     if(res.data == "Phone no already Exist."){
                      console.log(res.status)
@@ -73,7 +73,7 @@
             const OTP = document.getElementById('otp').value;
             const Username = document.getElementById('username').value;
             const Password = document.getElementById('password').value;
-            const res = await axios.post('https://win4cash.in/user/signup', { Phoneno, OTP, Username, Password });
+            const res = await axios.post('http://localhost:7000/user/signup', { Phoneno, OTP, Username, Password });
             console.log(res);
             if (res.status === 200) {
                 if (res.data === 'Username already exists! Choose another username') {
